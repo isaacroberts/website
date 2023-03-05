@@ -239,11 +239,17 @@ class _SignupFormState extends State<SignupForm> {
         emailErrMsg = null;
       });
     }
+    String body = msgField.text;
+    if (body.isEmpty) {
+      body = '[from signup form]';
+    }
+    sendSignup(email, body).then(signupReceived);
+  }
 
-    String? errmsg = await sendSignup(email, msgField.text);
-
+  void signupReceived(String? errmsg) {
     if (errmsg == null) {
       setState(() {
+        emailErrMsg = null;
         submitted = true;
       });
     } else {
