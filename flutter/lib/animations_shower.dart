@@ -74,10 +74,13 @@ class AnimationShower extends StatelessWidget with FeatureShower {
     // return SizedBox.shrink();
     if (kIsWeb) {
       return const RiveAnimation.network(
-          key: Key('rive'), 'assets/lottie/rivebot_transform.riv');
+        'assets/lottie/rivebot_transform.riv',
+        key: Key('rive'),
+        placeHolder: CircularProgressIndicator(),
+      );
     } else {
       return const RiveAnimation.asset('lottie/rivebot_transform.riv',
-          key: Key('rive'));
+          key: Key('rive'), placeHolder: CircularProgressIndicator());
     }
     return const RiveAnimation.network(
       key: Key('rive'),

@@ -53,7 +53,7 @@ Hero getImage(int index) {
       child: ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
           child: fadeAssetFore(
-            'assets/images/${experiences[index].image}',
+            'images/${experiences[index].image}',
             fit: BoxFit.contain,
           )));
 }

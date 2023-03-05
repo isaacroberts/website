@@ -24,10 +24,10 @@ import 'theme.dart';
 
  */
 
-void contactButtonPressed(BuildContext context) async {
+void contactButtonPressed(BuildContext context, bool fromFab) async {
   showDialog(
     context: context,
-    builder: (context) => const ContactBackdrop(),
+    builder: (context) => ContactBackdrop(fromFab),
   );
   // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
   //   return const ContactPage();
@@ -101,7 +101,7 @@ Widget fadeAssetBg(
   if (kIsWeb) {
     return FadeInImage.assetNetwork(
       placeholder: 'empty.png',
-      image: asset,
+      image: 'assets/$asset',
       fadeOutDuration: const Duration(milliseconds: 300),
       fadeOutCurve: Curves.easeOut,
       fadeInDuration: const Duration(milliseconds: 300),
@@ -198,7 +198,7 @@ Widget fadeAssetFore(
   if (kIsWeb) {
     return FadeInImage.assetNetwork(
       placeholder: 'loader.gif',
-      image: asset,
+      image: 'assets/$asset',
       fadeOutDuration: const Duration(milliseconds: 300),
       fadeOutCurve: Curves.easeOut,
       fadeInDuration: const Duration(milliseconds: 300),

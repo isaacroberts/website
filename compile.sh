@@ -3,7 +3,7 @@
 
 # Build
 rm -r templates
-
+  
 cd flutter/
 flutter clean && flutter build web --release --base-href=/templates/
 cd ..

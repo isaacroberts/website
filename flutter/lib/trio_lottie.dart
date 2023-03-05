@@ -75,7 +75,7 @@ abstract class TrioLottieHaver<Type extends StatefulWidget> extends State<Type>
 
   Widget buildLottie(String asset) {
     return Lottie.asset(
-      'assets/lottie/$asset.json',
+      'lottie/$asset.json',
       controller: _controller,
       width: 100,
       height: 100,
@@ -141,7 +141,7 @@ class _TrioLottieState extends State<TrioLottie> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return platformHover(
         child: Lottie.asset(
-      'assets/lottie/${widget.asset}.json',
+      'lottie/${widget.asset}.json',
       controller: _controller,
       width: 100,
       height: 100,

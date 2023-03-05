@@ -4,14 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'dart:developer';
 
-const String hostName =
-    kDebugMode ? 'http://127.0.0.1:5000' : 'https://isaacroberts.app';
+const String hostName = kDebugMode ? 'http://127.0.0.1:5000' : '';
 
 // Returns error message if not successful
-Future<String?> sendSignup(String emailAddress, String? body) async {
+Future<String?> sendSignup(String emailAddress, String body) async {
   var map = <String, dynamic>{};
   map['email'] = emailAddress;
-  map['body'] = body ?? '';
+  map['body'] = body;
 
   var send = jsonEncode(map);
   log('sending:$send');

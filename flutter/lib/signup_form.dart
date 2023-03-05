@@ -67,7 +67,7 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 children: [
                   // clipBehavior: Clip.antiAlias,
-                  fadeAssetBg('assets/images/email_cta.jpg',
+                  fadeAssetBg('images/email_cta.jpg',
                       fit: BoxFit.cover, key: _backgroundImageKey),
                 ]);
           } else {
@@ -75,7 +75,7 @@ class _SignupFormState extends State<SignupForm> {
                 key: const Key('email_cta_box'),
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: fadeAssetBg('assets/images/email_cta.jpg',
+                child: fadeAssetBg('images/email_cta.jpg',
                     fit: BoxFit.cover, key: _backgroundImageKey));
           }
         });

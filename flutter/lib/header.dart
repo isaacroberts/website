@@ -277,13 +277,13 @@ class _ProPicState extends State<ProPic> {
             ),
             children: [
               // clipBehavior: Clip.antiAlias,
-              fadeAssetBg('assets/images/bg.jpg',
+              fadeAssetBg('images/bg.jpg',
                   fit: BoxFit.cover, key: _backgroundImageKey),
             ]),
         Padding(
             padding: EdgeInsets.fromLTRB(m, m * 2, m, 0),
             child: fadeAssetFore(
-              'assets/images/coffee_header_shrink.png',
+              'images/coffee_header_shrink.png',
               // width: s * IPHI,
               // height: s * IPHI,
               alignment: Alignment.bottomCenter,

@@ -11,66 +11,6 @@ import 'common_elements.dart';
 import 'text_theme.dart';
 import 'dart:math' as math;
 
-class EmailSendFAB extends StatefulWidget {
-  final VoidCallback onPressed;
-
-  const EmailSendFAB({required this.onPressed, Key? key}) : super(key: key);
-
-  @override
-  State<EmailSendFAB> createState() => _EmailSendFABState();
-}
-
-class _EmailSendFABState extends State<EmailSendFAB> {
-  bool isOpen = false;
-
-  void contactPressed(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const ContactPage(),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // return Container();
-    return FloatingActionButton(
-      child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 350),
-          transitionBuilder: (child, anim) => RotationTransition(
-                turns: child.key == const ValueKey('sendicon')
-                    ? Tween<double>(begin: 1, end: 0.75).animate(anim)
-                    : Tween<double>(begin: 0.75, end: 1).animate(anim),
-                child: ScaleTransition(scale: anim, child: child),
-              ),
-          child: isOpen
-              ? const Icon(Icons.send_outlined, key: ValueKey('sendicon'))
-              : const Icon(
-                  Icons.email_outlined,
-                  key: ValueKey('emailicon'),
-                )),
-      onPressed: () {
-        if (isOpen) {
-          // log('send');
-          // Navigator.of(context).pop();
-          widget.onPressed();
-        } else {
-          contactPressed(context);
-        }
-        setState(() {
-          isOpen = !isOpen;
-        });
-      },
-    );
-  }
-}
-
-/*
-RotationTransition(
-                turns: child.key == const ValueKey('sendicon')
-                    ? Tween<double>(begin: 1, end: 0.75).animate(anim)
-                    : Tween<double>(begin: 0.75, end: 1).animate(anim),
-                child:
- */
 Widget fabSwitcher(BuildContext context, bool isOpen, {var onPressed}) {
   return FloatingActionButton(
       key: const Key('fab'),
@@ -86,17 +26,16 @@ Widget fabSwitcher(BuildContext context, bool isOpen, {var onPressed}) {
             ),
       onPressed: () {
         if (isOpen) {
-          // log('send');
-          // Navigator.of(context).pop();
           onPressed();
         } else {
-          contactButtonPressed(context);
+          contactButtonPressed(context, true);
         }
       });
 }
 
 class ContactBackdrop extends StatelessWidget {
-  const ContactBackdrop({Key? key}) : super(key: key);
+  final bool fromFab;
+  const ContactBackdrop(this.fromFab, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -112,19 +51,20 @@ class ContactBackdrop extends StatelessWidget {
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
             child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                child: const ContactPage())));
+                child: ContactPage(fromFab))));
   }
 }
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({Key? key}) : super(key: key);
+  final bool fromFab;
+  const ContactPage(this.fromFab, {Key? key}) : super(key: key);
 
   @override
   State<ContactPage> createState() => _ContactPageState();
 }
 
 // Global var to save email
-String prevText = 'a@g.c';
+String prevText = '';
 bool wasSubmitted = false;
 bool wasPrevValid = false;
 
@@ -150,7 +90,6 @@ class _ContactPageState extends State<ContactPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(child: LayoutBuilder(builder: (context, constraints) {
-            log('constraint ${constraints.maxWidth}');
             double w = math.min(constraints.maxWidth, 540);
             return Align(
                 alignment: Alignment.bottomRight,
@@ -169,25 +108,14 @@ class _ContactPageState extends State<ContactPage> {
                               hintText: 'Enter your email'),
                         ))));
           })),
-          // const SizedBox(width: 15),
           fabSwitcher(context, true, onPressed: sendEmail),
-          // const EmailSendFAB(key: Key('emailsendfab')),
-          // FloatingActionButton(
-          //   onPressed: () {},
-          //   child:  AnimatedIcon(AnimatedIcons.),
-          // ),
           const SizedBox(width: 15)
         ]);
   }
 
   void sendEmail() async {
-    var map = <String, dynamic>{};
     String email = controller.value.text;
-    log('sending $email');
     if (email.isEmpty) {
-      // setState(() {
-      //   emailErrMsg = 'Please enter an email';
-      // });
       if (mounted) {
         Navigator.of(context).pop();
       }
@@ -203,10 +131,12 @@ class _ContactPageState extends State<ContactPage> {
       });
     }
 
-    String? errmsg = await sendSignup(email, null);
+    String body = widget.fromFab ? '[from fab]' : '[from appbar]';
+    sendSignup(email, body).then(responseReceived);
+  }
 
+  void responseReceived(String? errmsg) {
     if (errmsg == null) {
-      //Commented until i get this working - so users see a response
       prevText = '';
       wasSubmitted = true;
       setState(() {

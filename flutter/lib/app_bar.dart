@@ -34,7 +34,7 @@ List<Widget> buildActions(
 
     //Contact button
     TextButton.icon(
-        onPressed: () => contactButtonPressed(context),
+        onPressed: () => contactButtonPressed(context, false),
         icon: const Icon(Icons.email_outlined),
         label: const Text('Contact'))
   ];
