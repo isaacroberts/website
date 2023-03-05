@@ -14,10 +14,10 @@ cp -R flutter/build/web templates/
 
 # Commit
 git add .
-git commit -m $1
-
+git commit -m "$1"
+echo "committed"
 git push
-
+echo "pushed"
 
 source ~/.bash_profile
 n
