@@ -1,0 +1,8 @@
+__pycache__/
+flutter/build/
+flutter/axsets
+flutter/assets
+flutter/image_raws
+flutter/ios
+flutter/macos
+flutter/android
