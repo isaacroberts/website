@@ -59,13 +59,22 @@ SliverAppBar buildAppBar(
 
       // centerTitle: true,
       title: LayoutBuilder(builder: (context, constraints) {
-        bool fw = Device.width > 600;
+        String text;
+        if (Device.width < 500) {
+          text = 'App Dev';
+        } else if (Device.width < 700) {
+          text = 'Mobile & Web';
+        } else {
+          text = 'Freelance Mobile & Web';
+        }
+
         // fw = true;
         return TextButton(
           onPressed: () => scrollCallback(Sections.Home),
-          child: Text(fw ? 'Freelance Mobile & Web' : 'Mobile & Web',
+          child: Text(text,
               style: Theme.of(context).textTheme.titleLarge,
-              textAlign: TextAlign.center),
+              textAlign: TextAlign.center,
+              maxLines: 1),
         );
       }),
       leading: Builder(builder: (context) {

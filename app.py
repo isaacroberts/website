@@ -27,14 +27,14 @@ mailer = smtplib.SMTP('smtp.gmail.com', 587)
 mailer.starttls()
 mailer.login(SENDR, PSWRD)
 
-print('CWD:')
-print(os.getcwd())
-print("Files:")
-files = os.listdir('.')
-print(files)
-print("Templates:")
-files = os.listdir('templates/')
-print(files)
+# print('CWD:')
+# print(os.getcwd())
+# print("Files:")
+# files = os.listdir('.')
+# print(files)
+# print("Templates:")
+# files = os.listdir('templates/')
+# print(files)
 
 @app.route('/')
 def render_page():
@@ -47,9 +47,15 @@ def render_page_web():
 
 @app.route('/web/<path:name>')
 def return_flutter_doc(name):
+    name = name.replace('assets/assets', 'assets')
 
     datalist = str(name).split('/')
     DIR_NAME = FLUTTER_WEB_APP
+
+    # print(datalist)
+    # if datalist[0]=='assets':
+    #     print('asset')
+
 
     if len(datalist) > 1:
         for i in range(0, len(datalist) - 1):

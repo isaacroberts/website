@@ -173,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: EdgeInsets.all(15),
             ),
             child: Text(
-              'Isaac Roberts Flutter Freelancer',
+              'Isaac Roberts - Mobile & Web Dev',
               style: fonts.headlineSmall,
             ),
           ),

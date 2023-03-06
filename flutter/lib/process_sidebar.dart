@@ -47,7 +47,6 @@ const double imgOpacity = .3;
 
 class _ProcessSidebarState extends State<ProcessSidebar> {
   int _current = 0;
-  double _fcurrent = 0;
 
   final List<NetworkImage> _bgs = [];
 
@@ -89,6 +88,35 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
 
   int get current => _current;
   set current(int n) {
+    if (_current != n) {
+      setState(() {
+        _current = n;
+        if (pageController.hasClients) {
+          pageController.jumpToPage(n);
+        }
+      });
+    }
+  }
+
+  void nextTab() {
+    current = (current + 1) % numPhases;
+  }
+
+  void nextPage() {
+    if ((pageController.page?.round() ?? 0) >= numPhases - 1) {
+      pageController.animateTo(0,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    } else {
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 420), curve: Curves.ease);
+    }
+  }
+
+  void setPage(int n) {
+    if (pageController.hasClients) {
+      pageController.animateToPage(n,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    }
     setState(() {
       _current = n;
     });
@@ -96,8 +124,11 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
 
   void updateCurrentFromPage() {
     if (pageController.page != null) {
-      current = pageController.page!.toInt();
-      _fcurrent = pageController.page!;
+      if (_current != (pageController.page?.toInt() ?? 0)) {
+        setState(() {
+          _current = pageController.page!.toInt();
+        });
+      }
     }
   }
 
@@ -125,7 +156,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         } else if (cnt.maxWidth > 650) {
           return midView();
         } else {
-          return phoneView();
+          return topTabsView();
         }
       }));
     }
@@ -133,7 +164,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     //   return sliverView();
     // }
     else {
-      return SliverToBoxAdapter(child: phoneView());
+      return SliverToBoxAdapter(child: topTabsView());
     }
   }
 
@@ -200,15 +231,17 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                 // child: Card(
                 //     color: Colors.transparent,
                 //     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Stack(
-                    fit: StackFit.expand,
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned.fill(
-                          child: Opacity(
-                              opacity: imgOpacity, child: crossFadeImg())),
-                      wideViewContent(height, maxWidth - 50 * 2)
-                    ]))));
+                child: GestureDetector(
+                    onTap: nextTab,
+                    child: Stack(
+                        fit: StackFit.expand,
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned.fill(
+                              child: Opacity(
+                                  opacity: imgOpacity, child: crossFadeImg())),
+                          wideViewContent(height, maxWidth - 50 * 2)
+                        ])))));
   }
 
   Widget midView() {
@@ -217,12 +250,17 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     const double maxWidth = 1000;
     return SizedBox(
         height: height,
-        child:
-            Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
-          Positioned.fill(
-              child: Opacity(opacity: imgOpacity, child: crossFadeImg())),
-          wideViewContent(height, maxWidth - 50 * 2)
-        ]));
+        child: GestureDetector(
+            onTap: nextTab,
+            child: Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: [
+                  Positioned.fill(
+                      child:
+                          Opacity(opacity: imgOpacity, child: crossFadeImg())),
+                  wideViewContent(height, maxWidth - 50 * 2)
+                ])));
   }
 
   Widget wideViewContent(double height, double maxWidth) {
@@ -250,11 +288,6 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
             // width: 1,
           ),
         ]);
-  }
-
-  void nextPage() {
-    pageController.nextPage(
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   Widget sliverView() {
@@ -319,7 +352,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
 
   bool get isPhoneDark => false;
 
-  Widget phoneView() {
+  Widget topTabsView() {
     // pageController.createScrollPosition(, context, oldPosition)
     const double hrailHeight = 60;
     return SizedBox(
@@ -333,25 +366,28 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
               itemCount: numPhases,
               // itemExtent: Device.width,
               itemBuilder: (context, index) {
-                return Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: getBg(index),
-                            opacity: imgOpacity,
-                            fit: BoxFit.cover)),
-                    child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: hrailHeight),
-                          Expanded(
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 45, vertical: 15),
-                                  child: contentSwitcher(context, !isPhoneDark,
-                                      value: index)))
-                        ]));
+                return GestureDetector(
+                    onTap: nextPage,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: getBg(index),
+                                opacity: imgOpacity,
+                                fit: BoxFit.cover)),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: hrailHeight),
+                              Expanded(
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 45, vertical: 15),
+                                      child: contentSwitcher(
+                                          context, !isPhoneDark,
+                                          value: index)))
+                            ])));
               }),
           SizedBox(
               height: hrailHeight,
@@ -359,107 +395,6 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                   alignment: Alignment.bottomCenter,
                   child: bottomRail(context))),
         ]));
-  }
-
-  Widget phoneViewBorked() {
-    // pageController.createScrollPosition(, context, oldPosition)
-
-    return SizedBox(
-        height: Device.isLandscapeMobile ? Device.height : 450,
-        width: Device.width,
-        child: Stack(children: [
-          pageScrolledImage(),
-          Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Padding(padding: EdgeInsets.only(top: 30)),
-                bottomRail(context),
-                const Padding(padding: EdgeInsets.only(top: 15)),
-                Expanded(
-                    child: PageView.builder(
-                        controller: pageController,
-                        // scrollDirection:
-                        //     Device.isLandscape ? Axis.vertical : Axis.horizontal,
-                        itemCount: numPhases,
-                        // itemExtent: Device.width,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                              padding: Device.isLandscapeMobile
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: 45, vertical: 15)
-                                  : const EdgeInsets.symmetric(
-                                      horizontal: 45, vertical: 15),
-                              child: contentSwitcher(context, !isPhoneDark,
-                                  value: index));
-                        })),
-              ]),
-        ]));
-  }
-
-  Widget mtnPhoneView() {
-    // pageController.createScrollPosition(, context, oldPosition)
-
-    return LayoutBuilder(builder: (context, constraint) {
-      return SizedBox(
-          height: Device.isLandscapeMobile ? Device.height : 550,
-          width: Device.width,
-          child: Stack(children: [
-            AnimatedBuilder(
-                animation: pageController,
-                builder: (BuildContext context, Widget? child) {
-                  double offset = _fcurrent * 0.16;
-
-                  return OverflowBox(
-                      maxWidth: double.infinity,
-                      alignment: FractionalOffset(offset, 0),
-                      child: AspectRatio(
-                          aspectRatio: 2,
-                          child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                  // backgroundBlendMode: BlendMode.overlay,
-                                  // color: theme.scaffoldBackgroundColor,
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      alignment: Alignment.centerLeft,
-                                      colorFilter: ColorFilter.mode(
-                                          theme.scaffoldBackgroundColor,
-                                          BlendMode.multiply),
-                                      image: const AssetImage(
-                                          'images/bg_mtns_edited.png'))))));
-                }),
-            Positioned.fill(
-                // child: Theme(
-                // data: isPhoneDark ? darkTheme : theme,
-                child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                  const Padding(padding: EdgeInsets.only(top: 30)),
-                  bottomRail(context),
-                  const Padding(padding: EdgeInsets.only(top: 15)),
-                  Expanded(
-                      child: PageView.builder(
-                          controller: pageController,
-                          // scrollDirection:
-                          //     Device.isLandscape ? Axis.vertical : Axis.horizontal,
-                          itemCount: numPhases,
-                          // itemExtent: Device.width,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                                padding: Device.isLandscapeMobile
-                                    ? const EdgeInsets.symmetric(
-                                        horizontal: 45, vertical: 15)
-                                    : const EdgeInsets.symmetric(
-                                        horizontal: 45, vertical: 30),
-                                child: contentSwitcher(context, !isPhoneDark,
-                                    value: index));
-                          })),
-                ])),
-          ]));
-    });
   }
 
   Widget contentPanel(BuildContext context) {
@@ -605,10 +540,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         //     : colorScheme.onBackground),
       ),
       onPressed: () {
-        current = index;
-        // pageController.jumpToPage(index);
-        pageController.animateToPage(index,
-            duration: const Duration(milliseconds: 350), curve: Curves.ease);
+        setPage(index);
       },
       // padding: EdgeInsets.all(10),
       // label: Text(label, style: fonts.labelMedium)
@@ -636,38 +568,12 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
       {required String svg,
       required UnDrawIllustration undraw,
       bool imgOnMobile = true}) {
-    return SelectionArea(
-      key: ValueKey<int>(ix),
-      // child: LayoutBuilder(builder: (context, constraints) {
-      //   // log('layouting ${constraints.maxWidth}');
-      //   if (Device.width > 600) {
-      //     // if (Device.isPhone) {
-      //     // log('phone wide');
-      //     return Align(
-      //         alignment: Alignment.topLeft,
-      //         child: Padding(
-      //             padding:
-      //                 const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-      //             child: textColumn(ix, headline, body, bounded: false)));
-      //     // } else {
-      //     //   // log('desktop wide - card');
-      //     //   return wrapInCard(
-      //     //       textColumn(desktop, ix, headline, body, bounded: false));
-      //     // }
-      //   } else {
-      //     return Align(
-      //         alignment: Alignment.topLeft,
-      //         child: Padding(
-      //             padding: const EdgeInsets.all(15),
-      //             child: textColumn(ix, headline, body, bounded: false)));
-      //   }
-      // })
-      child: Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: textColumn(ix, headline, body, bounded: false))),
-    );
+    return Align(
+        key: ValueKey<int>(ix),
+        alignment: Alignment.topLeft,
+        child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: textColumn(ix, headline, body, bounded: false)));
   }
 
   Widget contentSwitcher(BuildContext context, bool desktop, {int? value}) {
