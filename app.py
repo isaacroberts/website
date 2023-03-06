@@ -32,6 +32,9 @@ print(os.getcwd())
 print("Files:")
 files = os.listdir('.')
 print(files)
+print("Templates:")
+files = os.listdir('templates/')
+print(files)
 
 @app.route('/')
 def render_page():
@@ -53,6 +56,9 @@ def return_flutter_doc(name):
             DIR_NAME += '/' + datalist[i]
 
     return send_from_directory(DIR_NAME, datalist[-1])
+
+
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def submit_contact():

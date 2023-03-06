@@ -7,7 +7,7 @@ shopt -s expand_aliases
 rm -r templates
 cd flutter/
 # flutter clean
-flutter build web --release --base-href=/web/
+flutter build web --release --base-href=/web/ --web-renderer canvaskit
 cd ..
 
 mv flutter/build/web templates
