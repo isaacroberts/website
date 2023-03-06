@@ -1,4 +1,6 @@
 #!/bin/bash
+source ~/.bash_profile
+shopt -s expand_aliases
 
 
 # Build
@@ -19,5 +21,4 @@ echo "committed"
 git push --progress
 echo "pushed"
 
-source ~/.bash_profile
-n
+notify

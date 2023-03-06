@@ -16,8 +16,6 @@ CORS(app, resources={r"*": {"origins": "*"}})
 FLUTTER_WEB_APP = 'templates'
 
 # Email
-# from mailer import Mailer
-
 RECVR = 'isaaclevinroberts@gmail.com'
 SENDR = 'algorithmicdesignmusic@gmail.com'
 PSWRD = 'dbcvyphjrtuytsev'
@@ -74,7 +72,7 @@ def submit_contact():
     if body=='':
         body='[err: empty body]'
 
-    print('got email:', address, body)
+    print('Email:', address, 'Body:', body)
 
     currentDT = datetime.datetime.now()
 
@@ -100,16 +98,12 @@ Sent at: {str(currentDT)}
     # sending the mail
     mailer.send_message(message)
 
-    # TODO: Save data to make sure i don't lose email addresses 
+    # TODO: Save data to make sure i don't lose email addresses
 
 
-    # print('sent')
-    # print('response:', resp)
     return {'sweet':'thanks'}
 
 
 if __name__ == '__main__':
-    # print('running');
     app.debug = False
-    app.run() #go to http://localhost:5000/ to view the page.
-    # app.run(ssl_context=('cert.pem', 'key.pem')) #go to http://localhost:5000/ to view the page.
+    app.run()
