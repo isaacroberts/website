@@ -74,10 +74,7 @@ def submit_contact():
     if body=='':
         body='[err: empty body]'
 
-    # print('got email:', address, body)
-
-    # if mail is None:
-    #     mail = Mailer(email=SENDR, password=PSWRD)
+    print('got email:', address, body)
 
     currentDT = datetime.datetime.now()
 
@@ -102,6 +99,9 @@ Sent at: {str(currentDT)}
 
     # sending the mail
     mailer.send_message(message)
+
+    # TODO: Save data to make sure i don't lose email addresses 
+
 
     # print('sent')
     # print('response:', resp)

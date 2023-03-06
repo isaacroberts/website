@@ -3,7 +3,7 @@
 
 # Build
 rm -r templates
-  
+
 cd flutter/
 flutter clean && flutter build web --release --base-href=/templates/
 cd ..
@@ -16,7 +16,7 @@ cp -R flutter/build/web templates/
 git add .
 git commit -m "$1"
 echo "committed"
-git push
+git push --progress
 echo "pushed"
 
 source ~/.bash_profile
