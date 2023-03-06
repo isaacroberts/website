@@ -4,10 +4,9 @@ const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "version.json": "92c70f286b1a446deed293e3244ea9c4",
-"index.html": "8c7f9351384a9e618b06d59fc8493805",
-"/": "8c7f9351384a9e618b06d59fc8493805",
+"index.html": "82b850ea454690d3bdbf4b8eecfaa80f",
+"/": "82b850ea454690d3bdbf4b8eecfaa80f",
 "main.dart.js": "126945b72f9022aef8b3a30c1eddab80",
-"flutter.js": "a85fcf6324d3c4d3ae3be1ae4931e9c5",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
@@ -79,11 +78,7 @@ const RESOURCES = {
 "assets/card_bgs/moritz-mentges-XZuqMUiSdgc-unsplash.jpg": "ad8abed276a53ce5e063e9585e509462",
 "assets/card_bgs/planning.jpg": "8a53f1882dc7e3bb92deab013da15606",
 "assets/card_bgs/mika-baumeister-_Xesb_PEygM-unsplash.jpg": "52e235b9c2873ee9dbc1218b9d74659d",
-"assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080",
-"canvaskit/canvaskit.js": "97937cb4c2c2073c968525a3e08c86a3",
-"canvaskit/profiling/canvaskit.js": "c21852696bc1cc82e8894d851c01921a",
-"canvaskit/profiling/canvaskit.wasm": "371bc4e204443b0d5e774d64a046eb99",
-"canvaskit/canvaskit.wasm": "3de12d898ec208a5f31362cc00f09b9e"
+"assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080"
 };
 
 // The application shell files that are downloaded before a service worker can
