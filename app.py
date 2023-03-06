@@ -27,6 +27,11 @@ mailer = smtplib.SMTP('smtp.gmail.com', 587)
 mailer.starttls()
 mailer.login(SENDR, PSWRD)
 
+print('CWD:')
+print(os.getcwd())
+print("Files:")
+files = os.listdir('.')
+print(files)
 
 @app.route('/')
 def render_page():
