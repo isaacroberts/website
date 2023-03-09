@@ -59,7 +59,7 @@ abstract class FeatureShower {
           //     const ColorFilter.mode(Color(0xaa444444), BlendMode.multiply),
           image: assetProvider(bgImage()),
           fit: BoxFit.cover,
-          opacity: .2,
+          opacity: .5,
         ));
   }
 
@@ -81,10 +81,11 @@ abstract class FeatureShower {
         height: 400,
         decoration: deco(const BorderRadius.all(Radius.circular(15))),
         child: InkWell(
-            onTap: () => navToDisplayWidget(context),
+            onTap: shouldExpandToDisplay()
+                ? () => navToDisplayWidget(context)
+                : null,
             child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 45),
+                padding: const EdgeInsets.all(textContainerMargin),
                 child: textContent(true, selectable: false))));
   }
 
@@ -124,10 +125,6 @@ abstract class FeatureShower {
     if (vertical) {
       return [
         vertTextContainer(context),
-        // Align(
-        //     alignment: Alignment.center,
-        //     child: SizedBox(
-        //         width: 400, height: 400, child: _displayContent(context)))
       ];
     } else {
       if (left) {
@@ -168,11 +165,6 @@ abstract class FeatureShower {
               Text(title(), style: fonts.headlineSmall),
               const SizedBox(height: 15),
               paraMed(subtitle(), align: align),
-              // Text(
-              //   subtitle(),
-              //   style: fonts.bodyMedium,
-              //   textAlign: align,
-              // ),
               const SizedBox(height: 15),
               paraMed(body(), align: align)
             ]));
@@ -190,14 +182,23 @@ abstract class FeatureShower {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: children(context, textLeft, false))));
+        // } else if (constraints.maxWidth >= tinyWidth) {
+        //   return Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: standardContainerMargin),
+        //       child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           mainAxisAlignment: MainAxisAlignment.start,
+        //           crossAxisAlignment: CrossAxisAlignment.stretch,
+        //           children: [vertTextContainer(context)]));
       } else {
         return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding:
+                const EdgeInsets.symmetric(horizontal: standardContainerMargin),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: children(context, textLeft, true)));
+                children: [vertTextContainer(context)]));
       }
     });
   }

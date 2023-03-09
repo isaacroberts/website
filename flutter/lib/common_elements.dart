@@ -315,6 +315,7 @@ Widget _paragraph(String para,
     bool selectable = false}) {
   List<String> lines = para.split('\n');
   double spacing = .5 * (style?.height ?? 10);
+  spacing = 15;
   return selectionIf(
       selectable,
       Column(
@@ -323,7 +324,7 @@ Widget _paragraph(String para,
           mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(lines.length, (int index) {
             return Padding(
-                padding: index == lines.length
+                padding: index == lines.length - 1
                     ? EdgeInsets.zero
                     : EdgeInsets.only(bottom: spacing),
                 child: Text(
@@ -342,19 +343,18 @@ Widget _subt(String line,
     TextAlign align = TextAlign.left,
     bool selectable = false}) {
   double spacing = .5 * (style?.height ?? 10);
+  spacing = 15;
   return selectionIf(
       selectable,
-      Padding(
-          padding: EdgeInsets.only(bottom: spacing),
-          child: Text(
-            line,
-            style: style,
-            maxLines: null,
-            softWrap: true,
-            // strutStyle: StrutStyle(),
-            overflow: TextOverflow.visible,
-            textAlign: align,
-          )));
+      Text(
+        line,
+        style: style,
+        maxLines: null,
+        softWrap: true,
+        // strutStyle: StrutStyle(),
+        overflow: TextOverflow.visible,
+        textAlign: align,
+      ));
 }
 
 var paraSmall = paraLarge;

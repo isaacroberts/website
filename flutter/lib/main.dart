@@ -173,8 +173,8 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: EdgeInsets.all(15),
             ),
             child: Text(
-              'Isaac Roberts - Mobile & Web Dev',
-              style: fonts.headlineSmall,
+              'Isaac Roberts',
+              style: fonts.displaySmall?.copyWith(color: Colors.white),
             ),
           ),
           for (int n = 0; n < scrollTos.length; ++n) drawerListTile(n),

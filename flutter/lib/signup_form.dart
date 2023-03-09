@@ -40,10 +40,7 @@ class _SignupFormState extends State<SignupForm> {
 
   Widget imgStack(BuildContext context) {
     return Stack(alignment: Alignment.centerLeft, children: [
-      ClipRRect(child: parallaxImg(context)),
-      // Positioned.fill(
-      //     //Parallax this
-      //     child: Image.asset('images/email_cta.jpg', fit: BoxFit.cover)),
+      ClipRect(child: parallaxImg(context)),
       glassAndText(context),
     ]);
   }
@@ -54,8 +51,6 @@ class _SignupFormState extends State<SignupForm> {
         builder: (context, constraints) {
           double aspectRatio = constraints.maxWidth / constraints.maxHeight;
           double imgAspect = 1.52;
-          // log('ar = $aspectRatio img ar $imgAspect');
-
           if (aspectRatio > imgAspect) {
             return Flow(
                 key: const Key('email_cta_flow'),
@@ -66,7 +61,6 @@ class _SignupFormState extends State<SignupForm> {
                   distance: 0,
                 ),
                 children: [
-                  // clipBehavior: Clip.antiAlias,
                   fadeAssetBg('images/email_cta.jpg',
                       fit: BoxFit.cover, key: _backgroundImageKey),
                 ]);
@@ -87,35 +81,20 @@ class _SignupFormState extends State<SignupForm> {
         return Align(
             alignment: Alignment.centerLeft,
             child: FractionallySizedBox(
-                widthFactor: .5, heightFactor: 1, child: draggable(context)
-                // glassAndTextContent()
-
-                ));
+                widthFactor: .5,
+                heightFactor: 1,
+                child: glassAndTextContent()));
       } else {
         return Center(child: glassAndTextContent());
       }
     });
   }
 
-  Widget draggable(BuildContext context) {
-    return Draggable(
-
-        // axis: Axis.horizontal,
-        feedback: Material(
-            type: MaterialType.transparency,
-            child: SizedBox(
-                height: 400,
-                width: (Device.width - 30) / 2,
-                child: glassAndTextContent())),
-        childWhenDragging: Container(),
-        child: glassAndTextContent());
-  }
-
   Padding glassAndTextContent() {
     return Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(standardContainerMargin),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
               child: Container(
@@ -124,52 +103,49 @@ class _SignupFormState extends State<SignupForm> {
                       BoxDecoration(color: theme.cardColor.withOpacity(0.4)),
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 30, horizontal: 15),
+                          vertical: textContainerMargin,
+                          horizontal: textContainerMargin),
                       child: content()))),
         ));
   }
 
   Widget content() {
     if (!submitted) {
-      return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 15),
-                Text(
-                  'Get started',
-                  style: fonts.displaySmall,
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(height: 15),
-                Text(
-                    'Enter your email and I\'ll get back to you with questions about your project.',
-                    style: fonts.bodyMedium,
-                    textAlign: TextAlign.left),
-                const SizedBox(height: 15),
-                signupRow()
-              ]));
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 15),
+            Text(
+              'Get started',
+              style: fonts.displayMedium,
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 15),
+            Text(
+                'Enter your email and I\'ll get back to you with questions about your project.',
+                style: fonts.bodyLarge,
+                textAlign: TextAlign.left),
+            const SizedBox(height: 15),
+            signupRow()
+          ]);
     } else {
-      return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 15),
-                Text(
-                  'Thanks!',
-                  style: fonts.headlineSmall,
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(height: 15),
-                paraLarge('I\'ll get back to you soon!'),
-                // SizedBox(height: 15),
-              ]));
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            Text(
+              'Thanks!',
+              style: fonts.headlineSmall,
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 15),
+            paraLarge('I\'ll get back to you soon!'),
+            // SizedBox(height: 15),
+          ]);
     }
   }
 
@@ -177,28 +153,29 @@ class _SignupFormState extends State<SignupForm> {
     // return TextFormField(
     //   initialValue: 'yitzaklr@aol.com',
     // );
-    return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth > 300) {
-        return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Expanded(child: textForm()),
-          Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: ElevatedButton(
-                  onPressed: () => sendEmail(), child: submitButton()))
+    // return LayoutBuilder(builder: (context, constraints) {
+    // if (constraints.maxWidth > 500) {
+    // return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    //   Expanded(child: textForm()),
+    //   // const SizedBox(width: 10),
+    //   Padding(
+    //       padding: const EdgeInsets.only(top: 15),
+    //       child: ElevatedButton(
+    //           onPressed: () => sendEmail(), child: submitButton()))
+    // ]);
+    // } else {
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          //TODO: SizedBox so the errormsg expands into it
+          textForm(),
+          const SizedBox(height: 15),
+          ElevatedButton(onPressed: () => sendEmail(), child: submitButton())
         ]);
-      } else {
-        return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              textForm(),
-              const Padding(padding: EdgeInsets.only(top: 15)),
-              ElevatedButton(
-                  onPressed: () => sendEmail(), child: submitButton())
-            ]);
-      }
-    });
+    // }
+    // });
   }
 
   Text submitButton() => Text('Submit', style: fonts.button);
@@ -258,23 +235,6 @@ class _SignupFormState extends State<SignupForm> {
       });
     }
   }
-
-  // Widget content() {
-  //   return Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 15),
-  //       child: Draggable(
-  //           axis: Axis.horizontal,
-  //           feedback: Material(
-  //               type: MaterialType.transparency,
-  //               child: Card(
-  //                   // margin: const EdgeInsets.symmetric(horizontal: 15),
-  //                   child: SizedBox(
-  //                       height: 400,
-  //                       width: (Device.width - 60) / 2,
-  //                       child: _content()))),
-  //           childWhenDragging: Container(),
-  //           child: _content()));
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -104,13 +104,23 @@ List<Widget> popScrolls(BuildContext context) {
   ];
 }
 
+List<Widget> popScrollNoIcons(BuildContext context) {
+  return [
+    PopScrollNoIcon(icons[0], titles[0], bodies[0]),
+    PopScrollNoIcon(icons[1], titles[1], bodies[1]),
+    PopScrollNoIcon(icons[2], titles[2], bodies[2]),
+  ];
+}
+
 bool get useScroll => Device.width < 840;
 
 Widget trioSliver(BuildContext context) {
   return SliverLayoutBuilder(builder: (context, constraints) {
     if (useScroll) {
       return SliverList(
-        delegate: SliverChildListDelegate(popScrolls(context)),
+        delegate: SliverChildListDelegate(Device.width > tinyWidth
+            ? popScrolls(context)
+            : popScrollNoIcons(context)),
       );
     }
     return SliverToBoxAdapter(child: trioContainerNoScroll(context));

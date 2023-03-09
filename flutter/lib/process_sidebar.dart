@@ -155,8 +155,10 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
           return wideView();
         } else if (cnt.maxWidth > 650) {
           return midView();
-        } else {
+        } else if (cnt.maxWidth > tinyWidth) {
           return topTabsView();
+        } else {
+          return tinyTabsView();
         }
       }));
     }
@@ -290,70 +292,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         ]);
   }
 
-  Widget sliverView() {
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
-        return OrientationBuilder(builder: (context, orientation) {
-          return SelectionArea(
-              child: SizedBox(
-                  height: Device.height - (Device.isLandscape ? 0 : 100),
-                  child: GestureDetector(
-                      onTap: () => nextPage(),
-                      child: Card(
-                          margin: EdgeInsets.symmetric(
-                              vertical: (Device.isLandscape ? 5 : 10),
-                              horizontal: (Device.isLandscape ? 10 : 5)),
-                          child: Padding(
-                              padding: const EdgeInsets.all(30),
-                              child: contentSwitcher(context, true,
-                                  value: index))))));
-        });
-      },
-      childCount: numPhases,
-    ));
-  }
-
-  Widget phoneViewCards() {
-    // pageController.createScrollPosition(, context, oldPosition)
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // bottomRail(context),
-          OrientationBuilder(builder: (context, orientation) {
-            return SizedBox(
-                height: math.min(
-                    500, Device.height - (Device.isLandscape ? 0 : 100)),
-                child: PageView.builder(
-                    // physics: const ClampingScrollPhysics(),
-                    controller: pageController,
-                    // scrollDirection:
-                    //     Device.isLandscape ? Axis.vertical : Axis.horizontal,
-                    itemCount: numPhases,
-                    // itemExtent: Device.width,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                          // onTap: () => nextPage(),
-                          child: Card(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: (Device.isLandscape ? 15 : 15),
-                                  horizontal: (Device.isLandscape ? 15 : 15)),
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 30),
-                                  child: contentSwitcher(context, true,
-                                      value: index))));
-                    }));
-          }),
-        ]);
-  }
-
-  bool get isPhoneDark => false;
-
   Widget topTabsView() {
-    // pageController.createScrollPosition(, context, oldPosition)
     const double hrailHeight = 60;
     return SizedBox(
         height: Device.isLandscapeMobile ? Device.height : 500,
@@ -361,10 +300,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         child: Stack(alignment: Alignment.topCenter, children: [
           PageView.builder(
               controller: pageController,
-              // scrollDirection:
-              //     Device.isLandscape ? Axis.vertical : Axis.horizontal,
               itemCount: numPhases,
-              // itemExtent: Device.width,
               itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: nextPage,
@@ -384,8 +320,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                                   child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 45, vertical: 15),
-                                      child: contentSwitcher(
-                                          context, !isPhoneDark,
+                                      child: contentSwitcher(context,
                                           value: index)))
                             ])));
               }),
@@ -397,11 +332,58 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         ]));
   }
 
-  Widget contentPanel(BuildContext context) {
-    return buildAnimatedSwitcher(context, true);
+  Widget tinyTabsView() {
+    const double hrailHeight = 60;
+    return SizedBox(
+        height: Device.height,
+        width: Device.width,
+        child: Stack(alignment: Alignment.topCenter, children: [
+          PageView.builder(
+              controller: pageController,
+              itemCount: numPhases,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                    onTap: nextPage,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: getBg(index),
+                                opacity: imgOpacity,
+                                fit: BoxFit.cover)),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: hrailHeight),
+                              Expanded(
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 0),
+                                      child: contentSwitcher(context,
+                                          value: index)))
+                            ])));
+              }),
+          SizedBox(
+            height: hrailHeight,
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: totalTextMargin),
+                child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    // padding:
+                    //     const EdgeInsets.symmetric(horizontal: totalTextMargin),
+                    semanticChildCount: numPhases,
+                    children: _bottomRailList())),
+          )
+        ]));
   }
 
-  AnimatedSwitcher buildAnimatedSwitcher(BuildContext context, bool desktop) {
+  Widget contentPanel(BuildContext context) {
+    return buildAnimatedSwitcher(context);
+  }
+
+  AnimatedSwitcher buildAnimatedSwitcher(BuildContext context) {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
         transitionBuilder: (Widget child, Animation<double> animation) {
@@ -424,59 +406,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
             return FadeTransition(opacity: dubAnimation, child: child);
           }
         },
-        child: contentSwitcher(context, desktop));
-  }
-  //
-  // Widget contentNDesktop(
-  //     BuildContext context, String headline, String body, int ix,
-  //     {required String svg,
-  //     required UnDrawIllustration undraw,
-  //     bool imgOnMobile = true}) {
-  //   return SelectionArea(
-  //       key: ValueKey<int>(ix),
-  //       child: LayoutBuilder(builder: (context, constraints) {
-  //         return Row(
-  //             mainAxisSize: MainAxisSize.max,
-  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Expanded(
-  //                   child: Align(
-  //                       alignment: Alignment.topCenter,
-  //                       // child: Card(
-  //                       //     color: Colors.white,
-  //                       child: textColumn(ix, headline, body))),
-  //               if (constraints.maxWidth > 300)
-  //                 Flexible(
-  //                     // child: Padding(
-  //                     //     padding: const EdgeInsets.all(45),
-  //                     child: undrawImage(svg, undraw, true))
-  //               // const Padding(padding: EdgeInsets.only(right: 60)),
-  //             ]);
-  //       }));
-  // }
-
-  Widget wrapInCard(Widget child) {
-    return child;
-    // return ImageFilter.blur(
-    //     sigmaX: 10,
-    //     sigmaY: 10,
-    //     child: Padding(padding: EdgeInsets.all(30), child: child));
-  }
-
-  Widget undrawImage(String svg, UnDrawIllustration undraw, bool horiz) {
-    return Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: Device.isPhone ? 0 : 0,
-            horizontal: Device.isPhonePort ? 0 : 15),
-        child: SizedBox(
-            width: 200,
-            height: 200,
-            child: UnDraw(
-                // width: 200,
-                // height: 200,
-                illustration: undraw,
-                color: secondary.shade600)));
+        child: contentSwitcher(context));
   }
 
   Widget textColumn(int ix, String headline, String body,
@@ -547,24 +477,27 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     );
   }
 
+  List<Widget> _bottomRailList() {
+    return [
+      hrail(0, 'Quote', MdiIcons.fileDocument),
+      hrail(1, 'Planning', MdiIcons.imageFilterHdr),
+      hrail(2, 'Mockups', MdiIcons.applicationEdit), //pencilBox
+      hrail(3, 'Develop', MdiIcons.applicationBraces),
+      hrail(4, 'Sugarcoat', MdiIcons.star), //crown, heart
+      hrail(5, 'Test', MdiIcons.desktopTower), //bug
+      hrail(6, 'Release', MdiIcons.rocketLaunch),
+    ];
+  }
+
   Widget bottomRail(BuildContext context) {
     return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         // crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          hrail(0, 'Quote', MdiIcons.fileDocument),
-          hrail(1, 'Planning', MdiIcons.imageFilterHdr),
-          hrail(2, 'Mockups', MdiIcons.applicationEdit), //pencilBox
-          hrail(3, 'Develop', MdiIcons.applicationBraces),
-          hrail(4, 'Sugarcoat', MdiIcons.star), //crown, heart
-          hrail(5, 'Test', MdiIcons.desktopTower), //bug
-          hrail(6, 'Release', MdiIcons.rocketLaunch),
-        ]);
+        children: _bottomRailList());
   }
 
-  Widget contentN(
-      BuildContext context, bool desktop, String headline, String body, int ix,
+  Widget contentN(BuildContext context, String headline, String body, int ix,
       {required String svg,
       required UnDrawIllustration undraw,
       bool imgOnMobile = true}) {
@@ -576,13 +509,12 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
             child: textColumn(ix, headline, body, bounded: false)));
   }
 
-  Widget contentSwitcher(BuildContext context, bool desktop, {int? value}) {
+  Widget contentSwitcher(BuildContext context, {int? value}) {
     value ??= current;
     switch (value) {
       case 0:
         return contentN(
             context,
-            desktop,
             'Requirements gathering',
             """
 In the requirements gathering phase we will work closely to understand your business needs and objectives, and to identify the key features and functionality that your app should have. 
@@ -597,7 +529,6 @@ The end result of this phase will be a detailed set of requirements that will se
       case 1:
         return contentN(
             context,
-            desktop,
             'User story',
             """
 I work with you to come up with a User Story, determining how the user will use the app, their goals, the pathway to those goals, and the way you want them to go about those goals. 
@@ -610,7 +541,6 @@ I work with you to come up with a User Story, determining how the user will use 
       case 2:
         return contentN(
             context,
-            desktop,
             'Mockup',
             """
 The mockup phase is where we take the ideas and requirements from the previous phases and turn them into a visual representation of the app.
@@ -623,7 +553,6 @@ This typically involves creating wireframes or prototypes that show the basic st
       case 3:
         return contentN(
             context,
-            desktop,
             'Development',
             """
 Once the mockups have been approved, it's time to start development. 
@@ -636,7 +565,6 @@ Throughout development, I will keep you informed of the app's progress and addre
       case 4:
         return contentN(
             context,
-            desktop,
             'Sugarcoating',
             """
 The sugarcoating phase is where I add the finishing touches to the app, making it more engaging and user-friendly. This involves styling, adding effects, animations, and other visual flourishes.
@@ -648,7 +576,6 @@ The sugarcoating phase is where I add the finishing touches to the app, making i
       case 5:
         return contentN(
             context,
-            desktop,
             'Automated testing',
             """
 During this phase, I will use automated and manual testing to uncover bugs, issues, and inconsistencies in the app. 
@@ -659,8 +586,8 @@ The goal of testing is to identify and fix any problems with the app before it i
             svg: 'programmer');
 
       case 6:
-        return contentN(context, desktop, 'Launch',
-            "The app is ready! Go get out there!", value,
+        return contentN(
+            context, 'Launch', "The app is ready! Go get out there!", value,
             undraw: UnDrawIllustration.outer_space, svg: 'outer_space');
 
       default:

@@ -15,6 +15,13 @@ const double IPHI = .61803398;
 const double borderRadius1 = 20;
 const double borderRadius2 = 10;
 
+// Only applies to tiny
+const double totalTextMargin = 45;
+const double standardContainerMargin = 15;
+const double textContainerMargin = 30;
+
+const double tinyWidth = 400;
+
 const MaterialColor primary = Colors.orange;
 
 class Primary {
@@ -41,7 +48,7 @@ class Primary {
   static const int shade50value = 0xFFFFF3E0;
 }
 
-const Color MANIFEST_THEME_COLOR = Color(0xFFE65100);
+const Color MANIFEST_THEME_COLOR = Color(0xFFF57C00);
 const Color MANIFEST_BACKGROUND_COLOR = Color(0xff252525);
 
 const MaterialColor secondary = MaterialColor(0xff25581a, <int, Color>{
@@ -125,7 +132,7 @@ void startupPrint() {
   // log(theme.scaffoldBackgroundColor.toString());
 }
 
-const Color flutterLogoTop = PrimDark.v1;
+const Color flutterLogoTop = Primary.shade700; //Primary.Shade700
 const Color flutterLogoBot = Color(0xff214e18);
 
 class TextButtonColor extends MaterialStateColor {
@@ -232,7 +239,13 @@ final ThemeData theme = ThemeData(
 // DataTableThemeData? dataTableTheme,
 // DialogTheme? dialogTheme,
 // DividerThemeData? dividerTheme,
-// DrawerThemeData? drawerTheme,
+  drawerTheme: const DrawerThemeData(
+      backgroundColor: Grayscale.shade700,
+      elevation: 5,
+      shape: RoundedRectangleBorder(),
+      surfaceTintColor: PrimDark.v7,
+      shadowColor: Colors.black,
+      width: 175),
 // DropdownMenuThemeData? dropdownMenuTheme,
 // ElevatedButtonThemeData? elevatedButtonTheme,
 // ExpansionTileThemeData? expansionTileTheme,

@@ -82,21 +82,6 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
                 child: lightboxRows())),
       ));
     }
-    return OrientationBuilder(builder: (context, or) {
-      if (_imageExpandedInLightbox && Device.isPhonePort) {
-        //Avoid the margins
-        return Scaffold(
-            // appBar: AppBar(title: Text(experiences[index].headline)),
-            // backgroundColor: theme.cardColor,
-            body: Center(child: interactiveImage()));
-      }
-      return Scaffold(
-          appBar: AppBar(title: Text(experiences[index].headline)),
-          // backgroundColor: theme.cardColor,
-          body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: lightboxRows()));
-    });
   }
 
   Widget imgSizer({required Widget child}) {
@@ -145,54 +130,6 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
             ],
           ));
     }
-
-    //brk
-    //   if (_imageExpandedInLightbox) {
-    // if (Device.isPhonePort) {
-    //   //Expanded on phone
-    //   return Center(child: lightboxImage());
-    // } else {
-    //   //Desktop img expanded
-    //
-    //   //Show full image above text
-    //
-    //   return ListView(
-    //     children: [
-    //       lightboxImage(),
-    //       const Padding(padding: EdgeInsets.only(top: 45)),
-    //       lightboxSelectCol(TextAlign.left),
-    //     ],
-    //   );
-    // }
-    // } else {
-    //   if (Device.width < 800) {
-    //     //Mobile
-    //
-    //     return ListView(children: [
-    //       ConstrainedBox(
-    //           constraints: const BoxConstraints(maxHeight: 400),
-    //           child: lightboxImage()),
-    //       const Padding(padding: EdgeInsets.only(top: 45)),
-    //       lightboxSelectCol(TextAlign.left),
-    //     ]);
-    //     // const Padding(padding: EdgeInsets.only(bottom: 60)),
-    //   }
-    //   else {
-    //     //Desktop view
-    //     return Row(
-    //       mainAxisAlignment: MainAxisAlignment.start,
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       mainAxisSize: MainAxisSize.max,
-    //
-    //       // mainAxisAlignment: MainAxisAlignment.center,
-    //       // mainAxisSize: MainAxisSize.min,
-    //       children: [
-    //         Flexible(child: lightboxImage()),
-    //         Flexible(child: lightTextListView()),
-    //       ],
-    //     );
-    //   }
-    // }
   }
 
   Widget lightboxImage() {
@@ -209,24 +146,27 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
     return InteractiveViewer(child: getImage(index));
   }
 
-  List<Widget> _lightTextList(TextAlign align, {required bool addClose}) {
+  List<Widget> _lightTextList(TextAlign align,
+      {required bool addClose, required bool addTitle}) {
     return [
-      paraMed(experiences[index].bodyText, align: align),
-      const Padding(padding: EdgeInsets.only(top: 15)),
+      if (addTitle)
+        Text(experiences[index].headline,
+            style: fonts.titleMedium, textAlign: align),
+      if (addTitle) const SizedBox(height: 15),
       paraMed(experiences[index].fullText, align: align),
-      const Padding(padding: EdgeInsets.only(top: 15)),
+      const SizedBox(height: 15),
       OutlinedButton(
         onPressed: () => launchUrl(Uri.parse(experiences[index].url)),
         child: const Text('Website'),
       ),
-      const Padding(padding: EdgeInsets.only(top: 15)),
+      const SizedBox(height: 15),
       if (addClose)
         ElevatedButton(
           onPressed: _removeOverlay,
           // icon: const Icon(Icons.close),
           child: const Text('Close'),
         ),
-      if (addClose) const Padding(padding: EdgeInsets.only(top: 15)),
+      if (addClose) const SizedBox(height: 15),
     ];
   }
 
@@ -237,36 +177,17 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
             // child: Center(
             child: ListView(
                 shrinkWrap: true,
-                children: _lightTextList(TextAlign.left, addClose: false))));
+                children: _lightTextList(TextAlign.left,
+                    addClose: false, addTitle: true))));
   }
 
   Widget lightboxSelectCol(TextAlign align) {
     return SelectionArea(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: _lightTextList(align, addClose: true)));
+            children: _lightTextList(align, addClose: true, addTitle: false)));
   }
 }
-
-OverlayEntry? _entry;
-
-// void _removeOverlay() {
-// _entry?.remove();
-// _entry = null;
-// }
-
-// Widget lightbox(BuildContext context, int index) {
-//   return
-//       // SizedBox(
-//       //   width: Device.width,
-//       //   height: Device.height,
-//       //   child:
-//
-//       // GestureDetector(
-//       //     onTap: _removeOverlay,
-//       //     child:
-//       ExperienceLightbox(index, key: Key('lbx_$index'));
-// }
 
 class LightboxDialog extends PopupRoute {
   final int index;
@@ -276,7 +197,7 @@ class LightboxDialog extends PopupRoute {
         );
 
   @override
-  Color get barrierColor => const Color(0x40000000);
+  Color get barrierColor => const Color(0x90000000);
 
   @override
   bool get barrierDismissible => true;
@@ -302,46 +223,5 @@ class LightboxDialog extends PopupRoute {
 }
 
 void showLightbox(BuildContext context, int index) {
-  // _entry = OverlayEntry(
-  //   builder: (context) => lightbox(context, index),
-  // );
-  // Overlay.of(context).insert(_entry!);
-
-  // Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //
-  //         fullscreenDialog: false,
-  //         builder: (BuildContext context) {
-  //           return lightbox(context, index);
-  //         }));
-
-  // Navigator.push(
-  //     context,
-  //     PageRouteBuilder(
-  //         fullscreenDialog: true,
-  //         opaque: false,
-  //         pageBuilder: (BuildContext context, Animation<double> animation,
-  //             Animation<double> secondaryAnimation) {
-  //           // var offset =
-  //           //     Tween<Offset>(begin: const Offset(0, 10), end: Offset.zero)
-  //           //         .animate(animation);
-  //           var sigma = animation.value * 20;
-  //           return SizedBox.expand(
-  //               child: GestureDetector(
-  //                   onTap: () {
-  //                     log('touched__');
-  //                     Navigator.pop(context);
-  //                   },
-  //                   child: BackdropFilter(
-  //                       filter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
-  //                       // child: SlideTransition(
-  //                       //     position: offset,
-  //                       child: lightbox(context, index))));
-  //         }));
-
   Navigator.push(context, LightboxDialog(index));
-
-  // showDialog(
-  //     context: context, builder: (BuildContext ct) => lightbox(ct, index));
 }

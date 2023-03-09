@@ -62,8 +62,10 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
         return wideView(context);
         // } else if (constraints.maxWidth > 800) {
         //   return midView(context);
-      } else {
+      } else if (constraints.maxWidth > tinyWidth) {
         return thinView(context);
+      } else {
+        return tinyView(context);
       }
     }));
   }
@@ -92,28 +94,12 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: introText(context)),
+                    Expanded(child: introText(context, leftAlign: true)),
+                    const SizedBox(width: 15),
                     const SizedBox(width: 300, height: 300, child: ProPic()),
                   ]))),
     );
   }
-
-  // Container midView(BuildContext context) {
-  //   // log('mid');
-  //   return Container(
-  // decoration: containerDeco(),
-  //     alignment: Alignment.topCenter,
-  //     margin: const EdgeInsets.fromLTRB(120, 60, 120, 90),
-  //     child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         mainAxisSize: MainAxisSize.max,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Flexible(child: introText(context)),
-  //           const Flexible(child: ProPic()),
-  //         ]),
-  //   );
-  // }
 
   Container thinView(BuildContext context) {
     return Container(
@@ -121,14 +107,15 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
         alignment: Alignment.topCenter,
         // height: 400,
         child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 45, 15, 0),
+            padding: const EdgeInsets.symmetric(
+                vertical: 15, horizontal: totalTextMargin),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: introText(context, fullWidth: true)),
+                      child: introText(context, leftAlign: false)),
                   const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 0, vertical: 30),
@@ -136,65 +123,70 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
                 ])));
   }
 
-  Widget introText(BuildContext context, {bool fullWidth = false}) {
-    var ta = fullWidth ? TextAlign.center : TextAlign.left;
+  Container tinyView(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: fullWidth
-                ? CrossAxisAlignment.stretch
-                : CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Isaac Roberts',
-                style: fonts.displayLarge,
-                textAlign: ta,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: Text(
-                  bodyString(),
-                  style: fonts.bodyLarge,
-                  textAlign: ta,
-                ),
-              ),
-              ElevatedButton.icon(
-                  icon: (expander != null)
-                      ? ExpandIcon(
-                          isExpanded: extended,
-                          onPressed: setExt,
-                        )
-                      : const Icon(Icons.expand_more),
-                  label: const Text('Learn More'),
-                  onPressed: toggleExt // scrollLearnMore(widget.scrollTo),
-                  ),
-              extAnimator(context)
-            ]));
+        decoration: containerDeco(),
+        alignment: Alignment.topCenter,
+        // height: 400,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: totalTextMargin),
+                      child: introText(context, leftAlign: true)),
+                  const SizedBox(height: 45),
+                  const ProPic(isThin: true),
+                  const SizedBox(height: 30),
+                ])));
   }
 
-  Widget extAnimator(BuildContext context) {
-    // return AnimatedContainer(
-    //
-    //     duration: const Duration(milliseconds: 250),
-    //     // height: extended ? 300 : 0,
-    //     child: extText());
-    // return Hero(tag: const Key('header_exp_hero'), child: extText());
-    // if (expander == null) {
-    //   return extText();
-    // }
-    // return AnimatedFractionallySizedBox(
-    //   duration: const Duration(milliseconds: 250),
-    //   child: extText(),
-    //   heightFactor: extended ? 1 : 0,
-    //   curve: Curves.ease,
-    // );
-    // return ScaleTransition(
-    //     scale: expander!, alignment: Alignment.topLeft, child: extText());
+  Widget introText(BuildContext context, {required bool leftAlign}) {
+    //Centered: fullwidth=true
+    //Left: fullwidth=false
+    //Two columns: fullwidth=false
+
+    var ta = leftAlign ? TextAlign.left : TextAlign.center;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment:
+            leftAlign ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Isaac Roberts',
+            style: fonts.displayLarge,
+            textAlign: ta,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: Text(
+              bodyString(),
+              style: fonts.bodyLarge,
+              textAlign: ta,
+            ),
+          ),
+          ElevatedButton.icon(
+              icon: (expander != null)
+                  ? ExpandIcon(
+                      isExpanded: extended,
+                      onPressed: setExt,
+                    )
+                  : const Icon(Icons.expand_more),
+              label: const Text('Learn More'),
+              onPressed: toggleExt // scrollLearnMore(widget.scrollTo),
+              ),
+          extAnimator(context, ta)
+        ]);
+  }
+
+  Widget extAnimator(BuildContext context, TextAlign align) {
     return AnimatedBuilder(
         animation: expander!,
         builder: (context, widget) {
-          return SizeTransition(sizeFactor: expander!, child: extText());
+          return SizeTransition(sizeFactor: expander!, child: extText(align));
         });
   }
 
@@ -203,10 +195,10 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
   String extString() =>
       """As a full-stack developer specializing in mobile and web development, I help my clients turn their ideas into successful apps.\nMy expertise in the Flutter framework allows me to build beautiful, multiplatform apps, and my expertise with Python creates production-ready backends. Contact me today to see how I can meet your needs.""";
 
-  Padding extText() {
+  Padding extText(TextAlign align) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 30),
-        child: Text(extString(), style: fonts.bodyLarge));
+        child: Text(extString(), textAlign: align, style: fonts.bodyLarge));
   }
 }
 
@@ -227,12 +219,10 @@ class _ProPicState extends State<ProPic> {
       return SizedBox(
           height: 300,
           child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
               child: child));
     } else {
-      return Padding(
-          padding: const EdgeInsets.all(0),
-          child: AspectRatio(aspectRatio: 1, child: ClipOval(child: child)));
+      return AspectRatio(aspectRatio: 1, child: ClipOval(child: child));
     }
     return child;
   }
