@@ -9,7 +9,7 @@ import 'theme.dart';
 
 // var f = GoogleFonts.ibmPlexSans();
 
-const Color displayColor = Primary.shade700;
+const Color displayColor = Primary_; //Primary.shade700;
 const Color boldColor = Colors.white;
 // Color bodyColor = secondary.shade50; //Color(0xffe5e5d0);
 
@@ -197,9 +197,53 @@ TextTheme fonts = TextTheme(
       _body(fontSize: 11, fontWeight: FontWeight.w300, letterSpacing: 0.5),
 );
 
-// TextTheme fonts = const TextTheme();
+TextStyle watchHeaderLarge = _displayFont(
+  letterSpacing: 1.5,
+  height: 1.2,
+  fontSize: 30,
+  fontWeight: FontWeight.w600,
+  color: displayColor,
+);
+TextStyle watchHeader = _displayFont(
+  letterSpacing: 1,
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: displayColor,
+);
+TextStyle watchSubt = _headerFont(
+  color: Colors.white,
+  fontSize: 18,
+  letterSpacing: 0,
+  fontWeight: FontWeight.w500,
+);
+TextStyle watchBody = _body(
+  color: Colors.white,
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  letterSpacing: 0.5,
+  height: 1.5,
+);
+TextStyle watchLabel = _body(
+  color: Colors.orange,
+  fontSize: 14,
+  fontWeight: FontWeight.w300,
+  letterSpacing: 0.5,
+  height: 1.5,
+);
 
-// TextTheme fonts = GoogleFonts.poppinsTextTheme();
-// TextTheme fonts = GoogleFonts.latoTextTheme();
-
-// TextTheme darkFonts = fonts.apply(bodyColor: Colors.white);
+TextTheme watchFonts = TextTheme(
+    displayLarge: watchHeaderLarge,
+    displayMedium: watchHeaderLarge,
+    displaySmall: watchHeader,
+    headlineLarge: watchHeader,
+    headlineMedium: watchSubt,
+    headlineSmall: watchSubt,
+    titleLarge: watchHeader,
+    titleMedium: watchSubt,
+    titleSmall: watchSubt,
+    bodyLarge: watchBody,
+    bodyMedium: watchBody,
+    bodySmall: watchBody,
+    labelLarge: watchLabel,
+    labelMedium: watchLabel,
+    labelSmall: watchLabel);

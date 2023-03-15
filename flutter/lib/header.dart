@@ -58,37 +58,45 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
         child: LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth > 600 + 120 * 2) {
-        return wideView(context);
-        // } else if (constraints.maxWidth > 800) {
-        //   return midView(context);
-      } else if (constraints.maxWidth > tinyWidth) {
-        return thinView(context);
-      } else {
+      if (constraints.maxWidth <= math.max(watchSize, 300)) {
+        return watchView(context);
+      } else if (constraints.maxWidth <= math.max(tinyWidth, 525)) {
         return tinyView(context);
+      } else if (constraints.maxWidth <= 600) {
+        return thinView(context);
+      } else if (constraints.maxWidth <= math.min(trioBarWidth, 700)) {
+        return midView(context);
+      } else if (true || constraints.maxWidth <= processWidth + 30) {
+        return wideView(context);
+      } else {
+        return fullView(context);
       }
     }));
   }
 
-  BoxDecoration? containerDeco() {
-    return null;
-    return const BoxDecoration(
-        // color: Grayscale.shade900
-        gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Grayscale.shade800, Color(0x00000000)]));
+  Widget fullView(BuildContext context) {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 60, 15, 90),
+            child: SizedBox(
+                width: processWidth,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: introText(context, leftAlign: true)),
+                      const SizedBox(width: 15),
+                      const SizedBox(width: 300, height: 300, child: ProPic()),
+                    ]))));
   }
 
-  Container wideView(BuildContext context) {
-    // log('wide');
-    return Container(
-      decoration: containerDeco(),
-      alignment: Alignment.topCenter,
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(120, 60, 120, 90),
-          child: SizedBox(
-              width: 800,
+  Widget wideView(BuildContext context) {
+    return Center(
+      child: SizedBox(
+          width: trioBarWidth,
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 60, 15, 90),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
@@ -101,31 +109,61 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
     );
   }
 
+  Widget midView(BuildContext context) {
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 60, 15, 60),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: leftAlign
+                              ? CrossAxisAlignment.start
+                              : CrossAxisAlignment.stretch,
+                          children: _introWithoutExpando(leftAlign: true),
+                        )),
+                        const SizedBox(width: 15),
+                        const SizedBox(
+                            width: 300, height: 300, child: ProPic()),
+                      ]),
+                  const SizedBox(height: 30),
+                  ..._expando(context, leftAlign: true)
+                ])));
+  }
+
   Container thinView(BuildContext context) {
     return Container(
-        decoration: containerDeco(),
         alignment: Alignment.topCenter,
         // height: 400,
         child: Padding(
             padding: const EdgeInsets.symmetric(
-                vertical: 15, horizontal: totalTextMargin),
+                vertical: 15, horizontal: standardContainerMargin),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: introText(context, leftAlign: false)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: textContainerMargin),
+                      child: introText(context, leftAlign: true)),
                   const Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 0, vertical: 30),
+                          EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                       child: ProPic(isThin: true)),
                 ])));
   }
 
   Container tinyView(BuildContext context) {
     return Container(
-        decoration: containerDeco(),
         alignment: Alignment.topCenter,
         // height: 400,
         child: Padding(
@@ -138,47 +176,84 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
                       padding: const EdgeInsets.symmetric(
                           horizontal: totalTextMargin),
                       child: introText(context, leftAlign: true)),
-                  const SizedBox(height: 45),
-                  const ProPic(isThin: true),
+                  const SizedBox(height: 30),
+                  const ProPic(isThin: true, roundedCorner: false),
                   const SizedBox(height: 30),
                 ])));
   }
 
-  Widget introText(BuildContext context, {required bool leftAlign}) {
-    //Centered: fullwidth=true
-    //Left: fullwidth=false
-    //Two columns: fullwidth=false
+  Widget watchView(BuildContext context) {
+    const ta = TextAlign.left;
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: Stack(children: [
+          const ProPic(isThin: false, roundedCorner: false),
+          Container(
+              // decoration: ,
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Text(
+                    //   'Isaac Roberts',
+                    //   style: watchHeaderLarge, //.copyWith(color: Colors.white),
+                    //   textAlign: ta,
+                    // ),
+                    // Text(
+                    //   bodyString(),
+                    //   style: watchBody,
+                    //   textAlign: ta,
+                    // ),
+                    ..._introWithoutExpando(leftAlign: true),
+                    const SizedBox(height: 15),
+                  ]))
+        ]));
+  }
 
+  List<Widget> _introWithoutExpando({required bool leftAlign}) {
     var ta = leftAlign ? TextAlign.left : TextAlign.center;
+    return [
+      Text(
+        'Isaac Roberts',
+        style: fonts.displayLarge,
+        textAlign: ta,
+      ),
+      Text(
+        bodyString(),
+        style: fonts.bodyLarge,
+        textAlign: ta,
+      ),
+    ];
+  }
+
+  List<Widget> _expando(BuildContext context, {required bool leftAlign}) {
+    var ta = leftAlign ? TextAlign.left : TextAlign.center;
+    return [
+      ElevatedButton.icon(
+          icon: (expander != null)
+              ? ExpandIcon(
+                  isExpanded: extended,
+                  onPressed: setExt,
+                )
+              : const Icon(Icons.expand_more),
+          label: const Text('Learn More'),
+          onPressed: toggleExt // scrollLearnMore(widget.scrollTo),
+          ),
+      extAnimator(context, ta)
+    ];
+  }
+
+  Widget introText(BuildContext context, {required bool leftAlign}) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment:
             leftAlign ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Isaac Roberts',
-            style: fonts.displayLarge,
-            textAlign: ta,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: Text(
-              bodyString(),
-              style: fonts.bodyLarge,
-              textAlign: ta,
-            ),
-          ),
-          ElevatedButton.icon(
-              icon: (expander != null)
-                  ? ExpandIcon(
-                      isExpanded: extended,
-                      onPressed: setExt,
-                    )
-                  : const Icon(Icons.expand_more),
-              label: const Text('Learn More'),
-              onPressed: toggleExt // scrollLearnMore(widget.scrollTo),
-              ),
-          extAnimator(context, ta)
+          ..._introWithoutExpando(leftAlign: leftAlign),
+          const SizedBox(height: 15),
+          ..._expando(context, leftAlign: leftAlign)
         ]);
   }
 
@@ -197,14 +272,16 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
 
   Padding extText(TextAlign align) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30),
+        padding: const EdgeInsets.only(top: 30, bottom: 15),
         child: Text(extString(), textAlign: align, style: fonts.bodyLarge));
   }
 }
 
 class ProPic extends StatefulWidget {
   final bool isThin;
-  const ProPic({Key? key, this.isThin = false}) : super(key: key);
+  final bool roundedCorner;
+  const ProPic({Key? key, this.isThin = false, this.roundedCorner = true})
+      : super(key: key);
 
   @override
   State<ProPic> createState() => _ProPicState();
@@ -216,13 +293,21 @@ class _ProPicState extends State<ProPic> {
 
   Widget clipper({required Widget child}) {
     if (widget.isThin) {
-      return SizedBox(
-          height: 300,
-          child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
-              child: child));
+      if (widget.roundedCorner) {
+        return SizedBox(
+            height: 300,
+            child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                child: child));
+      } else {
+        return SizedBox(height: 300, child: ClipRect(child: child));
+      }
     } else {
-      return AspectRatio(aspectRatio: 1, child: ClipOval(child: child));
+      if (widget.roundedCorner) {
+        return AspectRatio(aspectRatio: 1, child: ClipOval(child: child));
+      } else {
+        return AspectRatio(aspectRatio: 1, child: ClipRect(child: child));
+      }
     }
     return child;
   }

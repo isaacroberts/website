@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:isaac_roberts_consulting/text_theme.dart';
 import 'package:lottie/lottie.dart';
 import 'trio_lottie.dart';
 import 'common_elements.dart';
@@ -59,17 +61,16 @@ class _PopColumnScrollWithIconState
                           ? CrossAxisAlignment.start
                           : CrossAxisAlignment.center,
                       children: [
-                    Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 15),
-                        child: buildHeadline(widget.header)),
+                    const SizedBox(height: 15),
+                    buildHeadline(widget.header),
                     Container(
                         // width: 250,
-                        margin: const EdgeInsets.only(bottom: 30),
                         alignment:
                             leftAlign ? Alignment.topLeft : Alignment.topCenter,
                         child: paraSmall(widget.body,
                             align:
-                                leftAlign ? TextAlign.left : TextAlign.center))
+                                leftAlign ? TextAlign.left : TextAlign.center)),
+                    const SizedBox(height: 15),
                   ])),
               const SizedBox(width: 15)
             ])));
@@ -111,5 +112,59 @@ class PopScrollNoIcon extends StatelessWidget {
                           align: leftAlign ? TextAlign.left : TextAlign.center),
                       const SizedBox(height: 15),
                     ]))));
+  }
+}
+
+class PopScrollWatch extends StatelessWidget {
+  final String icon;
+  final String header;
+  final String body;
+  const PopScrollWatch(this.icon, this.header, this.body, {Key? key})
+      : super(key: key);
+
+  Widget textSpan() {
+    return RichText(
+        text: TextSpan(children: <InlineSpan>[
+      TextSpan(
+        text: '$header ',
+        style: watchHeader,
+      ),
+      // const WidgetSpan(child: SizedBox(width: 5)),
+      WidgetSpan(
+        child:
+            SvgPicture.asset('lottie/$icon.svg', height: watchHeader.fontSize),
+        alignment: PlaceholderAlignment.bottom,
+      ),
+    ]));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const bool leftAlign = true;
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: leftAlign
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
+            children: [
+              //TODO: SVG inline with text
+
+              textSpan(),
+              // Text(
+              //   header,
+              //   style: watchHeader,
+              // ),
+              Text(
+                body,
+                style: watchBody,
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                textAlign: TextAlign.left,
+              ),
+              const SizedBox(height: 15),
+            ]));
   }
 }

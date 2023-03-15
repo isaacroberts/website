@@ -1,205 +1,203 @@
 import 'package:flutter/material.dart';
 
-/*
-Primary: Color(0xffffffff)
-Light: Color(0xffff531e)
-Tert (left): Color(0x0)
-Dark: Color(0xff000000)
-Sec (right): Color(0xffff0001)
-*/
+const Color Primary_ = Color(0xfff47c00);
+const Color Light_ = Color(0xfffffefe);
+const Color Tert_ = Color(0xff327523);
+const Color Dark_ = Color(0xff242525);
+const Color Sec_ = Color(0xfffffefe);
 
 class PrimLight {
-  static const Color v0 = Color(0xffff9700);
-  static const Color v1 = Color(0xffffa22f);
-  static const Color v2 = Color(0xffffac49);
-  static const Color v3 = Color(0xffffb661);
-  static const Color v4 = Color(0xffffc078);
-  static const Color v5 = Color(0xffffca8e);
-  static const Color v6 = Color(0xffffd4a4);
-  static const Color v7 = Color(0xffffdeba);
-  static const Color v8 = Color(0xffffe9d0);
-  static const Color v9 = Color(0xfffff3e7);
-  static const Color v10 = Color(0xfffefefd);
+  static const Color v0 = Color(0xfff47c00);
+  static const Color v1 = Color(0xfff9892b);
+  static const Color v2 = Color(0xfffe9645);
+  static const Color v3 = Color(0xffffa35c);
+  static const Color v4 = Color(0xffffb073);
+  static const Color v5 = Color(0xffffbd8a);
+  static const Color v6 = Color(0xffffcaa1);
+  static const Color v7 = Color(0xffffd7b8);
+  static const Color v8 = Color(0xffffe4cf);
+  static const Color v9 = Color(0xfffff1e7);
+  static const Color v10 = Color(0xfffffefe);
 }
 
 class Sec1Light {
-  static const Color v0 = Color(0xffffab50);
-  static const Color v1 = Color(0xffffb260);
-  static const Color v2 = Color(0xffffb970);
-  static const Color v3 = Color(0xffffc17f);
-  static const Color v4 = Color(0xffffc88f);
-  static const Color v5 = Color(0xffffd09e);
-  static const Color v6 = Color(0xffffd7ad);
-  static const Color v7 = Color(0xffffdebd);
-  static const Color v8 = Color(0xffffe6cc);
-  static const Color v9 = Color(0xffffeddc);
-  static const Color v10 = Color(0xfffff5ec);
+  static const Color v0 = Color(0xffff9c51);
+  static const Color v1 = Color(0xffffa560);
+  static const Color v2 = Color(0xffffae70);
+  static const Color v3 = Color(0xffffb77f);
+  static const Color v4 = Color(0xffffbf8f);
+  static const Color v5 = Color(0xffffc89e);
+  static const Color v6 = Color(0xffffd1ae);
+  static const Color v7 = Color(0xffffdabd);
+  static const Color v8 = Color(0xffffe3cd);
+  static const Color v9 = Color(0xffffecdd);
+  static const Color v10 = Color(0xfffff5ed);
 }
 
 class Sec2Light {
-  static const Color v0 = Color(0xfffcbe83);
-  static const Color v1 = Color(0xfffdc38d);
-  static const Color v2 = Color(0xffffc896);
-  static const Color v3 = Color(0xffffcda0);
-  static const Color v4 = Color(0xffffd2a9);
-  static const Color v5 = Color(0xffffd7b3);
-  static const Color v6 = Color(0xffffdcbd);
-  static const Color v7 = Color(0xffffe1c7);
-  static const Color v8 = Color(0xffffe6d1);
-  static const Color v9 = Color(0xffffecda);
-  static const Color v10 = Color(0xfffff1e4);
+  static const Color v0 = Color(0xffffbd8a);
+  static const Color v1 = Color(0xffffc293);
+  static const Color v2 = Color(0xffffc79c);
+  static const Color v3 = Color(0xffffcda5);
+  static const Color v4 = Color(0xffffd2af);
+  static const Color v5 = Color(0xffffd7b8);
+  static const Color v6 = Color(0xffffdcc1);
+  static const Color v7 = Color(0xffffe1ca);
+  static const Color v8 = Color(0xffffe7d4);
+  static const Color v9 = Color(0xffffecdd);
+  static const Color v10 = Color(0xfffff1e7);
 }
 
 class Sec3Light {
-  static const Color v0 = Color(0xfff4d2b4);
-  static const Color v1 = Color(0xfff5d4b8);
-  static const Color v2 = Color(0xfff6d7bd);
-  static const Color v3 = Color(0xfff7dac1);
-  static const Color v4 = Color(0xfff8dcc5);
-  static const Color v5 = Color(0xfff8dfca);
-  static const Color v6 = Color(0xfff9e1ce);
-  static const Color v7 = Color(0xfffae4d2);
-  static const Color v8 = Color(0xfffae7d7);
-  static const Color v9 = Color(0xfffbe9db);
-  static const Color v10 = Color(0xfffbece0);
+  static const Color v0 = Color(0xffffdec3);
+  static const Color v1 = Color(0xffffdfc7);
+  static const Color v2 = Color(0xffffe1ca);
+  static const Color v3 = Color(0xffffe3ce);
+  static const Color v4 = Color(0xffffe5d1);
+  static const Color v5 = Color(0xffffe7d5);
+  static const Color v6 = Color(0xffffe9d9);
+  static const Color v7 = Color(0xffffebdc);
+  static const Color v8 = Color(0xffffede0);
+  static const Color v9 = Color(0xffffefe3);
+  static const Color v10 = Color(0xfffff1e7);
 }
 
 class Tert3Light {
-  static const Color v0 = Color(0xff7a4f7d);
-  static const Color v1 = Color(0xff825985);
-  static const Color v2 = Color(0xff8a638c);
-  static const Color v3 = Color(0xff926d93);
-  static const Color v4 = Color(0xff99779b);
-  static const Color v5 = Color(0xffa181a2);
-  static const Color v6 = Color(0xffa98baa);
-  static const Color v7 = Color(0xffb195b2);
-  static const Color v8 = Color(0xffb9a0b9);
-  static const Color v9 = Color(0xffc1aac1);
-  static const Color v10 = Color(0xffc9b5c9);
+  static const Color v0 = Color(0xff6d7b1d);
+  static const Color v1 = Color(0xff76832c);
+  static const Color v2 = Color(0xff7f8a3a);
+  static const Color v3 = Color(0xff889147);
+  static const Color v4 = Color(0xff919954);
+  static const Color v5 = Color(0xff99a161);
+  static const Color v6 = Color(0xffa2a86e);
+  static const Color v7 = Color(0xffabb07b);
+  static const Color v8 = Color(0xffb4b888);
+  static const Color v9 = Color(0xffbcc095);
+  static const Color v10 = Color(0xffc5c8a2);
 }
 
 class Tert2Light {
-  static const Color v0 = Color(0xffab6664);
-  static const Color v1 = Color(0xffb3716f);
-  static const Color v2 = Color(0xffba7d7a);
-  static const Color v3 = Color(0xffc18986);
-  static const Color v4 = Color(0xffc89592);
-  static const Color v5 = Color(0xffcfa19e);
-  static const Color v6 = Color(0xffd6adaa);
-  static const Color v7 = Color(0xffdcb9b7);
-  static const Color v8 = Color(0xffe3c5c3);
-  static const Color v9 = Color(0xffe9d1d0);
-  static const Color v10 = Color(0xffefdedd);
+  static const Color v0 = Color(0xff9c7e17);
+  static const Color v1 = Color(0xffa5882d);
+  static const Color v2 = Color(0xffae9140);
+  static const Color v3 = Color(0xffb79b52);
+  static const Color v4 = Color(0xffc0a564);
+  static const Color v5 = Color(0xffc8af75);
+  static const Color v6 = Color(0xffd0b987);
+  static const Color v7 = Color(0xffd8c499);
+  static const Color v8 = Color(0xffdfceab);
+  static const Color v9 = Color(0xffe7d9bd);
+  static const Color v10 = Color(0xffeee3cf);
 }
 
 class Tert1Light {
-  static const Color v0 = Color(0xffd67e44);
-  static const Color v1 = Color(0xffdc8954);
-  static const Color v2 = Color(0xffe19464);
-  static const Color v3 = Color(0xffe6a074);
-  static const Color v4 = Color(0xffebab85);
-  static const Color v5 = Color(0xffefb695);
-  static const Color v6 = Color(0xfff3c2a6);
-  static const Color v7 = Color(0xfff6cdb6);
-  static const Color v8 = Color(0xfff9d9c7);
-  static const Color v9 = Color(0xfffbe5d9);
-  static const Color v10 = Color(0xfffdf0ea);
+  static const Color v0 = Color(0xffc87f0d);
+  static const Color v1 = Color(0xffd08a2c);
+  static const Color v2 = Color(0xffd79542);
+  static const Color v3 = Color(0xffdea057);
+  static const Color v4 = Color(0xffe4ab6b);
+  static const Color v5 = Color(0xffe9b680);
+  static const Color v6 = Color(0xffeec294);
+  static const Color v7 = Color(0xfff3cda8);
+  static const Color v8 = Color(0xfff7d9bd);
+  static const Color v9 = Color(0xfffae5d2);
+  static const Color v10 = Color(0xfffcf1e7);
 }
 
 class PrimDark {
-  static const Color v0 = Color(0xffff9700);
-  static const Color v1 = Color(0xffe28709);
-  static const Color v2 = Color(0xffc7770e);
-  static const Color v3 = Color(0xffac6811);
-  static const Color v4 = Color(0xff925813);
-  static const Color v5 = Color(0xff784a13);
-  static const Color v6 = Color(0xff603b12);
-  static const Color v7 = Color(0xff482d11);
-  static const Color v8 = Color(0xff32200d);
-  static const Color v9 = Color(0xff1e1407);
-  static const Color v10 = Color(0xff000000);
+  static const Color v0 = Color(0xfff47c00);
+  static const Color v1 = Color(0xffde720e);
+  static const Color v2 = Color(0xffc86916);
+  static const Color v3 = Color(0xffb3601c);
+  static const Color v4 = Color(0xff9e581f);
+  static const Color v5 = Color(0xff894f22);
+  static const Color v6 = Color(0xff744623);
+  static const Color v7 = Color(0xff603e24);
+  static const Color v8 = Color(0xff4d3525);
+  static const Color v9 = Color(0xff392d25);
+  static const Color v10 = Color(0xff242524);
 }
 
 class Sec1Dark {
-  static const Color v0 = Color(0xffffab50);
-  static const Color v1 = Color(0xffe39848);
-  static const Color v2 = Color(0xffc78641);
-  static const Color v3 = Color(0xffac743a);
-  static const Color v4 = Color(0xff926332);
-  static const Color v5 = Color(0xff78522b);
-  static const Color v6 = Color(0xff5f4224);
-  static const Color v7 = Color(0xff48321d);
-  static const Color v8 = Color(0xff312316);
-  static const Color v9 = Color(0xff1d150d);
-  static const Color v10 = Color(0xff000000);
+  static const Color v0 = Color(0xffff9c51);
+  static const Color v1 = Color(0xffe88f4d);
+  static const Color v2 = Color(0xffd08348);
+  static const Color v3 = Color(0xffb97644);
+  static const Color v4 = Color(0xffa26940);
+  static const Color v5 = Color(0xff8c5d3c);
+  static const Color v6 = Color(0xff775137);
+  static const Color v7 = Color(0xff614633);
+  static const Color v8 = Color(0xff4d3a2e);
+  static const Color v9 = Color(0xff392f29);
+  static const Color v10 = Color(0xff242524);
 }
 
 class Sec2Dark {
-  static const Color v0 = Color(0xfffcbe83);
-  static const Color v1 = Color(0xffe3ab76);
-  static const Color v2 = Color(0xffca996a);
-  static const Color v3 = Color(0xffb2875e);
-  static const Color v4 = Color(0xff9a7552);
-  static const Color v5 = Color(0xff836447);
-  static const Color v6 = Color(0xff6c533c);
-  static const Color v7 = Color(0xff574331);
-  static const Color v8 = Color(0xff423326);
-  static const Color v9 = Color(0xff2e251c);
-  static const Color v10 = Color(0xff1c1612);
+  static const Color v0 = Color(0xffffbd8a);
+  static const Color v1 = Color(0xffefae80);
+  static const Color v2 = Color(0xffd99f76);
+  static const Color v3 = Color(0xffc3906d);
+  static const Color v4 = Color(0xffae8263);
+  static const Color v5 = Color(0xff99745a);
+  static const Color v6 = Color(0xff856651);
+  static const Color v7 = Color(0xff715848);
+  static const Color v8 = Color(0xff5d4b3f);
+  static const Color v9 = Color(0xff4b3e36);
+  static const Color v10 = Color(0xff38322e);
 }
 
 class Sec3Dark {
-  static const Color v0 = Color(0xfff4d2b4);
-  static const Color v1 = Color(0xffe1c1a6);
-  static const Color v2 = Color(0xffceb198);
-  static const Color v3 = Color(0xffbca18b);
-  static const Color v4 = Color(0xffa9927e);
-  static const Color v5 = Color(0xff978371);
-  static const Color v6 = Color(0xff867464);
-  static const Color v7 = Color(0xff756558);
-  static const Color v8 = Color(0xff64574c);
-  static const Color v9 = Color(0xff544940);
-  static const Color v10 = Color(0xff443b34);
+  static const Color v0 = Color(0xffffdec3);
+  static const Color v1 = Color(0xfff4cfb7);
+  static const Color v2 = Color(0xffe3c1ab);
+  static const Color v3 = Color(0xffd1b39f);
+  static const Color v4 = Color(0xffc0a593);
+  static const Color v5 = Color(0xffb09787);
+  static const Color v6 = Color(0xff9f8a7c);
+  static const Color v7 = Color(0xff8f7c70);
+  static const Color v8 = Color(0xff7f6f65);
+  static const Color v9 = Color(0xff70635a);
+  static const Color v10 = Color(0xff615650);
 }
 
 class Tert3Dark {
-  static const Color v0 = Color(0xff7a4f7d);
-  static const Color v1 = Color(0xff714a74);
-  static const Color v2 = Color(0xff69446b);
-  static const Color v3 = Color(0xff603f62);
-  static const Color v4 = Color(0xff573a59);
-  static const Color v5 = Color(0xff4f3550);
-  static const Color v6 = Color(0xff462f48);
-  static const Color v7 = Color(0xff3e2a3f);
-  static const Color v8 = Color(0xff362537);
-  static const Color v9 = Color(0xff2e202f);
-  static const Color v10 = Color(0xff261c27);
+  static const Color v0 = Color(0xff6d7b1d);
+  static const Color v1 = Color(0xff68751f);
+  static const Color v2 = Color(0xff626e21);
+  static const Color v3 = Color(0xff5d6822);
+  static const Color v4 = Color(0xff586123);
+  static const Color v5 = Color(0xff535b24);
+  static const Color v6 = Color(0xff4e5525);
+  static const Color v7 = Color(0xff494f25);
+  static const Color v8 = Color(0xff444925);
+  static const Color v9 = Color(0xff3f4326);
+  static const Color v10 = Color(0xff3a3d26);
 }
 
 class Tert2Dark {
-  static const Color v0 = Color(0xffab6664);
-  static const Color v1 = Color(0xff9a5c5a);
-  static const Color v2 = Color(0xff8a5351);
-  static const Color v3 = Color(0xff7a4a48);
-  static const Color v4 = Color(0xff6a4140);
-  static const Color v5 = Color(0xff5b3837);
-  static const Color v6 = Color(0xff4c302f);
-  static const Color v7 = Color(0xff3e2827);
-  static const Color v8 = Color(0xff30201f);
-  static const Color v9 = Color(0xff221817);
-  static const Color v10 = Color(0xff160f0e);
+  static const Color v0 = Color(0xff9c7e17);
+  static const Color v1 = Color(0xff91761b);
+  static const Color v2 = Color(0xff856d1e);
+  static const Color v3 = Color(0xff7a6420);
+  static const Color v4 = Color(0xff705c22);
+  static const Color v5 = Color(0xff655424);
+  static const Color v6 = Color(0xff5a4b24);
+  static const Color v7 = Color(0xff504325);
+  static const Color v8 = Color(0xff453c25);
+  static const Color v9 = Color(0xff3b3425);
+  static const Color v10 = Color(0xff302d25);
 }
 
 class Tert1Dark {
-  static const Color v0 = Color(0xffd67e44);
-  static const Color v1 = Color(0xffbe713e);
-  static const Color v2 = Color(0xffa76437);
-  static const Color v3 = Color(0xff915731);
-  static const Color v4 = Color(0xff7b4a2b);
-  static const Color v5 = Color(0xff663e25);
-  static const Color v6 = Color(0xff52331f);
-  static const Color v7 = Color(0xff3e2719);
-  static const Color v8 = Color(0xff2b1c13);
-  static const Color v9 = Color(0xff1a110b);
-  static const Color v10 = Color(0xff000000);
+  static const Color v0 = Color(0xffc87f0d);
+  static const Color v1 = Color(0xffb77516);
+  static const Color v2 = Color(0xffa66b1b);
+  static const Color v3 = Color(0xff95621e);
+  static const Color v4 = Color(0xff845921);
+  static const Color v5 = Color(0xff744f23);
+  static const Color v6 = Color(0xff644624);
+  static const Color v7 = Color(0xff543e25);
+  static const Color v8 = Color(0xff443525);
+  static const Color v9 = Color(0xff352d25);
+  static const Color v10 = Color(0xff242524);
 }

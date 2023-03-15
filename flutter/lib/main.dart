@@ -53,16 +53,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // startupPrint();
-
-    return MaterialApp(
-      useInheritedMediaQuery: useDevicePreview,
-      locale: useDevicePreview ? DevicePreview.locale(context) : null,
-      builder: useDevicePreview ? DevicePreview.appBuilder : null,
-      debugShowCheckedModeBanner: false,
-      title: 'Isaac - App Dev',
-      theme: theme,
-      home: const MyHomePage(),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth > watchSize) {
+        return MaterialApp(
+          key: const Key('stdApp'),
+          useInheritedMediaQuery: useDevicePreview,
+          locale: useDevicePreview ? DevicePreview.locale(context) : null,
+          builder: useDevicePreview ? DevicePreview.appBuilder : null,
+          debugShowCheckedModeBanner: false,
+          title: 'Isaac - App Dev',
+          theme: theme,
+          home: const MyHomePage(),
+        );
+      } else {
+        return MaterialApp(
+          key: const Key('watchApp'),
+          useInheritedMediaQuery: useDevicePreview,
+          locale: useDevicePreview ? DevicePreview.locale(context) : null,
+          builder: useDevicePreview ? DevicePreview.appBuilder : null,
+          debugShowCheckedModeBanner: false,
+          title: 'Isaac - App Dev',
+          theme: theme.copyWith(textTheme: watchFonts),
+          home: const MyHomePage(),
+        );
+      }
+    });
   }
 }
 
@@ -116,7 +131,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 scrollTo: scrollKey(Sections.Process),
                 key: scrollKey(Sections.Home)),
             trioSliver(context),
-            // sliverDivider(),
+            //Header only if process section needs it
+            SliverToBoxAdapter(
+                child: LayoutBuilder(builder: (context, constraints) {
+              if (constraints.maxWidth <= watchSize) {
+                return sectionHeaderNoSliver('Process');
+              } else {
+                return const SizedBox.shrink();
+              }
+            })),
             ProcessSidebar(key: scrollKey(Sections.Process)),
 
             sectionHeader(
@@ -178,6 +201,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           for (int n = 0; n < scrollTos.length; ++n) drawerListTile(n),
+          if (Device.width < (theme.drawerTheme.width ?? 150) + 50)
+            TextButton(
+                child: const Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
         ],
       ),
     );
@@ -186,8 +215,15 @@ class _MyHomePageState extends State<MyHomePage> {
   ListTile drawerListTile(int n) {
     return ListTile(
       title: Text(scrollTos[n].name),
-      onTap: () {
-        scroll(scrollTos[n]);
+      onTap: () async {
+        if (Device.width < (theme.drawerTheme.width ?? 150) + 50) {
+          Navigator.of(context).pop();
+          await Future.delayed(const Duration(milliseconds: 350), () {
+            scroll(scrollTos[n]);
+          });
+        } else {
+          scroll(scrollTos[n]);
+        }
       },
     );
   }

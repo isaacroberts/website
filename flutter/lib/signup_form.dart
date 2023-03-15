@@ -38,6 +38,28 @@ class _SignupFormState extends State<SignupForm> {
     emailField.addListener(_revalidateEmail);
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth > watchSize) {
+        return SizedBox(
+            height: 400, width: Device.width, child: imgStack(context));
+      } else {
+        return Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: assetProvider('images/email_cta.jpg'),
+                  fit: BoxFit.cover)),
+          child: Padding(
+              padding: const EdgeInsets.all(15), child: watchContent(context)),
+        );
+      }
+    });
+    // return FlutterLogo();
+    // return SizedBox(height: 400, width: Device.width, child: FlutterLogo());
+    return SizedBox(height: 400, width: Device.width, child: imgStack(context));
+  }
+
   Widget imgStack(BuildContext context) {
     return Stack(alignment: Alignment.centerLeft, children: [
       ClipRect(child: parallaxImg(context)),
@@ -78,12 +100,16 @@ class _SignupFormState extends State<SignupForm> {
   Widget glassAndText(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > 800) {
-        return Align(
-            alignment: Alignment.centerLeft,
-            child: FractionallySizedBox(
-                widthFactor: .5,
-                heightFactor: 1,
-                child: glassAndTextContent()));
+        return Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                    maxWidth: processWidth + standardContainerMargin * 2),
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FractionallySizedBox(
+                        widthFactor: .5,
+                        heightFactor: 1,
+                        child: glassAndTextContent()))));
       } else {
         return Center(child: glassAndTextContent());
       }
@@ -149,21 +175,40 @@ class _SignupFormState extends State<SignupForm> {
     }
   }
 
+  Widget watchContent(BuildContext context) {
+    if (!submitted) {
+      return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Get started',
+              style: watchHeader,
+              textAlign: TextAlign.left,
+            ),
+            Text(
+                'Enter your email and I\'ll get back to you with questions about your project.',
+                style: watchBody,
+                textAlign: TextAlign.left),
+            signupRow()
+          ]);
+    } else {
+      return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Thanks!',
+              style: watchHeader,
+              textAlign: TextAlign.left,
+            ),
+            paraLarge('I\'ll get back to you soon!'),
+            // SizedBox(height: 15),
+          ]);
+    }
+  }
+
   Widget signupRow() {
-    // return TextFormField(
-    //   initialValue: 'yitzaklr@aol.com',
-    // );
-    // return LayoutBuilder(builder: (context, constraints) {
-    // if (constraints.maxWidth > 500) {
-    // return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    //   Expanded(child: textForm()),
-    //   // const SizedBox(width: 10),
-    //   Padding(
-    //       padding: const EdgeInsets.only(top: 15),
-    //       child: ElevatedButton(
-    //           onPressed: () => sendEmail(), child: submitButton()))
-    // ]);
-    // } else {
     return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -178,12 +223,14 @@ class _SignupFormState extends State<SignupForm> {
     // });
   }
 
-  Text submitButton() => Text('Submit', style: fonts.button);
+  Text submitButton() => const Text('Submit');
 
   TextFormField textForm() {
+    var style = Device.width > watchSize ? fonts.titleMedium : watchBody;
     return TextFormField(
       controller: emailField,
       onFieldSubmitted: (s) => sendEmail(),
+      style: style,
       decoration:
           InputDecoration(errorText: emailErrMsg, hintText: 'Enter your email'),
     );
@@ -234,13 +281,6 @@ class _SignupFormState extends State<SignupForm> {
         emailErrMsg = errmsg;
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // return FlutterLogo();
-    // return SizedBox(height: 400, width: Device.width, child: FlutterLogo());
-    return SizedBox(height: 400, width: Device.width, child: imgStack(context));
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:isaac_roberts_consulting/full_color.dart';
 import 'dart:developer';
+import 'device.dart';
 import 'text_theme.dart';
 import 'dart:math' as math;
 
@@ -16,39 +17,46 @@ const double borderRadius1 = 20;
 const double borderRadius2 = 10;
 
 // Only applies to tiny
+const double k = 15;
 const double totalTextMargin = 45;
 const double standardContainerMargin = 15;
 const double textContainerMargin = 30;
 
+const double appBar = 50;
+
 const double tinyWidth = 400;
+const double watchSize = 250;
+
+const double trioBarWidth = 16 * k * 3 + k * 4;
+const double processWidth = 950;
 
 const MaterialColor primary = Colors.orange;
 
-class Primary {
-  static const Color shade900 = Color(0xFFE65100);
-  static const Color shade800 = Color(0xFFEF6C00);
-  static const Color shade700 = Color(0xFFF57C00);
-  static const Color shade600 = Color(0xFFFB8C00);
-  static const Color shade500 = Color(0xFFFF9800);
-  static const Color shade400 = Color(0xFFFFA726);
-  static const Color shade300 = Color(0xFFFFB74D);
-  static const Color shade200 = Color(0xFFFFCC80);
-  static const Color shade100 = Color(0xFFFFE0B2);
-  static const Color shade50 = Color(0xFFFFF3E0);
+// class Primary {
+//   static const Color shade900 = Color(0xFFE65100);
+//   static const Color shade800 = Color(0xFFEF6C00);
+//   static const Color shade700 = Color(0xFFF57C00);
+//   static const Color shade600 = Color(0xFFFB8C00);
+//   static const Color shade500 = Color(0xFFFF9800);
+//   static const Color shade400 = Color(0xFFFFA726);
+//   static const Color shade300 = Color(0xFFFFB74D);
+//   static const Color shade200 = Color(0xFFFFCC80);
+//   static const Color shade100 = Color(0xFFFFE0B2);
+//   static const Color shade50 = Color(0xFFFFF3E0);
+//
+//   static const int shade900value = 0xFFE65100;
+//   static const int shade800value = 0xFFEF6C00;
+//   static const int shade700value = 0xFFF57C00;
+//   static const int shade600value = 0xFFFB8C00;
+//   static const int shade500value = 0xFFFF9800;
+//   static const int shade400value = 0xFFFFA726;
+//   static const int shade300value = 0xFFFFB74D;
+//   static const int shade200value = 0xFFFFCC80;
+//   static const int shade100value = 0xFFFFE0B2;
+//   static const int shade50value = 0xFFFFF3E0;
+// }
 
-  static const int shade900value = 0xFFE65100;
-  static const int shade800value = 0xFFEF6C00;
-  static const int shade700value = 0xFFF57C00;
-  static const int shade600value = 0xFFFB8C00;
-  static const int shade500value = 0xFFFF9800;
-  static const int shade400value = 0xFFFFA726;
-  static const int shade300value = 0xFFFFB74D;
-  static const int shade200value = 0xFFFFCC80;
-  static const int shade100value = 0xFFFFE0B2;
-  static const int shade50value = 0xFFFFF3E0;
-}
-
-const Color MANIFEST_THEME_COLOR = Color(0xFFF57C00);
+const Color MANIFEST_THEME_COLOR = Primary_;
 const Color MANIFEST_BACKGROUND_COLOR = Color(0xff252525);
 
 const MaterialColor secondary = MaterialColor(0xff25581a, <int, Color>{
@@ -132,8 +140,8 @@ void startupPrint() {
   // log(theme.scaffoldBackgroundColor.toString());
 }
 
-const Color flutterLogoTop = Primary.shade700; //Primary.Shade700
-const Color flutterLogoBot = Color(0xff214e18);
+const Color flutterLogoTop = Primary_; //Primary.Shade700
+const Color flutterLogoBot = Tert_; //Color(0xff214e18);
 
 class TextButtonColor extends MaterialStateColor {
   const TextButtonColor() : super(_defaultColor);
@@ -227,7 +235,7 @@ final ThemeData theme = ThemeData(
 //   buttonTheme: const ButtonThemeData(buttonColor: Grayscale.shade700),
   cardTheme: const CardTheme(
       color: Grayscale.shade800,
-      surfaceTintColor: Sec2Dark.v7,
+      surfaceTintColor: Sec1Dark.v7,
       shadowColor: Colors.black,
       // color: Colors.black,
       elevation: 2,
@@ -240,12 +248,12 @@ final ThemeData theme = ThemeData(
 // DialogTheme? dialogTheme,
 // DividerThemeData? dividerTheme,
   drawerTheme: const DrawerThemeData(
-      backgroundColor: Grayscale.shade700,
+      backgroundColor: Tert1Dark.v9,
       elevation: 5,
       shape: RoundedRectangleBorder(),
-      surfaceTintColor: PrimDark.v7,
+      surfaceTintColor: Colors.transparent,
       shadowColor: Colors.black,
-      width: 175),
+      width: k * 20),
 // DropdownMenuThemeData? dropdownMenuTheme,
 // ElevatedButtonThemeData? elevatedButtonTheme,
 // ExpansionTileThemeData? expansionTileTheme,
@@ -285,6 +293,14 @@ final ThemeData theme = ThemeData(
 //     brightness: Brightness.dark,
 //     colorScheme: darkScheme,
 //     fontFamily: fonts.headlineLarge?.fontFamily!);
+
+ThemeData getTheme() {
+  if (Device.width > watchSize) {
+    return theme;
+  } else {
+    return theme.copyWith(textTheme: watchFonts);
+  }
+}
 
 Color footerColor = Colors.grey.shade900;
 

@@ -114,21 +114,24 @@ class _ExperienceWidgetState extends State<ExperienceWidget>
         onHover: (b) => hover = b,
         onTap: () => showLightbox(context, index),
         child: child);
-
-    if (Device.isDesktop) {
-      return MouseRegion(
-          onEnter: (e) => hover = true,
-          onExit: (e) => hover = false,
-          child: GestureDetector(
-              onTap: () => showLightbox(context, index), child: child));
-    } else {
-      return GestureDetector(
-          onTap: () => showLightbox(context, index), child: child);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      if (Device.width > watchSize) {
+        return Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                    maxWidth: processWidth + standardContainerMargin * 2),
+                child: buildCard(context)));
+      } else {
+        return centerSection(context);
+      }
+    });
+  }
+
+  Card buildCard(BuildContext context) {
     return Card(
         margin: const EdgeInsets.fromLTRB(standardContainerMargin, 0,
             standardContainerMargin, standardContainerMargin),
@@ -143,18 +146,15 @@ class _ExperienceWidgetState extends State<ExperienceWidget>
   }
 
   Widget centerSection(BuildContext context) {
-    //TODO: Make stateful so i can expand image
-
     return LayoutBuilder(builder: (contet, constraints) {
       final bool horiz = Device.width >= 800;
       final bool tiny = Device.width <= tinyWidth;
 
       if (horiz) {
-        return Flex(
+        return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          direction: Axis.horizontal,
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Flexible(child: getImage(index)),
             const SizedBox(width: 30),

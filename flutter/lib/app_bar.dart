@@ -48,35 +48,37 @@ class CustomAppBar extends SliverAppBar {
 
 SliverAppBar buildAppBar(
     BuildContext context, void Function(Sections) scrollCallback) {
+  // final bool hasSpace = !Device.isLandscapeMobile;
+  final bool hasSpace = Device.height > 500;
+
+  if (!hasSpace) {
+    return SliverAppBar(
+      pinned: false,
+      floating: true,
+      // toolbarHeight: 30,
+      // backgroundColor: Colors.transparent,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      title: flexibleTitle(context, null),
+      leading: Builder(builder: (context) {
+        return IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        );
+      }),
+    );
+  }
+
   return SliverAppBar(
       elevation: 5,
       // scrolledUnderElevation: 4,
       stretch: false, //!Device.isLandscapeMobile,
-      pinned: !Device.isLandscapeMobile,
-      floating: !Device.isLandscapeMobile,
+      pinned: hasSpace,
+      floating: hasSpace,
       toolbarHeight: 50, //Device.select(def: 50, phoneLand: 40, phonePort: 40),
       backgroundColor: theme.scaffoldBackgroundColor,
 
       // centerTitle: true,
-      title: LayoutBuilder(builder: (context, constraints) {
-        String text;
-        if (Device.width < 500) {
-          text = 'App Dev';
-        } else if (Device.width < 700) {
-          text = 'Mobile & Web';
-        } else {
-          text = 'Freelance Mobile & Web';
-        }
-
-        // fw = true;
-        return TextButton(
-          onPressed: () => scrollCallback(Sections.Home),
-          child: Text(text,
-              style: Theme.of(context).textTheme.titleLarge,
-              textAlign: TextAlign.center,
-              maxLines: 1),
-        );
-      }),
+      title: flexibleTitle(context, scrollCallback),
       leading: Builder(builder: (context) {
         return IconButton(
           icon: const Icon(Icons.menu),
@@ -84,6 +86,46 @@ SliverAppBar buildAppBar(
         );
       }),
       actions: buildActions(context, scrollCallback));
+}
+
+Widget textOverflower(BuildContext context,
+    {required List<String> texts,
+    required TextStyle? style,
+    TextAlign textAlign = TextAlign.left,
+    int maxLines = 1}) {
+  return LayoutBuilder(builder: (BuildContext context, BoxConstraints size) {
+    for (int n = 0; n < texts.length; ++n) {
+      final TextPainter painter = TextPainter(
+        maxLines: maxLines,
+        textAlign: textAlign,
+        textDirection: TextDirection.ltr,
+        text: TextSpan(style: style, text: texts[n]),
+      );
+
+      painter.layout(maxWidth: size.maxWidth);
+
+      if (!painter.didExceedMaxLines) {
+        return Text(texts[n], style: style, textAlign: textAlign);
+      }
+    }
+    return const SizedBox.shrink();
+  });
+}
+
+Widget flexibleTitle(BuildContext context, var scrollCallback) {
+  Widget overflower() => textOverflower(context,
+      texts: ['Freelance Mobile & Web', 'Mobile & Web', 'App Dev', ''],
+      style: Theme.of(context).textTheme.titleLarge,
+      textAlign: TextAlign.left);
+
+  if (scrollCallback != null) {
+    return TextButton(
+      onPressed: () => scrollCallback(Sections.Home),
+      child: overflower(),
+    );
+  } else {
+    return overflower();
+  }
 }
 
 class AnimatingHomeIcon extends StatefulWidget {

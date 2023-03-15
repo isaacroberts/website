@@ -259,16 +259,24 @@ SliverToBoxAdapter sliverImgSeparator() {
 
 Widget sectionHeader(BuildContext context, String title,
     {Key? key, Color? color}) {
-  // color ??= theme.scaffoldBackgroundColor;
   return SliverToBoxAdapter(child: sectionHeaderNoSliver(title, key: key));
 }
 
 Widget sectionHeaderNoSliver(String title, {Key? key}) {
-  return Center(
-      child: Padding(
-    padding: const EdgeInsets.only(top: 45, bottom: 30),
-    child: Text(key: key, title, style: fonts.displayMedium),
-  ));
+  return LayoutBuilder(builder: (context, constraints) {
+    if (constraints.maxWidth > watchSize) {
+      return Center(
+          child: Padding(
+        padding: const EdgeInsets.only(top: 45, bottom: 30),
+        child: Text(key: key, title, style: fonts.displayMedium),
+      ));
+    } else {
+      return Center(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(key: key, title, style: watchHeaderLarge)));
+    }
+  });
 }
 
 Widget sectionHeaderNoSliverOrPadding(String title, {Key? key}) {

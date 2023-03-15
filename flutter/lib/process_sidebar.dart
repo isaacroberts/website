@@ -157,8 +157,10 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
           return midView();
         } else if (cnt.maxWidth > tinyWidth) {
           return topTabsView();
-        } else {
+        } else if (cnt.maxWidth > watchSize) {
           return tinyTabsView();
+        } else {
+          return watchView();
         }
       }));
     }
@@ -215,11 +217,10 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
   Widget wideView() {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
     const double height = 500;
-    const double maxWidth = 1000;
     return Center(
         child: ConstrainedBox(
             constraints: const BoxConstraints(
-                maxWidth: maxWidth, maxHeight: height, minHeight: height),
+                maxWidth: processWidth, maxHeight: height, minHeight: height),
             // child: ClipRRect(
             //     borderRadius: BorderRadius.circular(15),
             child: Container(
@@ -242,7 +243,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                           Positioned.fill(
                               child: Opacity(
                                   opacity: imgOpacity, child: crossFadeImg())),
-                          wideViewContent(height, maxWidth - 50 * 2)
+                          wideViewContent(height, processWidth - 50 * 2)
                         ])))));
   }
 
@@ -295,7 +296,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
   Widget topTabsView() {
     const double hrailHeight = 60;
     return SizedBox(
-        height: Device.isLandscapeMobile ? Device.height : 500,
+        height: Device.isLandscapeMobile ? Device.height - appBar : 500,
         width: Device.width,
         child: Stack(alignment: Alignment.topCenter, children: [
           PageView.builder(
@@ -320,7 +321,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                                   child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 45, vertical: 15),
-                                      child: contentSwitcher(context,
+                                      child: contentSwitcher(context, 0,
                                           value: index)))
                             ])));
               }),
@@ -335,7 +336,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
   Widget tinyTabsView() {
     const double hrailHeight = 60;
     return SizedBox(
-        height: Device.height,
+        height: Device.height - appBar,
         width: Device.width,
         child: Stack(alignment: Alignment.topCenter, children: [
           PageView.builder(
@@ -360,7 +361,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                                   child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 30, vertical: 0),
-                                      child: contentSwitcher(context,
+                                      child: contentSwitcher(context, 0,
                                           value: index)))
                             ])));
               }),
@@ -377,6 +378,22 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                     children: _bottomRailList())),
           )
         ]));
+  }
+
+  Widget watchView() {
+    return Column(children: [
+      for (int index = 0; index < numPhases; ++index)
+        Container(
+            constraints: const BoxConstraints(minHeight: 150),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+            // margin: const EdgeInsets.only(bottom: 15),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: getBg(index),
+                    opacity: imgOpacity,
+                    fit: BoxFit.cover)),
+            child: contentSwitcher(context, 1, value: index))
+    ]);
   }
 
   Widget contentPanel(BuildContext context) {
@@ -406,7 +423,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
             return FadeTransition(opacity: dubAnimation, child: child);
           }
         },
-        child: contentSwitcher(context));
+        child: contentSwitcher(context, 0));
   }
 
   Widget textColumn(int ix, String headline, String body,
@@ -423,10 +440,26 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
                 headline,
                 style: fonts.headlineSmall,
               ),
-              const Padding(padding: EdgeInsets.only(top: 15)),
+              const SizedBox(height: 15),
               paraMed(body),
               // const Padding(padding: EdgeInsets.only(top: 15)),
             ]));
+  }
+
+  Widget watchTextColumn(int ix, String headline, String body,
+      {bool bounded = true}) {
+    return Column(
+        key: Key(ix.toString()),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            headline,
+            style: fonts.headlineSmall,
+          ),
+          paraMed(body),
+        ]);
   }
 
   NavigationRailDestination rail(String label, IconData icon) {
@@ -497,24 +530,30 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         children: _bottomRailList());
   }
 
-  Widget contentN(BuildContext context, String headline, String body, int ix,
+  Widget contentN(
+      BuildContext context, int styleNo, String headline, String body, int ix,
       {required String svg,
       required UnDrawIllustration undraw,
       bool imgOnMobile = true}) {
-    return Align(
-        key: ValueKey<int>(ix),
-        alignment: Alignment.topLeft,
-        child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: textColumn(ix, headline, body, bounded: false)));
+    if (styleNo == 0) {
+      return Align(
+          key: ValueKey<int>(ix),
+          alignment: Alignment.topLeft,
+          child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: textColumn(ix, headline, body, bounded: false)));
+    } else {
+      return watchTextColumn(ix, headline, body, bounded: false);
+    }
   }
 
-  Widget contentSwitcher(BuildContext context, {int? value}) {
+  Widget contentSwitcher(BuildContext context, int styleNo, {int? value}) {
     value ??= current;
     switch (value) {
       case 0:
         return contentN(
             context,
+            styleNo,
             'Requirements gathering',
             """
 In the requirements gathering phase we will work closely to understand your business needs and objectives, and to identify the key features and functionality that your app should have. 
@@ -529,6 +568,7 @@ The end result of this phase will be a detailed set of requirements that will se
       case 1:
         return contentN(
             context,
+            styleNo,
             'User story',
             """
 I work with you to come up with a User Story, determining how the user will use the app, their goals, the pathway to those goals, and the way you want them to go about those goals. 
@@ -541,6 +581,7 @@ I work with you to come up with a User Story, determining how the user will use 
       case 2:
         return contentN(
             context,
+            styleNo,
             'Mockup',
             """
 The mockup phase is where we take the ideas and requirements from the previous phases and turn them into a visual representation of the app.
@@ -553,6 +594,7 @@ This typically involves creating wireframes or prototypes that show the basic st
       case 3:
         return contentN(
             context,
+            styleNo,
             'Development',
             """
 Once the mockups have been approved, it's time to start development. 
@@ -565,6 +607,7 @@ Throughout development, I will keep you informed of the app's progress and addre
       case 4:
         return contentN(
             context,
+            styleNo,
             'Sugarcoating',
             """
 The sugarcoating phase is where I add the finishing touches to the app, making it more engaging and user-friendly. This involves styling, adding effects, animations, and other visual flourishes.
@@ -576,6 +619,7 @@ The sugarcoating phase is where I add the finishing touches to the app, making i
       case 5:
         return contentN(
             context,
+            styleNo,
             'Automated testing',
             """
 During this phase, I will use automated and manual testing to uncover bugs, issues, and inconsistencies in the app. 
@@ -586,8 +630,8 @@ The goal of testing is to identify and fix any problems with the app before it i
             svg: 'programmer');
 
       case 6:
-        return contentN(
-            context, 'Launch', "The app is ready! Go get out there!", value,
+        return contentN(context, styleNo, 'Launch',
+            "The app is ready! Go get out there!", value,
             undraw: UnDrawIllustration.outer_space, svg: 'outer_space');
 
       default:

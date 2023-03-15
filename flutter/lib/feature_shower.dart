@@ -175,31 +175,42 @@ abstract class FeatureShower {
       if (constraints.maxWidth > 950) {
         return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: SizedBox(
-                height: 400,
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: children(context, textLeft, false))));
-        // } else if (constraints.maxWidth >= tinyWidth) {
-        //   return Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: standardContainerMargin),
-        //       child: Column(
-        //           mainAxisSize: MainAxisSize.min,
-        //           mainAxisAlignment: MainAxisAlignment.start,
-        //           crossAxisAlignment: CrossAxisAlignment.stretch,
-        //           children: [vertTextContainer(context)]));
-      } else {
+            child: Center(
+                child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: processWidth),
+                    child: SizedBox(
+                        height: 400,
+                        child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: children(context, textLeft, false))))));
+      } else if (Device.width > watchSize) {
         return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: standardContainerMargin),
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [vertTextContainer(context)]));
+            child: vertTextContainer(context));
+      } else {
+        return watchTextContainer(context);
       }
     });
+  }
+
+  Widget watchTextContainer(BuildContext context) {
+    const TextAlign align = TextAlign.left;
+
+    return Container(
+        decoration: deco(const BorderRadius.only()),
+        padding: const EdgeInsets.all(15),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: textToCA(align),
+            children: [
+              Text(title(), style: watchSubt),
+              paraLarge(subtitle(), align: align),
+              const SizedBox(height: 15),
+              paraLarge(body(), align: align)
+            ]));
   }
 }

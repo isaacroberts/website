@@ -46,10 +46,11 @@ class Footer extends StatelessWidget {
     ]);
   }
 
-  Widget sideText() {
+  Widget sideText(TextAlign align) {
     return Wrap(children: [
       Text('Open Sorcery LLC, 2022 ©, All Rights reserved',
-          style: fonts.bodySmall?.copyWith(color: colorScheme.onSecondary)),
+          style: fonts.bodySmall?.copyWith(color: colorScheme.onSecondary),
+          textAlign: align),
     ]);
   }
 
@@ -124,12 +125,11 @@ class Footer extends StatelessWidget {
           Text('Isaac Roberts Consulting',
               textAlign: TextAlign.center,
               maxLines: 2,
-              style: fonts.headlineSmall
-                  ?.copyWith(color: colorScheme.onSecondary)),
-          const Padding(padding: EdgeInsets.only(top: 45)),
+              style: fonts.displaySmall),
+          const SizedBox(height: 45),
           Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 80, 15),
-            child: sideFlex([sideText(), socials(context)]),
+            padding: const EdgeInsets.fromLTRB(80, 0, 80, 15),
+            child: sideFlex([sideText(TextAlign.left), socials(context)]),
           ),
           // const Padding(
           //     padding: EdgeInsets.fromLTRB(30, 0, 80, 0),
@@ -151,8 +151,9 @@ class Footer extends StatelessWidget {
           const SizedBox(height: 30),
           socials(context),
           const SizedBox(height: 30),
-          sideText(),
+          sideText(TextAlign.center),
           const SizedBox(height: 15),
+          const SizedBox(height: 50),
           // const Padding(
           //     padding: EdgeInsets.fromLTRB(30, 0, 80, 0),
           //     child: Divider(thickness: 1)),

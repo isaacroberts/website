@@ -41,7 +41,7 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
     Navigator.pop(context);
   }
 
-  Widget stackWithX(bool stack, Widget child) {
+  Widget stackWithX(bool stack, Widget child, {double size = 50}) {
     if (stack) {
       return Stack(children: [
         child,
@@ -49,7 +49,7 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
             child: Align(
                 alignment: Alignment.topLeft,
                 child: IconButton(
-                  iconSize: 50,
+                  iconSize: size,
                   icon: const Icon(Icons.close),
                   onPressed: _removeOverlay,
                 ))),
@@ -61,27 +61,37 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
 
   @override
   Widget build(BuildContext context) {
-    //TODO: OrientationBuilder for isLandscape
-    if (_imageExpandedInLightbox && Device.isPhonePort) {
-      return Center(child: interactiveImage());
-    } else {
-      bool stackX = !(_imageExpandedInLightbox && Device.isPhonePort);
+    return LayoutBuilder(builder: (context, constraints) {
+      if (Device.width <= watchSize) {
+        if (_imageExpandedInLightbox) {
+          return Center(child: interactiveImage());
+        } else {
+          return stackWithX(true,
+              Padding(padding: const EdgeInsets.all(15), child: lightboxRows()),
+              size: 20);
+        }
+      }
+      if (_imageExpandedInLightbox && Device.isPhonePort) {
+        return Center(child: interactiveImage());
+      } else {
+        bool stackX = !(_imageExpandedInLightbox && Device.isPhonePort);
 
-      // return Scaffold(
-      //     // backgroundColor: Colors.transparent,
-      //     appBar: AppBar(),
-      return Center(
-          // child: IgnorePointer(
-          child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-        child: stackWithX(
-            stackX,
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: lightboxRows())),
-      ));
-    }
+        // return Scaffold(
+        //     // backgroundColor: Colors.transparent,
+        //     appBar: AppBar(),
+        return Center(
+            // child: IgnorePointer(
+            child: Card(
+          margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+          child: stackWithX(
+              stackX,
+              Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                  child: lightboxRows())),
+        ));
+      }
+    });
   }
 
   Widget imgSizer({required Widget child}) {
@@ -151,10 +161,10 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
     return [
       if (addTitle)
         Text(experiences[index].headline,
-            style: fonts.titleMedium, textAlign: align),
+            style: fonts.titleLarge, textAlign: align),
       if (addTitle) const SizedBox(height: 15),
       paraMed(experiences[index].fullText, align: align),
-      const SizedBox(height: 15),
+      // const SizedBox(height: 15),
       OutlinedButton(
         onPressed: () => launchUrl(Uri.parse(experiences[index].url)),
         child: const Text('Website'),
