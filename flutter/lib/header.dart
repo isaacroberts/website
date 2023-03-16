@@ -77,7 +77,8 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
   Widget fullView(BuildContext context) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 60, 15, 90),
+            padding: const EdgeInsets.fromLTRB(
+                totalTextMargin, 60, totalTextMargin, 90),
             child: SizedBox(
                 width: processWidth,
                 child: Row(
@@ -93,10 +94,11 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
 
   Widget wideView(BuildContext context) {
     return Center(
-      child: SizedBox(
-          width: trioBarWidth,
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 60, 15, 90),
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+              totalTextMargin, 60, totalTextMargin, 90),
+          child: SizedBox(
+              width: trioBarWidth,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
@@ -112,7 +114,8 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
   Widget midView(BuildContext context) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 60, 15, 60),
+            padding: const EdgeInsets.fromLTRB(
+                totalTextMargin, 60, totalTextMargin, 60),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

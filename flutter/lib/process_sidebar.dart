@@ -270,12 +270,10 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     return Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           sectionHeaderNoSliverOrPadding('Process'),
           Expanded(
-              // height: height,
-              // width: maxWidth,
               child: Row(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,

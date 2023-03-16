@@ -27,8 +27,10 @@ const double appBar = 50;
 const double tinyWidth = 400;
 const double watchSize = 250;
 
-const double trioBarWidth = 16 * k * 3 + k * 4;
-const double processWidth = 950;
+const double trioHorizWidth = 16 * k;
+const double processWidth = 70 * k;
+const double trioBarWidth = 60 * k;
+// processWidth; //trioHorizWidth * 3 + trioHorizSpacing * 2;
 
 const MaterialColor primary = Colors.orange;
 
@@ -258,7 +260,9 @@ final ThemeData theme = ThemeData(
 // ElevatedButtonThemeData? elevatedButtonTheme,
 // ExpansionTileThemeData? expansionTileTheme,
 // FilledButtonThemeData? filledButtonTheme,
-// FloatingActionButtonThemeData? floatingActionButtonTheme,
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: PrimDark.v1,
+  ),
 // IconButtonThemeData? iconButtonTheme,
 // ListTileThemeData? listTileTheme,
 // MenuBarThemeData? menuBarTheme,

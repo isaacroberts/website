@@ -116,30 +116,35 @@ class Footer extends StatelessWidget {
   }
 
   Widget wideView(BuildContext context) {
-    return SelectionArea(
-        child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-          Text('Isaac Roberts Consulting',
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: fonts.displaySmall),
-          const SizedBox(height: 45),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(80, 0, 80, 15),
-            child: sideFlex([sideText(TextAlign.left), socials(context)]),
-          ),
-          // const Padding(
-          //     padding: EdgeInsets.fromLTRB(30, 0, 80, 0),
-          //     child: Divider(thickness: 1)),
-        ]));
+    return Center(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+            child: SizedBox(
+                width: processWidth,
+                // child: SelectionArea(
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Isaac Roberts Consulting',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: fonts.displaySmall),
+                      const SizedBox(height: 45),
+                      sideFlex([sideText(TextAlign.left), socials(context)]),
+
+                      // const Padding(
+                      //     padding: EdgeInsets.fromLTRB(30, 0, 80, 0),
+                      //     child: Divider(thickness: 1)),
+                    ]))));
   }
 
   Widget thinView(BuildContext context) {
-    return SelectionArea(
-        child: Column(
+    return
+        // SelectionArea(
+        //   child:
+        Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -157,7 +162,7 @@ class Footer extends StatelessWidget {
           // const Padding(
           //     padding: EdgeInsets.fromLTRB(30, 0, 80, 0),
           //     child: Divider(thickness: 1)),
-        ]));
+        ]);
   }
 
   static Widget sliver() {

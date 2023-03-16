@@ -8,6 +8,10 @@ const String hostName = kDebugMode ? 'http://127.0.0.1:5000' : '';
 
 // Returns error message if not successful
 Future<String?> sendSignup(String emailAddress, String body) async {
+  if (kDebugMode) {
+    return null;
+  }
+
   var map = <String, dynamic>{};
   map['email'] = emailAddress;
   map['body'] = body;

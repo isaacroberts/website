@@ -215,15 +215,20 @@ class _MyHomePageState extends State<MyHomePage> {
   ListTile drawerListTile(int n) {
     return ListTile(
       title: Text(scrollTos[n].name),
-      onTap: () async {
-        if (Device.width < (theme.drawerTheme.width ?? 150) + 50) {
-          Navigator.of(context).pop();
-          await Future.delayed(const Duration(milliseconds: 350), () {
-            scroll(scrollTos[n]);
-          });
-        } else {
+      onTap: () {
+        // if (Device.width < (theme.drawerTheme.width ?? 150) + 50) {
+        Navigator.of(context).pop();
+        Future.delayed(const Duration(milliseconds: 350), () {
           scroll(scrollTos[n]);
-        }
+        });
+        // } else {
+        //   scroll(scrollTos[n]);
+        //   Future.delayed(const Duration(milliseconds: 750), () {
+        //     if (context.mounted) {
+        //       Navigator.of(context).pop();
+        //     }
+        //   });
+        // }
       },
     );
   }

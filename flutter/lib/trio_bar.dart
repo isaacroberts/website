@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:developer';
 import 'dart:math' as math;
 
@@ -48,7 +49,7 @@ class _PopItemHorizontalState extends TrioLottieHaver<PopItemHorizontal> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 16 * k,
+        width: trioHorizWidth,
         child: Card(
             margin: EdgeInsets.zero,
             child: inkwellWrapper(Padding(
@@ -88,12 +89,25 @@ Text buildHeadline(String header) {
   );
 }
 
+Widget headlineWithIcon(String header, String icon) {
+  TextStyle style = fonts.displaySmall ?? watchHeader;
+  return RichText(
+      text: TextSpan(children: <InlineSpan>[
+    TextSpan(
+      text: '$header ',
+      style: style,
+    ),
+    WidgetSpan(
+      child: SvgPicture.asset('lottie/$icon.svg', height: style.fontSize),
+      alignment: PlaceholderAlignment.bottom,
+    ),
+  ]));
+}
+
 List<Widget> popHorizontal(BuildContext contex) {
   return [
     PopItemHorizontal(icons[0], titles[0], bodies[0]),
-    const SizedBox(width: 15),
     PopItemHorizontal(icons[1], titles[1], bodies[1]),
-    const SizedBox(width: 15),
     PopItemHorizontal(icons[2], titles[2], bodies[2]),
   ];
 }
@@ -122,32 +136,35 @@ List<Widget> popScrollWatch(BuildContext context) {
   ];
 }
 
-bool get useScroll => Device.width < trioBarWidth;
+// bool get useScroll => Device.width < (trioHorizWidth * 3 + k);
 
 Widget trioSliver(BuildContext context) {
   return SliverLayoutBuilder(builder: (context, constraints) {
-    if (useScroll) {
+    if (Device.width <= watchSize) {
       return SliverList(
-        delegate: SliverChildListDelegate(Device.width > tinyWidth
-            ? popScrolls(context)
-            : Device.width > watchSize
-                ? popScrollNoIcons(context)
-                : popScrollWatch(context)),
-      );
+          delegate: SliverChildListDelegate(popScrollWatch(context)));
     }
-    return SliverToBoxAdapter(child: trioContainerNoScroll(context));
+    if (Device.width <= 550) {
+      return SliverList(
+          delegate: SliverChildListDelegate(popScrollNoIcons(context)));
+    } else if (Device.width < (trioHorizWidth * 3 + k)) {
+      return SliverList(delegate: SliverChildListDelegate(popScrolls(context)));
+    } else {
+      return SliverToBoxAdapter(child: trioContainerNoScroll(context));
+    }
   });
 }
 
 Widget trioContainerNoScroll(BuildContext context) {
-  return Container(
-      alignment: Alignment.center,
-      width: math.min(Device.width, 1000),
-      padding: const EdgeInsets.only(bottom: 30),
-      height: 25 * 15,
-      child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: popHorizontal(context)));
+  return Center(
+      child: Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: SizedBox(
+              width: trioHorizWidth * 3 + k * 4,
+              height: 24 * 15,
+              child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: popHorizontal(context)))));
 }

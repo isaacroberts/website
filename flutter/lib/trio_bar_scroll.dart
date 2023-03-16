@@ -30,17 +30,11 @@ class _PopColumnScrollWithIconState
   // late final bool hovered;
 
   Widget iconIfSize() {
-    // return LayoutBuilder(builder: (context, constraints) {
-    //   if (Device.width >= 400) {
     return Container(
         width: 120,
         height: 120,
         margin: const EdgeInsets.all(15),
         child: buildLottie(widget.icon));
-    // } else {
-    //   return const SizedBox(width: 15);
-    // }
-    // });
   }
 
   @override
@@ -77,16 +71,11 @@ class _PopColumnScrollWithIconState
   }
 }
 
-/*
-
-    return LayoutBuilder(builder: (context, constraints) {
-      if (Device.width >= 400) {
- */
 class PopScrollNoIcon extends StatelessWidget {
-  // final String icon;
+  final String icon;
   final String header;
   final String body;
-  const PopScrollNoIcon(String icon, this.header, this.body, {Key? key})
+  const PopScrollNoIcon(this.icon, this.header, this.body, {Key? key})
       : super(key: key);
 
   @override
@@ -107,7 +96,9 @@ class PopScrollNoIcon extends StatelessWidget {
                         ? CrossAxisAlignment.start
                         : CrossAxisAlignment.center,
                     children: [
-                      buildHeadline(header),
+                      // buildHeadline(header),
+                      headlineWithIcon(header, icon),
+
                       paraSmall(body,
                           align: leftAlign ? TextAlign.left : TextAlign.center),
                       const SizedBox(height: 15),
@@ -122,22 +113,6 @@ class PopScrollWatch extends StatelessWidget {
   const PopScrollWatch(this.icon, this.header, this.body, {Key? key})
       : super(key: key);
 
-  Widget textSpan() {
-    return RichText(
-        text: TextSpan(children: <InlineSpan>[
-      TextSpan(
-        text: '$header ',
-        style: watchHeader,
-      ),
-      // const WidgetSpan(child: SizedBox(width: 5)),
-      WidgetSpan(
-        child:
-            SvgPicture.asset('lottie/$icon.svg', height: watchHeader.fontSize),
-        alignment: PlaceholderAlignment.bottom,
-      ),
-    ]));
-  }
-
   @override
   Widget build(BuildContext context) {
     const bool leftAlign = true;
@@ -150,16 +125,14 @@ class PopScrollWatch extends StatelessWidget {
                 ? CrossAxisAlignment.start
                 : CrossAxisAlignment.center,
             children: [
-              //TODO: SVG inline with text
-
-              textSpan(),
+              headlineWithIcon(header, icon),
               // Text(
               //   header,
               //   style: watchHeader,
               // ),
               Text(
                 body,
-                style: watchBody,
+                style: fonts.bodyLarge,
                 softWrap: true,
                 overflow: TextOverflow.visible,
                 textAlign: TextAlign.left,

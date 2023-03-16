@@ -114,7 +114,13 @@ Widget textOverflower(BuildContext context,
 
 Widget flexibleTitle(BuildContext context, var scrollCallback) {
   Widget overflower() => textOverflower(context,
-      texts: ['Freelance Mobile & Web', 'Mobile & Web', 'App Dev', ''],
+      texts: [
+        // 'Isaac Roberts - Freelance Mobile & Web',
+        'Freelance Mobile & Web',
+        'Mobile & Web',
+        'App Dev',
+        ''
+      ],
       style: Theme.of(context).textTheme.titleLarge,
       textAlign: TextAlign.left);
 

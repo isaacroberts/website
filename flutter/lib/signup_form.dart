@@ -142,7 +142,7 @@ class _SignupFormState extends State<SignupForm> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 15),
+            // const SizedBox(height: 15),
             Text(
               'Get started',
               style: fonts.displayMedium,
@@ -153,6 +153,10 @@ class _SignupFormState extends State<SignupForm> {
                 'Enter your email and I\'ll get back to you with questions about your project.',
                 style: fonts.bodyLarge,
                 textAlign: TextAlign.left),
+            // Expanded(child: LayoutBuilder(builder: (context, constraints) {
+            //   log('avail height: ${constraints.maxHeight}');
+            //   return SizedBox.shrink();
+            // })),
             const SizedBox(height: 15),
             signupRow()
           ]);
@@ -160,7 +164,7 @@ class _SignupFormState extends State<SignupForm> {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 15),
             Text(
