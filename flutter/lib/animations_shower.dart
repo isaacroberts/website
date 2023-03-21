@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -10,90 +11,73 @@ import 'common_elements.dart';
 import 'feature_shower.dart';
 import 'package:rive/rive.dart';
 
-class HoldappLogoRiveWidget extends StatefulWidget {
-  const HoldappLogoRiveWidget({Key? key}) : super(key: key);
+class AnimationShower extends StatefulWidget {
+  final bool textLeft;
+  const AnimationShower(this.textLeft, {Key? key}) : super(key: key);
 
   @override
-  State<HoldappLogoRiveWidget> createState() => _HoldappLogoRiveWidgetState();
+  State<AnimationShower> createState() => _AnimationShowerState();
 }
 
-class _HoldappLogoRiveWidgetState extends State<HoldappLogoRiveWidget>
-    with SingleTickerProviderStateMixin {
-  Artboard? _riveArtboard;
+class _AnimationShowerState extends State<AnimationShower> with FeatureShower {
+  late SMITrigger? _bump;
+
+  _AnimationShowerState();
 
   @override
-  void initState() {
-    super.initState();
-    rootBundle.load('images/bear.riv').then((data) {
-      // Load the RiveFile from the binary data.
-      final file = RiveFile.import(data);
+  String title() => 'Animations';
+  @override
+  String subtitle() => 'Impress your users with animations.';
+  @override
+  String body() =>
+      """Add loading animations, action animations, even animations that respond to clicks, events, and mouse position. 
+          """;
+  @override
+  String bgImage() => 'images/animation.jpg';
 
-      // The artboard is the root of the animation
-      // and gets drawn in the Rive widget.
-      final artboard = file.mainArtboard;
-      var controller =
-          StateMachineController.fromArtboard(artboard, 'State Machine 1');
-      if (controller != null) {
-        artboard.addController(controller);
-      }
-      setState(() => _riveArtboard = artboard);
-    });
+  @override
+  bool shouldExpandToDisplay() => true;
+
+  void clickRive() => _bump?.fire();
+
+  void riveLoaded(Artboard artboard) {
+    final controller = StateMachineController.fromArtboard(artboard, 'tap');
+    artboard.addController(controller!);
+    _bump = controller.findInput<bool>('Trigger 1') as SMITrigger;
+  }
+
+  Widget getRive() {
+    if (kIsWeb) {
+      return RiveAnimation.network(
+        'assets/lottie/rivebot_transform.riv',
+        key: const Key('rive'),
+        placeHolder: const CircularProgressIndicator(),
+        onInit: riveLoaded,
+        stateMachines: const ['tap'],
+        animations: const ['idleCar'],
+      );
+    } else {
+      return RiveAnimation.asset(
+        'lottie/rivebot_transform.riv',
+        key: const Key('rive'),
+        placeHolder: const CircularProgressIndicator(),
+        onInit: riveLoaded,
+        stateMachines: const ['tap'],
+        animations: const ['idleCar'],
+      );
+    }
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Colors.white,
-        body: _riveArtboard != null
-            ? Rive(artboard: _riveArtboard!)
-            : const Center(
-                child: CircularProgressIndicator(),
-              ),
-      );
-}
-
-class AnimationShower extends StatelessWidget with FeatureShower {
-  final bool textLeft;
-  const AnimationShower(this.textLeft, {super.key});
-
-  @override
-  String title() => 'Automation';
-  @override
-  String subtitle() => 'Streamline your workplace with simple scripts.';
-  @override
-  String body() =>
-      """Use Python and Pandas to convert the latest numbers into reports. Use Google Apps Script to upload those reports to the company Google Docs folder. Use an email server to send that link to everyone in the scheduled meeting, 10 minutes before. 
-          """;
-  @override
-  String bgImage() => 'images/automation.jpg';
-
-  @override
-  bool shouldExpandToDisplay() => false;
-
-  @override
   Widget displayContent(BuildContext context) {
-    // return SizedBox.shrink();
-    if (kIsWeb) {
-      return const RiveAnimation.network(
-        'assets/lottie/rivebot_transform.riv',
-        key: Key('rive'),
-        placeHolder: CircularProgressIndicator(),
-      );
-    } else {
-      return const RiveAnimation.asset('lottie/rivebot_transform.riv',
-          key: Key('rive'), placeHolder: CircularProgressIndicator());
-    }
-    return const RiveAnimation.network(
-      key: Key('rive'),
-      'https://public.rive.app/community/runtime-files/3898-8161-rivebot-transform.riv',
-      // placeHolder: Image(image: assetProvider('loader.gif')),
-    );
-    return const HoldappLogoRiveWidget();
-    // return const RiveAnimation.asset('images/bear.riv');
+    return InkWell(
+        onTap: clickRive,
+        borderRadius: BorderRadius.circular(15),
+        child: Center(child: AbsorbPointer(child: getRive())));
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return doBuild(context, textLeft);
+    return doBuild(context, widget.textLeft);
   }
 }

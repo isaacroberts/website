@@ -321,7 +321,8 @@ Widget _paragraph(String para,
     {required TextStyle? style,
     TextAlign align = TextAlign.left,
     bool selectable = false}) {
-  List<String> lines = para.split('\n');
+  List<String> lines = para.trim().split('\n');
+
   double spacing = .5 * (style?.height ?? 10);
   spacing = 15;
   return selectionIf(

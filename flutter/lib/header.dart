@@ -98,7 +98,7 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
           padding: const EdgeInsets.fromLTRB(
               totalTextMargin, 60, totalTextMargin, 90),
           child: SizedBox(
-              width: trioBarWidth,
+              width: processWidth,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,

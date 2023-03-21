@@ -63,7 +63,7 @@ abstract class FeatureShower {
         ));
   }
 
-  Widget textContainer(bool textLeft) {
+  Widget textContainer(BuildContext context, bool textLeft) {
     return Card(
         child: SizedBox.expand(
             child: Container(
@@ -73,7 +73,7 @@ abstract class FeatureShower {
                     onTap: () {},
                     child: Padding(
                         padding: const EdgeInsets.all(30),
-                        child: textContent(textLeft))))));
+                        child: textContent(context, textLeft))))));
   }
 
   Widget vertTextContainer(BuildContext context) {
@@ -86,14 +86,17 @@ abstract class FeatureShower {
                 : null,
             child: Padding(
                 padding: const EdgeInsets.all(textContainerMargin),
-                child: textContent(true, selectable: false))));
+                child: textContent(context, true,
+                    selectable: false, vert: true))));
   }
 
   Widget separatedDisplayWidget(BuildContext context) {
     return Center(
         child: Card(
             child: SizedBox(
-                width: 400, height: 400, child: _displayContent(context))));
+                width: Device.width - 60,
+                height: Device.height - 120,
+                child: _displayContent(context))));
   }
 
   void navToDisplayWidget(BuildContext context) {
@@ -116,8 +119,10 @@ abstract class FeatureShower {
   }
 
   Widget _displayContent(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(30), child: displayContent(context));
+    return displayContent(context);
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: displayContent(context));
     return Card(child: displayContent(context));
   }
 
@@ -129,15 +134,15 @@ abstract class FeatureShower {
     } else {
       if (left) {
         return [
-          Flexible(child: textContainer(left)),
+          Flexible(child: textContainer(context, left)),
+          const SizedBox(width: 30),
           Flexible(child: _displayContent(context)),
-          // const SizedBox(width: 15),
         ];
       } else {
         return [
-          // const SizedBox(width: 15),
           Flexible(child: _displayContent(context)),
-          Flexible(child: textContainer(left)),
+          const SizedBox(width: 30),
+          Flexible(child: textContainer(context, left)),
         ];
       }
     }
@@ -152,7 +157,8 @@ abstract class FeatureShower {
   }
 
   // @override
-  Widget textContent(bool textLeft, {bool selectable = true}) {
+  Widget textContent(BuildContext context, bool textLeft,
+      {bool selectable = true, bool vert = false}) {
     TextAlign align = textLeft ? TextAlign.left : TextAlign.center;
 
     return selectWrap(
@@ -166,7 +172,12 @@ abstract class FeatureShower {
               const SizedBox(height: 15),
               paraMed(subtitle(), align: align),
               const SizedBox(height: 15),
-              paraMed(body(), align: align)
+              paraMed(body(), align: align),
+              if (vert) const SizedBox(height: 15),
+              if (vert)
+                OutlinedButton(
+                    onPressed: () => navToDisplayWidget(context),
+                    child: const Text("See more"))
             ]));
   }
 

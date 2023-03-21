@@ -7,6 +7,7 @@ import 'dart:developer';
 
 import 'package:device_preview/device_preview.dart';
 import 'download_section.dart';
+import 'gpt_shower.dart';
 import 'signup_form.dart';
 import 'text_theme.dart';
 import 'trio_bar.dart';
@@ -126,7 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
           // anchor: .33,
           slivers: [
             buildAppBar(context, scrollCallback),
-
             Header(
                 scrollTo: scrollKey(Sections.Process),
                 key: scrollKey(Sections.Home)),
@@ -141,23 +141,23 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             })),
             ProcessSidebar(key: scrollKey(Sections.Process)),
-
             sectionHeader(
               context,
               'Features',
               key: scrollKey(Sections.Features),
             ),
+            const SliverToBoxAdapter(child: GPTShower(true)),
+            const SliverToBoxAdapter(child: SizedBox(height: 30)),
             const SliverToBoxAdapter(child: DataVis(true)),
             const SliverToBoxAdapter(child: SizedBox(height: 30)),
-            const SliverToBoxAdapter(child: AnimationShower(true)),
 
+            const SliverToBoxAdapter(child: AnimationShower(true)),
             sectionHeader(
               context,
               'Experience',
               key: scrollKey(Sections.Experience),
             ),
             buildExperienceList(context),
-
             const SliverToBoxAdapter(child: SizedBox(height: 30)
                 // child: Container(height: 30, decoration: expGradient(4)),
                 ),
