@@ -20,10 +20,10 @@ mkdir templates
 cp -r flutter/build/web/* templates/
 
 if [ -f "flutter/assets_sheet.csv" ]; then
-    # Fixes nested asset folder and 
+    # Fixes nested asset folder and
     # Resizes them to listed sizes
     rm -r templates/assets/assets/
-    python ~/Dropbox/scripts/flutter/resize_assets.py resize .
+    python ~/Dropbox/scripts/flutter/resize_asset_sheet.py resize .
 else
     # Fixes fucked assets thing
     mv templates/assets/assets/* templates/assets/
