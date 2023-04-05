@@ -1,15 +1,9 @@
-import 'dart:html';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
 import 'dart:developer';
-// import 'dart:math' as math;
 
-// import 'package:decorated_icon/decorated_icon.dart';
-import 'package:flutter/material.dart';
-import 'package:ms_undraw/ms_undraw.dart';
-import 'package:flutter/animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'common_elements.dart';
 import 'text_theme.dart';
@@ -42,6 +36,7 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
   }
 
   Widget stackWithX(bool stack, Widget child, {double size = 50}) {
+    return child;
     if (stack) {
       return Stack(children: [
         child,
@@ -135,8 +130,8 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
             // mainAxisAlignment: MainAxisAlignment.center,
             // mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(child: lightboxImage()),
               Flexible(child: lightTextListView()),
+              Flexible(child: lightboxImage()),
             ],
           ));
     }
@@ -158,20 +153,21 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
 
   List<Widget> _lightTextList(TextAlign align,
       {required bool addClose, required bool addTitle}) {
+    addClose = true;
     return [
       if (addTitle)
         Text(experiences[index].headline,
-            style: fonts.titleLarge, textAlign: align),
+            style: fonts.titleSmall, textAlign: align),
       if (addTitle) const SizedBox(height: 15),
-      paraMed(experiences[index].fullText, align: align),
-      // const SizedBox(height: 15),
+      paraSmall(experiences[index].fullText, align: align),
+      const SizedBox(height: 15),
       OutlinedButton(
         onPressed: () => launchUrl(Uri.parse(experiences[index].url)),
         child: const Text('Website'),
       ),
       const SizedBox(height: 15),
       if (addClose)
-        ElevatedButton(
+        OutlinedButton(
           onPressed: _removeOverlay,
           // icon: const Icon(Icons.close),
           child: const Text('Close'),

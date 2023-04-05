@@ -3,9 +3,13 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
+import 'package:isaac_roberts_consulting/parallax.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'colorable_flutter_logo.dart';
+import 'device.dart';
 import 'text_theme.dart';
 import 'contact_page.dart';
 import 'theme.dart';
@@ -43,7 +47,7 @@ ImageProvider<Object> assetProvider(String asset, {String? package}) {
       'assets/${package == null ? '' : 'packages/$package/'}$asset',
     );
   } else {
-    return AssetImage(asset, package: package);
+    return AssetImage('assets/$asset', package: package);
   }
 }
 
@@ -262,19 +266,54 @@ Widget sectionHeader(BuildContext context, String title,
   return SliverToBoxAdapter(child: sectionHeaderNoSliver(title, key: key));
 }
 
+Widget headerTextRow(String title, TextStyle? style, {Key? key}) {
+  return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        key: key,
+        '// $title',
+        style: style,
+        textAlign: TextAlign.left,
+      ));
+  return SizedBox(
+      width: Device.width,
+      height: 120,
+      child: Stack(
+          fit: StackFit.expand,
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned.fill(
+                child: Center(child: Text(key: key, title, style: style))),
+            Positioned.fill(
+                child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('//', style: style),
+            ))
+          ]));
+}
+
 Widget sectionHeaderNoSliver(String title, {Key? key}) {
   return LayoutBuilder(builder: (context, constraints) {
     if (constraints.maxWidth > watchSize) {
-      return Center(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 45, bottom: 30),
-        child: Text(key: key, title, style: fonts.displayMedium),
-      ));
+      return Padding(
+          padding: const EdgeInsets.only(top: 45, bottom: 30, left: 15),
+          child: headerTextRow(title, fonts.displayMedium, key: key)
+          // child: Text(key: key, '//$title', style: fonts.displayMedium),
+          );
+
+      // return Center(
+      //     child: Padding(
+      //         padding: const EdgeInsets.only(top: 45, bottom: 30, left: 15),
+      //         child: headerTextRow(title, fonts.displayMedium, key: key)
+      //         // child: Text(key: key, '//$title', style: fonts.displayMedium),
+      //         ));
     } else {
       return Center(
           child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Text(key: key, title, style: watchHeaderLarge)));
+              child: headerTextRow(title, watchHeaderLarge, key: key)));
+
+      // child: Text(key: key, '//$title', style: watchHeaderLarge)));
     }
   });
 }
@@ -282,9 +321,10 @@ Widget sectionHeaderNoSliver(String title, {Key? key}) {
 Widget sectionHeaderNoSliverOrPadding(String title, {Key? key}) {
   return Center(
       child: Padding(
-    padding: const EdgeInsets.only(top: 15, bottom: 15),
-    child: Text(key: key, title, style: fonts.displayMedium),
-  ));
+          padding: const EdgeInsets.only(top: 15, bottom: 15),
+          child: headerTextRow(title, fonts.displayMedium)
+          // child: Text(key: key, title, style: fonts.displayMedium),
+          ));
 }
 
 Widget divider() {
@@ -366,18 +406,19 @@ Widget _subt(String line,
       ));
 }
 
-var paraSmall = paraLarge;
-// Widget paraSmall(String para,
-//     {TextAlign align = TextAlign.left, bool selectable = false}) {
-//   return _paragraph(para,
-//       style: fonts.bodySmall, align: align, selectable: selectable);
-// }
-var paraMed = paraLarge;
-// Widget paraMed(String para,
-//     {TextAlign align = TextAlign.left, bool selectable = false}) {
-//   return _paragraph(para,
-//       style: fonts.bodyMedium, align: align, selectable: selectable);
-// }
+// var paraSmall = paraLarge;
+Widget paraSmall(String para,
+    {TextAlign align = TextAlign.left, bool selectable = false}) {
+  return _paragraph(para,
+      style: fonts.bodySmall, align: align, selectable: selectable);
+}
+
+// var paraMed = paraLarge;
+Widget paraMed(String para,
+    {TextAlign align = TextAlign.left, bool selectable = false}) {
+  return _paragraph(para,
+      style: fonts.bodyMedium, align: align, selectable: selectable);
+}
 
 Widget paraLarge(String para,
     {TextAlign align = TextAlign.left, bool selectable = false}) {
@@ -479,67 +520,106 @@ class TextWithOptImgLayout extends MultiChildLayoutDelegate {
   bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) => false;
 }
 
-class ParallaxFlowDelegate extends FlowDelegate {
+class ParallaxImage extends StatefulWidget {
+  final String image;
+  final double? opacity;
+  final String? debugLabel;
   final double distance;
-
-  ParallaxFlowDelegate(
-      {required this.scrollable,
-      required this.listItemContext,
-      required this.backgroundImageKey,
-      this.distance = 10})
-      : super(repaint: scrollable.position);
-
-  final ScrollableState scrollable;
-  final BuildContext listItemContext;
-  final GlobalKey backgroundImageKey;
+  //ParallaxImage(image: , opacity: 1, debugLabel: )
+  const ParallaxImage(
+      {required this.image,
+      this.opacity,
+      double? distance,
+      this.debugLabel,
+      Key? key})
+      : distance = distance ?? 5,
+        super(key: key);
 
   @override
-  BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) {
-    return BoxConstraints.tightFor(
-      width: constraints.maxWidth,
-    );
+  State<ParallaxImage> createState() => _ParallaxImageState();
+}
+
+class _ParallaxImageState extends State<ParallaxImage> {
+  late GlobalKey _backgroundImageKey;
+
+  @override
+  void initState() {
+    _backgroundImageKey = GlobalKey(debugLabel: widget.debugLabel);
+    super.initState();
   }
 
   @override
-  void paintChildren(FlowPaintingContext context) {
-    // Calculate the position of this list item within the viewport.
-    final scrollableBox = scrollable.context.findRenderObject() as RenderBox;
-    final listItemBox = listItemContext.findRenderObject() as RenderBox;
-    final listItemOffset = listItemBox.localToGlobal(
-        listItemBox.size.centerLeft(Offset.zero),
-        ancestor: scrollableBox);
+  Widget build(BuildContext context) {
+    double? op = widget.opacity;
 
-    // Determine the percent position of this list item within the
-    // scrollable area.
-    final viewportDimension = scrollable.position.viewportDimension;
-    final scrollFraction =
-        (listItemOffset.dy / viewportDimension).clamp(0.0, 1.0);
-
-    // Calculate the vertical alignment of the background
-    // based on the scroll percent.
-    final verticalAlignment = Alignment(0.0, scrollFraction * 2 - 1);
-
-    // Convert the background alignment into a pixel offset for
-    // painting purposes.
-    final backgroundSize =
-        (backgroundImageKey.currentContext!.findRenderObject() as RenderBox)
-            .size;
-    final listItemSize = context.size;
-    final childRect =
-        verticalAlignment.inscribe(backgroundSize, Offset.zero & listItemSize);
-
-    // Paint the background.
-    context.paintChild(
-      0,
-      transform:
-          Transform.translate(offset: Offset(0.0, childRect.top)).transform,
+    final delegate = PixelParallaxDelegate(
+      scrollable: Scrollable.of(context),
+      listItemContext: context,
+      backgroundImageKey: _backgroundImageKey,
+      distance: widget.distance,
     );
+
+    return Flow(delegate: delegate, children: [
+      ConstrainedBox(
+          constraints: BoxConstraints(
+              minHeight: (Device.height) * delegate.pixelsPerPixel),
+          child: (op != null)
+              ? Opacity(
+                  opacity: op,
+                  child: fadeAssetBg(widget.image, fit: BoxFit.fitHeight))
+              : fadeAssetBg(widget.image, fit: BoxFit.cover))
+    ]);
+  }
+}
+
+class ParallaxImageFromProvider extends StatefulWidget {
+  final ImageProvider image;
+  final double? opacity;
+  final String? debugLabel;
+  final double distance;
+  //ParallaxImage(image: , opacity: 1, debugLabel: )
+  const ParallaxImageFromProvider(
+      {required this.image,
+      this.opacity,
+      double? distance,
+      this.debugLabel,
+      Key? key})
+      : distance = distance ?? 2,
+        super(key: key);
+
+  @override
+  State<ParallaxImageFromProvider> createState() =>
+      _ParallaxImageFromProviderState();
+}
+
+class _ParallaxImageFromProviderState extends State<ParallaxImageFromProvider> {
+  late GlobalKey _backgroundImageKey;
+
+  @override
+  void initState() {
+    _backgroundImageKey = GlobalKey(debugLabel: widget.debugLabel);
+    super.initState();
   }
 
   @override
-  bool shouldRepaint(ParallaxFlowDelegate oldDelegate) {
-    return scrollable != oldDelegate.scrollable ||
-        listItemContext != oldDelegate.listItemContext ||
-        backgroundImageKey != oldDelegate.backgroundImageKey;
+  Widget build(BuildContext context) {
+    double? op = widget.opacity;
+
+    final delegate = PixelParallaxDelegate(
+      scrollable: Scrollable.of(context),
+      listItemContext: context,
+      backgroundImageKey: _backgroundImageKey,
+      distance: widget.distance,
+    );
+
+    return Flow(delegate: delegate, children: [
+      ConstrainedBox(
+          constraints: BoxConstraints(
+              minHeight: (Device.height) * delegate.pixelsPerPixel),
+          child: Image(
+              image: widget.image,
+              opacity: op != null ? AlwaysStoppedAnimation<double>(op) : null,
+              fit: BoxFit.cover))
+    ]);
   }
 }

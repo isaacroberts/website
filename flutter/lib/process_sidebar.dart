@@ -1,9 +1,11 @@
 // import 'dart:html';
+import 'dart:core';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
+import 'package:isaac_roberts_consulting/parallax_image_switcher.dart';
 import 'text_theme.dart';
 import 'vert_to_horiz_scroll.dart';
 import 'theme.dart';
@@ -36,6 +38,72 @@ List<String> cardBgs = [
   'spacex--p-KCm6xB9I-unsplash.jpg',
 ];
 
+class ProcessStage {
+  // final String name;
+  final String headline;
+  final int ix;
+  final String svg;
+  // final UnDrawIllustration undraw;
+  final String body;
+
+  const ProcessStage(this.headline, this.ix,
+      {required this.svg,
+      // required this.undraw,
+      required this.body});
+
+  String get name => headline;
+}
+
+List<ProcessStage> Stages = const [
+  ProcessStage('Requirements gathering', 0,
+      body: """
+In the requirements gathering phase we will work closely to understand your business needs and objectives, and to identify the key features and functionality that your app should have. 
+The end result of this phase will be a detailed set of requirements that will serve as the foundation for the rest of the project. """,
+// undraw: UnDrawIllustration.business_chat,
+      svg: 'business_chat'),
+  ProcessStage(
+    'User story', 1,
+    body: """
+I work with you to come up with a User Story, determining how the user will use the app, their goals, the pathway to those goals, and the way you want them to go about those goals. 
+"I will use this information to create a detailed and user-centered design that will help your app achieve its goals and provide a great user experience.""",
+// undraw: UnDrawIllustration.user_flow,
+    svg: 'user_flow',
+  ),
+  ProcessStage('Mockup', 2,
+      body: """
+The mockup phase is where we take the ideas and requirements from the previous phases and turn them into a visual representation of the app.
+This typically involves creating wireframes or prototypes that show the basic structure and layout of the app, as well as how the different screens and features will work together. 
+            """,
+// undraw: UnDrawIllustration.prototyping_process,
+      svg: 'prototyping_process'),
+  ProcessStage('Development', 3,
+      body: """
+Once the mockups have been approved, it's time to start development. 
+Throughout development, I will keep you informed of the app's progress and address any issues that arise. When the app is ready, I will deliver it to you for review and preliminary testing.
+            """,
+
+// undraw: UnDrawIllustration.project_complete,
+      svg: 'project_complete'),
+  ProcessStage('Sugarcoating', 4,
+      body: """
+The sugarcoating phase is where I add the finishing touches to the app, making it more engaging and user-friendly. This involves styling, adding effects, animations, and other visual flourishes.
+""",
+
+// undraw: UnDrawIllustration.progressive_app,
+      svg: 'progressive_app'),
+  ProcessStage('Automated testing', 5,
+      body: """
+During this phase, I will use automated and manual testing to uncover bugs, issues, and inconsistencies in the app. 
+The goal of testing is to identify and fix any problems with the app before it is released to the public, ensuring that it performs well and meets the standards I have set for my work.
+            """,
+// undraw: UnDrawIllustration.programmer,
+      svg: 'programmer'),
+  ProcessStage('Launch', 6,
+      body: "The app is ready! Go get out there!",
+// undraw: UnDrawIllustration.outer_space,
+      svg: 'outer_space'),
+];
+
 class ProcessSidebar extends StatefulWidget {
   const ProcessSidebar({Key? key}) : super(key: key);
 
@@ -47,8 +115,10 @@ const double imgOpacity = .3;
 
 class _ProcessSidebarState extends State<ProcessSidebar> {
   int _current = 0;
+  // final GlobalKey _backgroundImageKey = GlobalKey();
 
   final List<NetworkImage> _bgs = [];
+  ParallaxImageSwitcher? _imageSwitcher;
 
   _ProcessSidebarState() : pageController = PageController() {
     pageController.addListener(updateCurrentFromPage);
@@ -152,7 +222,9 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     if (Device.isDesktop || Device.isTablet) {
       return SliverToBoxAdapter(child: LayoutBuilder(builder: (c, cnt) {
         if (cnt.maxWidth > 1000) {
-          return wideView();
+          // return SizedBox(
+          //     height: 500, width: 1000, child: parallaxImage(context));
+          return wideView(context);
         } else if (cnt.maxWidth > 650) {
           return midView();
         } else if (cnt.maxWidth > tinyWidth) {
@@ -203,6 +275,23 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     );
   }
 
+  Widget parallaxImage(BuildContext context) {
+    return ParallaxImageSwitcher(
+      key: const Key('process_parallax'),
+      images: cardBgs,
+      current: current,
+      opacity: .5,
+      distance: 2,
+    );
+  }
+
+  Widget paraStack(BuildContext context, Widget child) {
+    return Stack(
+        fit: StackFit.expand,
+        alignment: Alignment.center,
+        children: [Positioned.fill(child: parallaxImage(context)), child]);
+  }
+
   Widget pageScrolledImage() {
     return PageView.builder(
         controller: pageController,
@@ -214,65 +303,63 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         });
   }
 
-  Widget wideView() {
+  Widget wideView(BuildContext context) {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
     const double height = 500;
-    return Center(
-        child: ConstrainedBox(
-            constraints: const BoxConstraints(
-                maxWidth: processWidth, maxHeight: height, minHeight: height),
-            // child: ClipRRect(
-            //     borderRadius: BorderRadius.circular(15),
-            child: Container(
-                margin: EdgeInsets.zero,
-                alignment: Alignment.center,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: const Border.fromBorderSide(
-                        BorderSide(color: Color(0xa0ffffff)))),
-                // child: Card(
-                //     color: Colors.transparent,
-                //     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    return Container(
+        color: const Color(0x40000000),
+        child: Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                    maxWidth: processWidth,
+                    maxHeight: height,
+                    minHeight: height),
+                // child: ClipRRect(
+                //     borderRadius: BorderRadius.circular(15),
+                // child: Container(
+                //     margin: EdgeInsets.zero,
+                //     alignment: Alignment.center,
+                // clipBehavior: Clip.hardEdge,
+                // decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(15),
+                //     border: const Border.fromBorderSide(
+                //         BorderSide(color: Color(0xa0ffffff)))),
                 child: GestureDetector(
                     onTap: nextTab,
-                    child: Stack(
-                        fit: StackFit.expand,
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned.fill(
-                              child: Opacity(
-                                  opacity: imgOpacity, child: crossFadeImg())),
-                          wideViewContent(height, processWidth - 50 * 2)
-                        ])))));
+                    child: paraStack(context,
+                        wideViewContent(height, processWidth - 50 * 2))))));
   }
 
   Widget midView() {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
     const double height = 500;
-    const double maxWidth = 1000;
     return SizedBox(
         height: height,
         child: GestureDetector(
             onTap: nextTab,
-            child: Stack(
-                fit: StackFit.expand,
-                alignment: Alignment.center,
-                children: [
-                  Positioned.fill(
-                      child:
-                          Opacity(opacity: imgOpacity, child: crossFadeImg())),
-                  wideViewContent(height, maxWidth - 50 * 2)
-                ])));
+            child: paraStack(
+                context, wideViewContent(height, processWidth - 50 * 2))));
   }
 
   Widget wideViewContent(double height, double maxWidth) {
+    return Positioned.fill(
+        child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+          sideBar(context),
+          Expanded(
+            child: contentPanel(context),
+          ),
+          const SizedBox(width: 100),
+        ]));
     return Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          sectionHeaderNoSliverOrPadding('Process'),
+          // sectionHeaderNoSliverOrPadding('Process'),
           Expanded(
               child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -436,9 +523,9 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
             children: [
               Text(
                 headline,
-                style: fonts.headlineSmall,
+                style: fonts.titleLarge,
               ),
-              const SizedBox(height: 15),
+              // const SizedBox(height: 15),
               paraMed(body),
               // const Padding(padding: EdgeInsets.only(top: 15)),
             ]));
@@ -454,7 +541,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         children: [
           Text(
             headline,
-            style: fonts.headlineSmall,
+            style: fonts.titleLarge,
           ),
           paraMed(body),
         ]);
@@ -472,11 +559,13 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         padding: const EdgeInsets.all(15),
         child: NavigationRail(
           // elevation: 5,
+
           backgroundColor: Colors.transparent,
           // indicatorColor: colorScheme.primary?.withAlpha(100),
           extended: Device.width > 910,
           minExtendedWidth: 180,
           // labelType: NavigationRailLabelType.all,
+          groupAlignment: 0,
           selectedIndex: current,
           onDestinationSelected: (i) => current = i,
           destinations: [
@@ -536,7 +625,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     if (styleNo == 0) {
       return Align(
           key: ValueKey<int>(ix),
-          alignment: Alignment.topLeft,
+          alignment: Alignment.centerLeft,
           child: Padding(
               padding: const EdgeInsets.all(15),
               child: textColumn(ix, headline, body, bounded: false)));

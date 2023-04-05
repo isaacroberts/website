@@ -5,7 +5,7 @@ import 'feature_shower.dart';
 
 class GPTShower extends StatelessWidget with FeatureShower {
   final bool textLeft;
-  const GPTShower(this.textLeft, {super.key});
+  GPTShower(this.textLeft, {super.key});
 
   @override
   String title() => 'ChatGPT';
@@ -16,7 +16,7 @@ class GPTShower extends StatelessWidget with FeatureShower {
       """ChatGPT can serve as a user support line, autocompletion tool, email writer, or even as a salesperson. Explore what's possible with ChatGPT and GPT-4.
           """;
   @override
-  String bgImage() => 'images/deepmind2.jpg';
+  String bgImage() => 'images/deepmind3.jpg';
 
   @override
   bool shouldExpandToDisplay() => true;

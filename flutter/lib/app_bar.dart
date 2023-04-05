@@ -57,7 +57,7 @@ SliverAppBar buildAppBar(
       floating: true,
       // toolbarHeight: 30,
       // backgroundColor: Colors.transparent,
-      backgroundColor: theme.scaffoldBackgroundColor,
+      // backgroundColor: theme.scaffoldBackgroundColor,
       title: flexibleTitle(context, null),
       leading: Builder(builder: (context) {
         return IconButton(
@@ -75,8 +75,6 @@ SliverAppBar buildAppBar(
       pinned: hasSpace,
       floating: hasSpace,
       toolbarHeight: 50, //Device.select(def: 50, phoneLand: 40, phonePort: 40),
-      backgroundColor: theme.scaffoldBackgroundColor,
-
       // centerTitle: true,
       title: flexibleTitle(context, scrollCallback),
       leading: Builder(builder: (context) {
@@ -90,7 +88,7 @@ SliverAppBar buildAppBar(
 
 Widget textOverflower(BuildContext context,
     {required List<String> texts,
-    required TextStyle? style,
+    TextStyle? style,
     TextAlign textAlign = TextAlign.left,
     int maxLines = 1}) {
   return LayoutBuilder(builder: (BuildContext context, BoxConstraints size) {
@@ -115,13 +113,17 @@ Widget textOverflower(BuildContext context,
 Widget flexibleTitle(BuildContext context, var scrollCallback) {
   Widget overflower() => textOverflower(context,
       texts: [
-        // 'Isaac Roberts - Freelance Mobile & Web',
-        'Freelance Mobile & Web',
-        'Mobile & Web',
-        'App Dev',
+        'Isaac Roberts Consulting',
+        'Isaac Roberts',
+        'Roberts',
         ''
+
+        // 'Freelance Mobile & Web',
+        // 'Mobile & Web',
+        // 'App Dev',
+        // ''
       ],
-      style: Theme.of(context).textTheme.titleLarge,
+      // style: Theme.of(context).textTheme.displaySmall,
       textAlign: TextAlign.left);
 
   if (scrollCallback != null) {

@@ -50,6 +50,8 @@ abstract class FeatureShower {
 
   bool shouldExpandToDisplay() => true;
 
+  final GlobalKey _backgroundImageKey = GlobalKey();
+
   BoxDecoration deco(BorderRadius borderRadius) {
     return BoxDecoration(
         borderRadius: borderRadius,
@@ -63,20 +65,67 @@ abstract class FeatureShower {
         ));
   }
 
+  Widget parallaxImg(BuildContext context) {
+    return ParallaxImage(
+        image: bgImage(), opacity: .5, distance: 2, debugLabel: title());
+    // return Flow(
+    //     key: const Key('feature_flow'),
+    //     delegate: ParallaxFlowDelegate(
+    //       scrollable: Scrollable.of(context),
+    //       listItemContext: context,
+    //       backgroundImageKey: _backgroundImageKey,
+    //       // distance: .5,
+    //     ),
+    //     children: [
+    //       // SizedBox(
+    //       //     height: 500,
+    //       Opacity(
+    //           opacity: .5,
+    //           child: fadeAssetBg(bgImage(), fit: BoxFit.fitHeight)),
+    //     ]);
+  }
+
+  Widget parallax(BuildContext context, {required Widget child}) {
+    return SizedBox(
+        height: 400,
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Stack(
+                alignment: Alignment.center,
+                fit: StackFit.expand,
+                children: [parallaxImg(context), child])));
+  }
+
+  Widget boxDeco(BuildContext context, {required Widget child}) {
+    return Container(
+        height: 400, decoration: deco(BorderRadius.circular(15)), child: child);
+  }
+
   Widget textContainer(BuildContext context, bool textLeft) {
-    return Card(
-        child: SizedBox.expand(
-            child: Container(
-                decoration: deco(BorderRadius.circular(15)),
-                child: InkWell(
-                    borderRadius: BorderRadius.circular(15),
-                    onTap: () {},
-                    child: Padding(
-                        padding: const EdgeInsets.all(30),
-                        child: textContent(context, textLeft))))));
+    return parallax(
+      context,
+      child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: textContent(context, textLeft)),
+    );
+    // return Card(
+    //     child: Container(
+    //         decoration: deco(BorderRadius.circular(15)),
+    //         child: Padding(
+    //             padding: const EdgeInsets.all(30),
+    //             child: textContent(context, textLeft))));
   }
 
   Widget vertTextContainer(BuildContext context) {
+    return parallax(context,
+        child: InkWell(
+            onTap: shouldExpandToDisplay()
+                ? () => navToDisplayWidget(context)
+                : null,
+            child: Padding(
+                padding: const EdgeInsets.all(textContainerMargin),
+                child: textContent(context, true,
+                    selectable: false, vert: true))));
     return Container(
         height: 400,
         decoration: deco(const BorderRadius.all(Radius.circular(15))),
@@ -169,7 +218,7 @@ abstract class FeatureShower {
             crossAxisAlignment: textToCA(align),
             children: [
               Text(title(), style: fonts.headlineSmall),
-              const SizedBox(height: 15),
+              // const SizedBox(height: 15),
               paraMed(subtitle(), align: align),
               const SizedBox(height: 15),
               paraMed(body(), align: align),
@@ -219,9 +268,9 @@ abstract class FeatureShower {
             crossAxisAlignment: textToCA(align),
             children: [
               Text(title(), style: watchSubt),
-              paraLarge(subtitle(), align: align),
+              paraMed(subtitle(), align: align),
               const SizedBox(height: 15),
-              paraLarge(body(), align: align)
+              paraMed(body(), align: align)
             ]));
   }
 }

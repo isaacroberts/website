@@ -23,13 +23,13 @@ const bool leftAlign = false;
 //   MdiIcons.shieldBug
 // ];
 
-final List<String> icons = ['responsive', 'brush', 'caliper'];
+final List<String> icons = ['responsive', 'caliper', 'brush'];
 
-final List<String> titles = ['Develop', 'Design', 'Debug'];
+final List<String> titles = ['Prototype', 'Debug', 'Deliver'];
 final List<String> bodies = [
   "I can help you quickly build robust, high-quality apps that are easy to maintain and upgrade.",
+  "Don't let bugs and glitches ruin your app. I can help you identify and fix them.",
   "With my UI/UX design skills, I can help you create an app that is both beautiful and easy to use.",
-  "Don't let bugs and glitches ruin your app. I can help you identify and fix them."
 ];
 
 class PopItemHorizontal extends StatefulWidget {
@@ -51,6 +51,7 @@ class _PopItemHorizontalState extends TrioLottieHaver<PopItemHorizontal> {
     return SizedBox(
         width: trioHorizWidth,
         child: Card(
+            // color: colorScheme.tertiaryContainer,
             margin: EdgeInsets.zero,
             child: inkwellWrapper(Padding(
                 padding:
@@ -66,9 +67,9 @@ class _PopItemHorizontalState extends TrioLottieHaver<PopItemHorizontal> {
             leftAlign ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           buildLottie(widget.icon),
-          const Padding(padding: EdgeInsets.only(top: 15)),
+          // const Padding(padding: EdgeInsets.only(top: 15)),
           buildHeadline(widget.header),
-          const Padding(padding: EdgeInsets.only(top: 15)),
+          // const Padding(padding: EdgeInsets.only(top: 15)),
           buildBodyText(widget.body)
         ]);
   }
@@ -78,14 +79,14 @@ Container buildBodyText(String body) {
   return Container(
       width: 250,
       alignment: leftAlign ? Alignment.topLeft : Alignment.topCenter,
-      child: paraSmall(body,
-          align: leftAlign ? TextAlign.left : TextAlign.center));
+      child:
+          paraMed(body, align: leftAlign ? TextAlign.left : TextAlign.center));
 }
 
 Text buildHeadline(String header) {
   return Text(
     header,
-    style: fonts.displaySmall,
+    style: fonts.titleLarge,
   );
 }
 
@@ -160,11 +161,11 @@ Widget trioContainerNoScroll(BuildContext context) {
       child: Padding(
           padding: const EdgeInsets.only(bottom: 30),
           child: SizedBox(
-              width: trioHorizWidth * 3 + k * 4,
+              width: trioBarWidth,
               height: 24 * 15,
               child: Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: popHorizontal(context)))));
 }

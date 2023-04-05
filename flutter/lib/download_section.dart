@@ -21,7 +21,7 @@ class DownloadSection extends StatelessWidget {
     return Column(
         // height: 400,
         children: [
-          paraSmall(
+          paraMed(
               "With Flutter, I can easily make cross-platform apps that work wherever your users are.\nWith detail-oriented design skills, I can make them look good on every screen.",
               align: TextAlign.center,
               selectable: true),

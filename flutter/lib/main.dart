@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 
 import 'package:device_preview/device_preview.dart';
+import 'package:isaac_roberts_consulting/chatgpt/config/pallete.dart';
 import 'download_section.dart';
 import 'gpt_shower.dart';
 import 'signup_form.dart';
@@ -63,7 +64,9 @@ class MyApp extends StatelessWidget {
           builder: useDevicePreview ? DevicePreview.appBuilder : null,
           debugShowCheckedModeBanner: false,
           title: 'Isaac - App Dev',
-          theme: theme,
+          theme: lightTheme,
+          darkTheme: theme,
+          // darkTheme: ,
           home: const MyHomePage(),
         );
       } else {
@@ -132,21 +135,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 key: scrollKey(Sections.Home)),
             trioSliver(context),
             //Header only if process section needs it
-            SliverToBoxAdapter(
-                child: LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth <= watchSize) {
-                return sectionHeaderNoSliver('Process');
-              } else {
-                return const SizedBox.shrink();
-              }
-            })),
-            ProcessSidebar(key: scrollKey(Sections.Process)),
+            // SliverToBoxAdapter(
+            //     child: LayoutBuilder(builder: (context, constraints) {
+            //   if (constraints.maxWidth <= watchSize) {
+            //     return sectionHeaderNoSliver('Process');
+            //   } else {
+            //     return const SizedBox.shrink();
+            //   }
+            // })),
+            sectionHeader(context, 'Process', key: scrollKey(Sections.Process)),
+            const ProcessSidebar(),
+            // SliverToBoxAdapter(
+            //     child: SizedBox(
+            //         height: Device.height,
+            //         child: ParallaxImage(
+            //             image: 'images/bg_field.jpg', debugLabel: 'sky'))),
             sectionHeader(
               context,
               'Features',
               key: scrollKey(Sections.Features),
             ),
-            const SliverToBoxAdapter(child: GPTShower(true)),
+            SliverToBoxAdapter(child: GPTShower(true)),
             const SliverToBoxAdapter(child: SizedBox(height: 30)),
             const SliverToBoxAdapter(child: DataVis(true)),
             const SliverToBoxAdapter(child: SizedBox(height: 30)),

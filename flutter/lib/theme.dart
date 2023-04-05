@@ -9,6 +9,7 @@ import 'dart:developer';
 import 'device.dart';
 import 'text_theme.dart';
 import 'dart:math' as math;
+import 'theme_material_states.dart';
 
 const double PHI = 1.61803398;
 const double IPHI = .61803398;
@@ -27,63 +28,35 @@ const double appBar = 50;
 const double tinyWidth = 400;
 const double watchSize = 250;
 
-const double trioHorizWidth = 16 * k;
+const double trioHorizWidth = 20 * k;
 const double processWidth = 70 * k;
-const double trioBarWidth = 60 * k;
+const double trioBarWidth = processWidth; //60 * k;
 // processWidth; //trioHorizWidth * 3 + trioHorizSpacing * 2;
 
-const MaterialColor primary = Colors.orange;
+// const MaterialColor primary = Colors.orange;
 
-// class Primary {
-//   static const Color shade900 = Color(0xFFE65100);
-//   static const Color shade800 = Color(0xFFEF6C00);
-//   static const Color shade700 = Color(0xFFF57C00);
-//   static const Color shade600 = Color(0xFFFB8C00);
-//   static const Color shade500 = Color(0xFFFF9800);
-//   static const Color shade400 = Color(0xFFFFA726);
-//   static const Color shade300 = Color(0xFFFFB74D);
-//   static const Color shade200 = Color(0xFFFFCC80);
-//   static const Color shade100 = Color(0xFFFFE0B2);
-//   static const Color shade50 = Color(0xFFFFF3E0);
-//
-//   static const int shade900value = 0xFFE65100;
-//   static const int shade800value = 0xFFEF6C00;
-//   static const int shade700value = 0xFFF57C00;
-//   static const int shade600value = 0xFFFB8C00;
-//   static const int shade500value = 0xFFFF9800;
-//   static const int shade400value = 0xFFFFA726;
-//   static const int shade300value = 0xFFFFB74D;
-//   static const int shade200value = 0xFFFFCC80;
-//   static const int shade100value = 0xFFFFE0B2;
-//   static const int shade50value = 0xFFFFF3E0;
-// }
+/*
+const Color Primary_ = Color(0xfff47c00);
+const Color Light_ = Color(0xfffffefe);
+const Color Tert_ = Color(0xff327523);
+const Color Dark_ = Color(0xff1a1a1a);
+const Color Sec_ = Color(0xff565656);
+ */
 
 const Color MANIFEST_THEME_COLOR = Primary_;
 const Color MANIFEST_BACKGROUND_COLOR = Color(0xff252525);
 
-const MaterialColor secondary = MaterialColor(0xff25581a, <int, Color>{
-  900: Color(0xff11270c),
-  800: Color(0xff214e18),
-  700: Color(0xff327623),
-  600: Color(0xff439d2f),
-  500: Color(0xff53c43b),
-  400: Color(0xff76d062),
-  300: Color(0xff98dc89),
-  200: Color(0xffbae7b1),
-  100: Color(0xffddf3d8),
-  50: Color(0xffeef9eb),
-});
-// MaterialColor(0xff505050, <int, Color>{
-//   900: Color(0xff1a1a1a),
-//   800: Color(0xff333333),
-//   700: Color(0xff4d4d4d),
-//   600: Color(0xff666666),
-//   500: Color(0xff808080),
-//   400: Color(0xff999999),
-//   300: Color(0xffb3b3b3),
-//   200: Color(0xffcccccc),
-//   100: Color(0xffe6e6e6),
-//   50: Color(0xfff2f2f2),
+// const MaterialColor secondary = MaterialColor(0xff25581a, <int, Color>{
+//   900: Color(0xff11270c),
+//   800: Color(0xff214e18),
+//   700: Color(0xff327623),
+//   600: Color(0xff439d2f),
+//   500: Color(0xff53c43b),
+//   400: Color(0xff76d062),
+//   300: Color(0xff98dc89),
+//   200: Color(0xffbae7b1),
+//   100: Color(0xffddf3d8),
+//   50: Color(0xffeef9eb),
 // });
 
 // const MaterialColor undrawColor = Colors.blueAccent;
@@ -117,25 +90,27 @@ class Grayscale {
 // ColorScheme colorScheme = ColorScheme.fromSwatch(primarySwatch: primary);
 const ColorScheme colorScheme = ColorScheme(
   brightness: Brightness.dark,
-  primary: Colors.orange,
+  primary: primarySwatch,
   onPrimary: Colors.black,
   primaryContainer: Grayscale.shade900,
   onPrimaryContainer: Colors.white,
-  secondary: Colors.black,
+  secondary: secSwatch,
   onSecondary: Colors.white,
-  secondaryContainer: Colors.black,
+  secondaryContainer: Sec2Light.v5,
   onSecondaryContainer: Colors.white,
-  tertiary: Colors.white,
+  tertiary: tertSwatch,
   onTertiary: Colors.black,
-  tertiaryContainer: Colors.white,
+  tertiaryContainer: Tert1Light.v5,
   onTertiaryContainer: Colors.black,
   error: Colors.yellow,
   onError: Colors.black,
   errorContainer: Colors.yellowAccent,
   onErrorContainer: Colors.black,
-  background: Grayscale.shade900,
+  background: PrimDark.v9, //Grayscale.shade900,
   onBackground: Colors.white,
-  surface: Grayscale.shade800,
+  // surface: SecLight.v1,
+  surface: SecDark.v1,
+
   onSurface: Colors.white,
 );
 void startupPrint() {
@@ -143,53 +118,18 @@ void startupPrint() {
 }
 
 const Color flutterLogoTop = Primary_; //Primary.Shade700
-const Color flutterLogoBot = Tert_; //Color(0xff214e18);
-
-class TextButtonColor extends MaterialStateColor {
-  const TextButtonColor() : super(_defaultColor);
-
-  static const int _defaultColor = Grayscale.shade800value;
-  static const int _hoveredColor = Grayscale.shade700value;
-  static const int _pressedColor = 0xff000000;
-
-  @override
-  Color resolve(Set<MaterialState> states) {
-    // if (states.contains(MaterialState.pressed)) {
-    //   return const Color(_pressedColor);
-    // } else if (states.contains(MaterialState.hovered)) {
-    //   return const Color(_hoveredColor);
-    // }
-    return const Color(_defaultColor);
-  }
-}
-
-class OutlineButtonColor extends MaterialStateColor {
-  const OutlineButtonColor() : super(_defaultColor);
-
-  static const int _defaultColor = 0x00ffffff;
-  static const int _hoveredColor = 0x02ffffff;
-  static const int _pressedColor = 0x03ffffff;
-
-  @override
-  Color resolve(Set<MaterialState> states) {
-    if (states.contains(MaterialState.pressed)) {
-      return const Color(_pressedColor);
-    } else if (states.contains(MaterialState.hovered)) {
-      return const Color(_hoveredColor);
-    }
-    return const Color(_defaultColor);
-  }
-}
+const Color flutterLogoBot = Sec_; //Color(0xff214e18);
 
 // final ThemeData theme = FlexThemeData.light(colors: scheme, textTheme: fonts);
 // ColorScheme colorScheme = theme.colorScheme;
 final ThemeData theme = ThemeData(
   textTheme: fonts,
-  primarySwatch: primary,
+  primarySwatch: primarySwatch,
   // applyElevationOverlayColor: true,
   // NoDefaultCupertinoThemeData? cupertinoOverrideTheme,
   // Iterable<ThemeExtension>? extensions,
-  // InputDecorationTheme? inputDecorationTheme,
+  // inputDecorationTheme: InputDecorationTheme(
+  //     labelStyle: fonts.labelLarge, helperStyle: fonts.displaySmall),
   // MaterialTapTargetSize? materialTapTargetSize,
   // PageTransitionsTheme? pageTransitionsTheme,
   // TargetPlatform? platform,
@@ -227,7 +167,18 @@ final ThemeData theme = ThemeData(
 // TextTheme? primaryTextTheme,
 // TextTheme? textTheme,
 // Typography? typography,
-// appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: )),
+  appBarTheme: const AppBarTheme(
+    // surfaceTintColor: PrimDark.v10,
+    backgroundColor: PrimDark.v6,
+    scrolledUnderElevation: 3,
+    elevation: 0,
+    // foregroundColor: Colors.blue,
+    // color: Colors.pink,
+    // foregroundColor: Tert3Dark.v0,
+    // surfaceTintColor: Colors.transparent,
+
+    // toolbarTextStyle: fonts.labelLarge,
+  ),
 // BadgeThemeData? badgeTheme,
 // MaterialBannerThemeData? bannerTheme,
 // BottomAppBarTheme? bottomAppBarTheme,
@@ -236,14 +187,17 @@ final ThemeData theme = ThemeData(
 // ButtonBarThemeData? buttonBarTheme,
 //   buttonTheme: const ButtonThemeData(buttonColor: Grayscale.shade700),
   cardTheme: const CardTheme(
-      color: Grayscale.shade800,
-      surfaceTintColor: Sec1Dark.v7,
-      shadowColor: Colors.black,
-      // color: Colors.black,
-      elevation: 2,
+      // color: Grayscale.shade800,
+      // color: GrayLight.v4.withOpacity(.75),
+      // surfaceTintColor: GrayLight.v2,
+      // shadowColor: Colors.black,
+      color: ChangingCardColor(),
+      // elevation: 2,
       shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black),
+          // side: BorderSide(
+          //     color: Color(0xff262626), width: k / 6, strokeAlign: -1),
           borderRadius: BorderRadius.all(Radius.circular(15)))),
+
 // CheckboxThemeData? checkboxTheme,
 // ChipThemeData? chipTheme,
 // DataTableThemeData? dataTableTheme,
@@ -253,14 +207,13 @@ final ThemeData theme = ThemeData(
       backgroundColor: Tert1Dark.v9,
       elevation: 5,
       shape: RoundedRectangleBorder(),
-      surfaceTintColor: Colors.transparent,
+      // surfaceTintColor: Colors.transparent,
       shadowColor: Colors.black,
       width: k * 20),
 // DropdownMenuThemeData? dropdownMenuTheme,
-// ElevatedButtonThemeData? elevatedButtonTheme,
 // ExpansionTileThemeData? expansionTileTheme,
 // FilledButtonThemeData? filledButtonTheme,
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: PrimDark.v1,
   ),
 // IconButtonThemeData? iconButtonTheme,
@@ -271,8 +224,23 @@ final ThemeData theme = ThemeData(
 // NavigationBarThemeData? navigationBarTheme,
 // NavigationDrawerThemeData? navigationDrawerTheme,
 // NavigationRailThemeData? navigationRailTheme,
+  elevatedButtonTheme: const ElevatedButtonThemeData(
+      style: ButtonStyle(
+
+          // surfaceTintColor: SurfaceColor(),
+          foregroundColor: WhiteButtonColor())),
+
   outlinedButtonTheme: const OutlinedButtonThemeData(
-      style: ButtonStyle(backgroundColor: OutlineButtonColor())),
+      style: ButtonStyle(
+          // surfaceTintColor: SurfaceColor(),
+          )),
+
+  textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(
+          // surfaceTintColor: SurfaceColor(),
+          visualDensity: VisualDensity.compact,
+          foregroundColor: WhiteButtonColor())),
+
 // PopupMenuThemeData? popupMenuTheme,
 // ProgressIndicatorThemeData? progressIndicatorTheme,
 // RadioThemeData? radioTheme,
@@ -281,31 +249,17 @@ final ThemeData theme = ThemeData(
 // SnackBarThemeData? snackBarTheme,
 // SwitchThemeData? switchTheme,
 // TabBarTheme? tabBarTheme,
-//   textButtonTheme: const TextButtonThemeData(
-//       style: ButtonStyle(backgroundColor: TextButtonColor())),
 // TextSelectionThemeData? textSelectionTheme,
 // TimePickerThemeData? timePickerTheme,
 // ToggleButtonsThemeData? toggleButtonsTheme,
 // TooltipThemeData? tooltipTheme
 );
 //
-// final ThemeData darkTheme = ThemeData(
-//     textTheme: fonts,
-//     primarySwatch: primary,
-//     useMaterial3: true,
-//     // VisualDensity? visualDensity,
-//     brightness: Brightness.dark,
-//     colorScheme: darkScheme,
-//     fontFamily: fonts.headlineLarge?.fontFamily!);
-
-ThemeData getTheme() {
-  if (Device.width > watchSize) {
-    return theme;
-  } else {
-    return theme.copyWith(textTheme: watchFonts);
-  }
-}
-
+final ThemeData lightTheme = theme.copyWith(
+  // textTheme: darkFonts,
+  brightness: Brightness.light,
+  // colorScheme: darkScheme,
+);
 Color footerColor = Colors.grey.shade900;
 
 List<Color> _expGradStops = [

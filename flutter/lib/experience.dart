@@ -52,10 +52,20 @@ Hero getImage(int index) {
       tag: 'expHero$index',
       child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: fadeAssetFore(
-            'images/${experiences[index].image}',
-            fit: BoxFit.contain,
-          )));
+          child: Stack(children: [
+            fadeAssetFore(
+              'images/${experiences[index].image}',
+              fit: BoxFit.contain,
+            ),
+            Positioned.fill(
+                child: Container(
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+              colors: [Color(0x00000000), Color(0x40000000)],
+              begin: Alignment(-.75, -1),
+              end: Alignment.bottomLeft,
+            ))))
+          ])));
 }
 
 class ExperienceWidget extends StatefulWidget {
@@ -131,15 +141,15 @@ class _ExperienceWidgetState extends State<ExperienceWidget>
     });
   }
 
-  Card buildCard(BuildContext context) {
-    return Card(
-        margin: const EdgeInsets.fromLTRB(standardContainerMargin, 0,
-            standardContainerMargin, standardContainerMargin),
-        // elevation: hover ? 5 : 1,
-        child: touchWrapper(
-            context,
-            index,
-            Padding(
+  Widget buildCard(BuildContext context) {
+    return touchWrapper(
+        context,
+        index,
+        Padding(
+            padding: const EdgeInsets.fromLTRB(standardContainerMargin, 0,
+                standardContainerMargin, standardContainerMargin),
+            // elevation: hover ? 5 : 1,
+            child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 child: centerSection(context))));
@@ -156,9 +166,9 @@ class _ExperienceWidgetState extends State<ExperienceWidget>
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Flexible(child: getImage(index)),
-            const SizedBox(width: 30),
-            Flexible(child: textSection(horiz, tiny)),
+            Expanded(child: textSection(horiz, tiny)),
+            const SizedBox(width: 60),
+            Expanded(child: getImage(index)),
           ],
         );
       } else {
@@ -208,8 +218,8 @@ class _ExperienceWidgetState extends State<ExperienceWidget>
             style: fonts.headlineSmall,
             textAlign: align,
           ),
-          const SizedBox(height: 15),
-          subt(experiences[index].bodyText, align: align, selectable: false),
+          // const SizedBox(height: 15),
+          paraMed(experiences[index].bodyText, align: align, selectable: false),
           if (tiny) const SizedBox(height: 15),
           if (tiny)
             Flexible(

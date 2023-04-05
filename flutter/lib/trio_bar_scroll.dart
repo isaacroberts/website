@@ -61,7 +61,7 @@ class _PopColumnScrollWithIconState
                         // width: 250,
                         alignment:
                             leftAlign ? Alignment.topLeft : Alignment.topCenter,
-                        child: paraSmall(widget.body,
+                        child: paraMed(widget.body,
                             align:
                                 leftAlign ? TextAlign.left : TextAlign.center)),
                     const SizedBox(height: 15),
@@ -99,7 +99,7 @@ class PopScrollNoIcon extends StatelessWidget {
                       // buildHeadline(header),
                       headlineWithIcon(header, icon),
 
-                      paraSmall(body,
+                      paraMed(body,
                           align: leftAlign ? TextAlign.left : TextAlign.center),
                       const SizedBox(height: 15),
                     ]))));
@@ -132,7 +132,7 @@ class PopScrollWatch extends StatelessWidget {
               // ),
               Text(
                 body,
-                style: fonts.bodyLarge,
+                style: fonts.bodyMedium,
                 softWrap: true,
                 overflow: TextOverflow.visible,
                 textAlign: TextAlign.left,

@@ -57,34 +57,39 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-        child: LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth <= math.max(watchSize, 300)) {
-        return watchView(context);
-      } else if (constraints.maxWidth <= math.max(tinyWidth, 525)) {
-        return tinyView(context);
-      } else if (constraints.maxWidth <= 600) {
-        return thinView(context);
-      } else if (constraints.maxWidth <= math.min(trioBarWidth, 700)) {
-        return midView(context);
-      } else if (true || constraints.maxWidth <= processWidth + 30) {
-        return wideView(context);
-      } else {
-        return fullView(context);
-      }
-    }));
+        child: Stack(children: [
+      const Positioned.fill(
+          child: ParallaxImage(
+              image: 'images/bg.jpg', distance: 3, debugLabel: 'forest')),
+      LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxWidth <= math.max(watchSize, 300)) {
+          return watchView(context);
+        } else if (constraints.maxWidth <= math.max(tinyWidth, 525)) {
+          return tinyView(context);
+        } else if (constraints.maxWidth <= trioBarWidth) {
+          return thinView(context);
+        } else if (constraints.maxWidth <= math.min(trioBarWidth, 700)) {
+          return midView(context);
+        } else if (true || constraints.maxWidth <= processWidth + 30) {
+          return wideView(context);
+        } else {
+          return fullView(context);
+        }
+      })
+    ]));
   }
 
   Widget fullView(BuildContext context) {
     return Center(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(
-                totalTextMargin, 60, totalTextMargin, 90),
+                totalTextMargin, 30, totalTextMargin, 90),
             child: SizedBox(
                 width: processWidth,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(child: introText(context, leftAlign: true)),
                       const SizedBox(width: 15),
@@ -96,13 +101,13 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
     return Center(
       child: Padding(
           padding: const EdgeInsets.fromLTRB(
-              totalTextMargin, 60, totalTextMargin, 90),
+              totalTextMargin, 30, totalTextMargin, 90),
           child: SizedBox(
               width: processWidth,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(child: introText(context, leftAlign: true)),
                     const SizedBox(width: 15),
@@ -115,7 +120,7 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
     return Center(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(
-                totalTextMargin, 60, totalTextMargin, 60),
+                totalTextMargin, 30, totalTextMargin, 60),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -199,16 +204,6 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Text(
-                    //   'Isaac Roberts',
-                    //   style: watchHeaderLarge, //.copyWith(color: Colors.white),
-                    //   textAlign: ta,
-                    // ),
-                    // Text(
-                    //   bodyString(),
-                    //   style: watchBody,
-                    //   textAlign: ta,
-                    // ),
                     ..._introWithoutExpando(leftAlign: true),
                     const SizedBox(height: 15),
                   ]))
@@ -218,11 +213,18 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
   List<Widget> _introWithoutExpando({required bool leftAlign}) {
     var ta = leftAlign ? TextAlign.left : TextAlign.center;
     return [
+      //TODO: move this outside container to have it touch the left edge
       Text(
-        'Isaac Roberts',
-        style: fonts.displayLarge,
+        '// Mobile &\n   Web Apps',
+        style: fonts.displayLarge, //!.copyWith(color: Colors.white),
         textAlign: ta,
       ),
+      const SizedBox(height: 15),
+      // Text(
+      //   'Isaac Roberts',
+      //   style: fonts.headlineMedium,
+      //   textAlign: ta,
+      // ),
       Text(
         bodyString(),
         style: fonts.bodyLarge,
@@ -255,7 +257,7 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
             leftAlign ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
         children: [
           ..._introWithoutExpando(leftAlign: leftAlign),
-          const SizedBox(height: 15),
+          const SizedBox(height: 30),
           ..._expando(context, leftAlign: leftAlign)
         ]);
   }
@@ -291,23 +293,20 @@ class ProPic extends StatefulWidget {
 }
 
 class _ProPicState extends State<ProPic> {
-  final GlobalKey _backgroundImageKey = GlobalKey(debugLabel: 'bg image');
-  final GlobalKey _myImageKey = GlobalKey(debugLabel: 'face image');
-
   Widget clipper({required Widget child}) {
     if (widget.isThin) {
       if (widget.roundedCorner) {
         return SizedBox(
             height: 300,
             child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                //     borderRadius: const BorderRadius.all(Radius.circular(15)),
                 child: child));
       } else {
         return SizedBox(height: 300, child: ClipRect(child: child));
       }
     } else {
       if (widget.roundedCorner) {
-        return AspectRatio(aspectRatio: 1, child: ClipOval(child: child));
+        return AspectRatio(aspectRatio: 1, child: child);
       } else {
         return AspectRatio(aspectRatio: 1, child: ClipRect(child: child));
       }
@@ -345,28 +344,15 @@ class _ProPicState extends State<ProPic> {
     m = 15;
     return Stack(alignment: Alignment.bottomLeft, children: [
       clipper(
-          child: Stack(alignment: Alignment.bottomCenter, children: [
-        Flow(
-            delegate: ParallaxFlowDelegate(
-              scrollable: Scrollable.of(context),
-              listItemContext: context,
-              backgroundImageKey: _backgroundImageKey,
-              distance: widget.isThin ? 0 : 0,
-            ),
-            children: [
-              // clipBehavior: Clip.antiAlias,
-              fadeAssetBg('images/bg.jpg',
-                  fit: BoxFit.cover, key: _backgroundImageKey),
-            ]),
-        Padding(
-            padding: EdgeInsets.fromLTRB(m, m * 2, m, 0),
-            child: fadeAssetFore(
-              'images/coffee_header_shrink.png',
-              // width: s * IPHI,
-              // height: s * IPHI,
-              alignment: Alignment.bottomCenter,
-            )),
-      ])),
+          child: Padding(
+        padding: EdgeInsets.fromLTRB(m, m * 2, m, 0),
+        child: fadeAssetFore(
+          'images/coffee_header_shrink.png',
+          // width: s * IPHI,
+          // height: s * IPHI,
+          alignment: Alignment.bottomCenter,
+        ),
+      )),
       flutterLogo(),
     ]);
   }

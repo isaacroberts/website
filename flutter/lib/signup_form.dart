@@ -43,7 +43,7 @@ class _SignupFormState extends State<SignupForm> {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > watchSize) {
         return SizedBox(
-            height: 400, width: Device.width, child: imgStack(context));
+            height: 450, width: Device.width, child: imgStack(context));
       } else {
         return Container(
           decoration: BoxDecoration(
@@ -74,18 +74,20 @@ class _SignupFormState extends State<SignupForm> {
           double aspectRatio = constraints.maxWidth / constraints.maxHeight;
           double imgAspect = 1.52;
           if (aspectRatio > imgAspect) {
-            return Flow(
-                key: const Key('email_cta_flow'),
-                delegate: ParallaxFlowDelegate(
-                  scrollable: Scrollable.of(context),
-                  listItemContext: context,
-                  backgroundImageKey: _backgroundImageKey,
-                  distance: 0,
-                ),
-                children: [
-                  fadeAssetBg('images/email_cta.jpg',
-                      fit: BoxFit.cover, key: _backgroundImageKey),
-                ]);
+            return const ParallaxImage(
+                image: 'images/email_cta.jpg', debugLabel: 'email_cta');
+            // return Flow(
+            //     key: const Key('email_cta_flow'),
+            //     delegate: ParallaxFlowDelegate(
+            //       scrollable: Scrollable.of(context),
+            //       listItemContext: context,
+            //       backgroundImageKey: _backgroundImageKey,
+            //       distance: 0,
+            //     ),
+            //     children: [
+            //       fadeAssetBg('images/email_cta.jpg',
+            //           fit: BoxFit.cover, key: _backgroundImageKey),
+            //     ]);
           } else {
             return SizedBox(
                 key: const Key('email_cta_box'),
@@ -107,7 +109,7 @@ class _SignupFormState extends State<SignupForm> {
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child: FractionallySizedBox(
-                        widthFactor: .5,
+                        widthFactor: .666,
                         heightFactor: 1,
                         child: glassAndTextContent()))));
       } else {
@@ -144,15 +146,13 @@ class _SignupFormState extends State<SignupForm> {
           children: [
             // const SizedBox(height: 15),
             Text(
-              'Get started',
+              '// Todo:',
               style: fonts.displayMedium,
               textAlign: TextAlign.left,
             ),
-            const SizedBox(height: 15),
-            Text(
-                'Enter your email and I\'ll get back to you with questions about your project.',
-                style: fonts.bodyLarge,
-                textAlign: TextAlign.left),
+            // const SizedBox(height: 15),
+            paraMed(
+                'Enter your email and I\'ll get back to you with questions about your project.'),
             // Expanded(child: LayoutBuilder(builder: (context, constraints) {
             //   log('avail height: ${constraints.maxHeight}');
             //   return SizedBox.shrink();
@@ -173,7 +173,7 @@ class _SignupFormState extends State<SignupForm> {
               textAlign: TextAlign.left,
             ),
             const SizedBox(height: 15),
-            paraLarge('I\'ll get back to you soon!'),
+            paraMed('I\'ll get back to you soon!'),
             // SizedBox(height: 15),
           ]);
     }
@@ -206,7 +206,7 @@ class _SignupFormState extends State<SignupForm> {
               style: watchHeader,
               textAlign: TextAlign.left,
             ),
-            paraLarge('I\'ll get back to you soon!'),
+            paraMed('I\'ll get back to you soon!'),
             // SizedBox(height: 15),
           ]);
     }
@@ -230,11 +230,10 @@ class _SignupFormState extends State<SignupForm> {
   Text submitButton() => const Text('Submit');
 
   TextFormField textForm() {
-    var style = Device.width > watchSize ? fonts.titleMedium : watchBody;
     return TextFormField(
       controller: emailField,
       onFieldSubmitted: (s) => sendEmail(),
-      style: style,
+      style: Theme.of(context).textTheme.bodyLarge,
       decoration:
           InputDecoration(errorText: emailErrMsg, hintText: 'Enter your email'),
     );

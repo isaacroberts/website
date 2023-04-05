@@ -184,7 +184,10 @@ class _DataVisState extends State<DataVis> with FeatureShower {
   String body() => """
 Machine learning through Keras or APIs can make your app more intelligent.""";
   @override
-  String bgImage() => 'images/data_an.jpg';
+  String bgImage() => 'images/deepmind.jpg';
+
+  // String bgImage() => 'images/data-ann-tall-michelangelo-buonarroti.jpg';
+  // String bgImage() => 'images/data_an.jpg';
 
   Widget visWrap(Widget child) {
     return VisibilityDetector(
@@ -202,7 +205,7 @@ Machine learning through Keras or APIs can make your app more intelligent.""";
   Widget displayContent(BuildContext context) {
     return visWrap(SfCircularChart(
         palette: palette,
-        title: ChartTitle(text: 'Market Share', textStyle: fonts.titleSmall),
+        title: ChartTitle(text: 'Market Share', textStyle: fonts.labelLarge),
         legend: Legend(isVisible: true, textStyle: fonts.labelMedium),
         series: <PieSeries<_PieData, String>>[
           PieSeries<_PieData, String>(

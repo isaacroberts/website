@@ -35,6 +35,8 @@ class _AnimationShowerState extends State<AnimationShower> with FeatureShower {
   @override
   String bgImage() => 'images/animation.jpg';
 
+  //TODO: Stack with button
+
   @override
   bool shouldExpandToDisplay() => true;
 

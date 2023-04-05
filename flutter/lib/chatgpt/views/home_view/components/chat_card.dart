@@ -38,24 +38,21 @@ class ChatCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    image: messageBlock.author!.id == 'chatGPT'
-                        ? DecorationImage(
-                            image: assetProvider("gpt/chatgpt_logo.png"),
-                            fit: BoxFit.cover,
-                          )
-                        : null,
-                    color: Colors.grey,
-                  ),
-                  child: messageBlock.author!.id != 'chatGPT'
-                      ? Image(
-                          image: assetProvider("gpt/user_icon.png"),
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  image: messageBlock.author!.id == 'chatGPT'
+                      ? DecorationImage(
+                          image: assetProvider("gpt/chatgpt_logo.png"),
                           fit: BoxFit.cover,
                         )
-                      : null),
+                      : DecorationImage(
+                          image: assetProvider("gpt/user_icon.png"),
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
               const SizedBox(
                 width: 20,
               ),
