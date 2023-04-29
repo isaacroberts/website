@@ -1,0 +1,127 @@
+import 'dart:math' as math;
+
+import 'dart:developer';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+class ProcessSliver extends SingleChildRenderObjectWidget {
+  /// Creates a sliver that fills the remaining space in the viewport.
+  const ProcessSliver({super.key, super.child});
+
+  @override
+  ProcessSliverRenderer createRenderObject(BuildContext context) =>
+      ProcessSliverRenderer();
+}
+
+class ProcessSliverRenderer extends RenderSliverToBoxAdapter {
+  double yOffset = 0;
+
+  ProcessSliverRenderer();
+
+  @override
+  void performLayout() {
+    if (this.child == null) {
+      log('no child');
+      return;
+    }
+
+    String pr(double num) {
+      String str = num.toStringAsFixed(2);
+      if (str.startsWith('-0')) {
+        str = '-${str.substring(2)}';
+      } else {
+        while (str.startsWith('0')) {
+          str = str.substring(1);
+        }
+        str = ' $str';
+      }
+      return str;
+    }
+
+    SliverAppBar;
+    RenderBox child = this.child!;
+
+    // RenderSliverToBoxAdapter
+
+    final SliverConstraints constraints = this.constraints;
+    double dh = constraints.viewportMainAxisExtent;
+    double w = constraints.crossAxisExtent;
+    // TODO: Safely remove maxHeight so experience column can be longer if it wants
+    child.layout(BoxConstraints(minWidth: w, maxWidth: w, minHeight: dh),
+        parentUsesSize: true);
+    double h = child.size.height;
+
+    // log('child h : $h');
+    const double spacing = 500;
+
+    double widgetOverflow = h - dh;
+    // log('h $h dh $dh');
+    double maxExtent = h + spacing;
+    double paintOffset;
+
+    double scrPos = constraints.scrollOffset;
+    double relPos = (scrPos).toDouble() / dh;
+
+    double heightTraversal = 0;
+
+    if (scrPos > 0) {
+      heightTraversal = -scrPos;
+      if (heightTraversal > widgetOverflow) {
+        heightTraversal = widgetOverflow;
+        relPos = (scrPos - widgetOverflow) / dh;
+      } else {
+        relPos = 0;
+      }
+    }
+
+    // if (relPos < -1) return;
+    if (relPos > 1) {
+      log('scroll pos = ${pr(scrPos / dh)} rel ${pr(relPos)}');
+      geometry = SliverGeometry(
+        visible: false,
+        scrollExtent: maxExtent,
+        paintOrigin: -dh * 2,
+        paintExtent: 0,
+        maxPaintExtent: h,
+      );
+      return;
+    }
+
+    if (relPos < 0) {
+      //Before its entered
+      paintOffset = -(relPos * relPos) * dh;
+    } else if (relPos == 0) {
+      //Focused on-screen
+      paintOffset = heightTraversal;
+      //paintOffset := widgetOverflow
+    } else {
+      relPos = (scrPos - widgetOverflow) / dh;
+      //As its leaving
+
+      paintOffset = heightTraversal - (math.sqrt(relPos.abs())) * dh;
+    }
+
+    //TODO: If offset is nonzero, this needs to rescale scrPos so that it transforms from (h) / (h-offset) or something like that
+
+    final double paintExtent =
+        clampDouble(h + paintOffset, 0.0, constraints.remainingPaintExtent);
+
+    // if (paintOffset + paintExtent > constraints.remainingPaintExtent) {
+    //   log('paint overflow paintOffset $paintOffset extent $paintExtent remaining ${constraints.remainingPaintExtent}');
+    // }
+
+    geometry = SliverGeometry(
+      scrollExtent: maxExtent,
+      paintOrigin: paintOffset,
+
+      paintExtent: paintExtent,
+
+      maxPaintExtent: h,
+      hasVisualOverflow:
+          true, // Conservatively say we do have overflow to avoid complexity.
+    );
+    // _childPosition = updateGeometry();
+  }
+}

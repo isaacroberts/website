@@ -23,9 +23,6 @@ PSWRD = 'dbcvyphjrtuytsev'
 # creates SMTP session
 import smtplib
 from email.message import EmailMessage
-mailer = smtplib.SMTP('smtp.gmail.com', 587)
-mailer.starttls()
-mailer.login(SENDR, PSWRD)
 
 # print('CWD:')
 # print(os.getcwd())
@@ -111,6 +108,10 @@ Sent at: {str(currentDT)}
     message['To'] = RECVR # Reciver of the Mail
     message.set_content(msg) # Email body or Content
 
+    # Start mailer here just to ensure no errors from heroku/gunicorn restarts 
+    mailer = smtplib.SMTP('smtp.gmail.com', 587)
+    mailer.starttls()
+    mailer.login(SENDR, PSWRD)
 
     # sending the mail
     mailer.send_message(message)

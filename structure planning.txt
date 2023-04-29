@@ -1,0 +1,102 @@
+Top Level:
+
+Chained animations
+ScrollController
+Have ScrollController drive AnimationController (there was that thing from stackoverflow 4/12)
+AnimationController
+
+
+InheritedWidget or global object to store animations
+	shouldCallUpdate => False 
+
+Have top level calculate which widgets are visible and show those
+
+
+
+Per Widget: 
+
+Standard widget
+InheritedAnimationWidget.of(context).bouncingTextAnimation
+
+
+
+---------------------------
+
+
+
+AppBarStack that is InheritedWidget
+can be used to say AppBarStack.setText(header)
+
+
+Use PageView 
+
+Each page is a Page 
+
+
+
+------------------------
+
+Scaffold:
+	App bar listens to ScratchPageController
+		onPageChange(phase, newPageName) 
+	Backspaces text (with Delayed) until empty, types new text 
+	
+	String currentText 
+	String? backspaceTo
+	String? newText
+
+ScratchPageController: 
+	Int page;
+	String pageName;
+	Phase phase;
+
+	void transitionToPage(String pageName)
+	void nextPage()
+
+
+
+Phase: {Hold, PreExit, Transitioning, PostEnter }
+PagePhase: {Offscreen, Entering, PostEnter, Main, PreExit, Exiting, Skipping }
+
+Animation Theme:
+# The text on the current page fade (or other) out
+# The AppBar deletes its text
+# The page slides down to reveal the next page. 
+# The AppBar queues typing its next text 
+# The text on that page fade (or other) in
+
+
+
+ScratchPageView:
+	Constructor takes ScratchPageController? 
+	onPageChanged(string name)
+	Builds the currently visible page 
+	Uses ScratchPage's durations and Delayed.then() to swap out pages 
+	Can navigate from and to any page by using the enter/exit animations on the widgets 
+
+	ScratchPageController controller
+	List<ScratchPage> pages;
+
+
+	ScratchPage? currentPage 
+	ScratchPage? bottomPage 
+
+ScratchPage:
+	String name
+	PhasePhase phase;
+
+	Animation<double> for postEnter, preExit 
+
+	//returns length of time of each animation 
+	double postEnterTime(), preExitTime()
+
+	void startPostEnter();
+	void startPreExit();
+	
+	//returns if page is currently opaque - ie if page needs to be drawn under it 
+	bool isOpaque()
+
+	Widget buildChild();
+
+
+
