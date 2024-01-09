@@ -12,7 +12,7 @@ if [ ! -f "build/web/flutter.js" ]; then
     flutter clean
 fi
 
-flutter build web --release --base-href=/web/ --web-renderer canvaskit
+flutter build web --release --base-href=/web/ --web-renderer canvaskit --no-tree-shake-icons
 
 cd ..
 
