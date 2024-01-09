@@ -135,7 +135,29 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
             // mainAxisAlignment: MainAxisAlignment.center,
             // mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(child: lightboxImage()),
+              Flexible(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                    Text(experiences[index].headline,
+                        style: fonts.headlineSmall, textAlign: TextAlign.left),
+                    const SizedBox(height: 15),
+                    lightboxImage(),
+                    const SizedBox(height: 15),
+                    OutlinedButton(
+                      onPressed: () =>
+                          launchUrl(Uri.parse(experiences[index].url)),
+                      child: const Text('Website'),
+                    ),
+                    // const SizedBox(height: 15),
+                    // ElevatedButton(
+                    //   onPressed: _removeOverlay,
+                    //   // icon: const Icon(Icons.close),
+                    //   child: const Text('Close'),
+                    // ),
+                  ])),
               Flexible(child: lightTextListView()),
             ],
           ));
@@ -163,12 +185,13 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
         Text(experiences[index].headline,
             style: fonts.titleLarge, textAlign: align),
       if (addTitle) const SizedBox(height: 15),
-      paraMed(experiences[index].fullText, align: align),
-      // const SizedBox(height: 15),
-      OutlinedButton(
-        onPressed: () => launchUrl(Uri.parse(experiences[index].url)),
-        child: const Text('Website'),
-      ),
+      paraSmall(experiences[index].fullText, align: align),
+      if (_imageExpandedInLightbox) const SizedBox(height: 15),
+      if (_imageExpandedInLightbox)
+        OutlinedButton(
+          onPressed: () => launchUrl(Uri.parse(experiences[index].url)),
+          child: const Text('Website'),
+        ),
       const SizedBox(height: 15),
       if (addClose)
         ElevatedButton(
@@ -188,7 +211,7 @@ class _ExperienceLightboxState extends State<ExperienceLightbox>
             child: ListView(
                 shrinkWrap: true,
                 children: _lightTextList(TextAlign.left,
-                    addClose: false, addTitle: true))));
+                    addClose: false, addTitle: false))));
   }
 
   Widget lightboxSelectCol(TextAlign align) {

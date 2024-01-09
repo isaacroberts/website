@@ -87,7 +87,7 @@ class Footer extends StatelessWidget {
     // log('constraints $constraints');
     return Container(
         alignment: Alignment.bottomCenter,
-        color: footerColor,
+        // color: footerColor,
         // decoration: BoxDecoration(
         //     gradient: LinearGradient(
         //         begin: Alignment.bottomCenter,

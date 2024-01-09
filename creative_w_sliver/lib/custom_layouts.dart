@@ -135,7 +135,7 @@ class InterlacedLayout extends MultiChildLayoutDelegate {
 
     if (hasChild(Slot.middle)) {
       layoutChild(Slot.middle, BoxConstraints.loose(size));
-      positionChild(Slot.middle, Offset(0, parallax * .6));
+      positionChild(Slot.middle, Offset(0, parallax * .1));
     }
     if (hasChild(Slot.xtr)) {
       layoutChild(Slot.xtr, BoxConstraints.loose(size));
@@ -163,7 +163,7 @@ class InterlacedLayout extends MultiChildLayoutDelegate {
           Slot.front, BoxConstraints.loose(Size(fWidth, innerHeight)));
 
       Offset frontAlign = Offset(
-          k, appBar + k + (innerHeight - frontSize.height) / 2 + parallax * .4);
+          k, appBar + k + (innerHeight - frontSize.height) / 2 + parallax * 0);
 
       positionChild(Slot.front, frontAlign);
 
@@ -176,10 +176,13 @@ class InterlacedLayout extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) => false;
+  bool shouldRelayout(InterlacedLayout oldDelegate) =>
+      oldDelegate.scroll != scroll;
 }
 
 class IndicatedLinearSimulation extends Simulation {
+  //TODO: Make this tick up to whole number integers
+
   bool isMoving = false;
 
   final double initPosition;

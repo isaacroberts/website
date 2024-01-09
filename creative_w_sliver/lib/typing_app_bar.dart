@@ -38,6 +38,9 @@ class Typer extends StatefulWidget {
 }
 
 class _TyperState extends State<Typer> {
+  int page = 0;
+  // int get page => widget.page;
+
   String appBarText = '';
   String targetText = DEFAULT_PAGE_TITLE;
 
@@ -116,14 +119,24 @@ class _TyperState extends State<Typer> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(appBarText, style: fonts.displayMedium);
+    return NotificationListener<VisNotification>(
+        child: Text(appBarText, style: fonts.displayMedium),
+        onNotification: (VisNotification notif) {
+          if (page != notif.section.index) {
+            setState(() {
+              page = notif.section.index;
+              log('page changed to $page');
+            });
+          }
+          return true;
+        });
   }
 
   void _updateTargetText() {
-    if (widget.page == 0) {
+    if (page == 0) {
       targetText = DEFAULT_PAGE_TITLE;
     } else {
-      targetText = '//${pageTitles[widget.page]}:';
+      targetText = '//${pageTitles[page]}:';
     }
   }
 
@@ -143,9 +156,8 @@ class _TyperState extends State<Typer> {
 }
 
 class TypingAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final PageController pageController;
-  const TypingAppBar({Key? key, required this.pageController})
-      : super(key: key);
+  // final PageController pageController;
+  const TypingAppBar({Key? key}) : super(key: key);
 
   @override
   State<TypingAppBar> createState() => _TypingAppBarState();
@@ -159,30 +171,29 @@ class _TypingAppBarState extends State<TypingAppBar> {
 
   @override
   void initState() {
-    widget.pageController.addListener(_pageChanged);
+    // widget.pageController.addListener(_pageChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    widget.pageController.removeListener(_pageChanged);
+    // widget.pageController.removeListener(_pageChanged);
     super.dispose();
   }
 
   void _pageChanged() {
-    int? i = widget.pageController.page?.round();
-    if (i != null && page != i && i < pageTitles.length) {
-      setState(() {
-        page = i;
-      });
-    }
+    // int? i = widget.pageController.page?.round();
+    // if (i != null && page != i && i < pageTitles.length) {
+    //   setState(() {
+    //     page = i;
+    //   });
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
         title: Typer(page, key: const ValueKey<String>('typer')),
-        actions: buildActions(
-            context, (section) => scrollToPage(section.pageStart)));
+        actions: buildActions(context, (section) => scrollToPage(section)));
   }
 }

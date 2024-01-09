@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 
 import 'package:device_preview/device_preview.dart';
+import 'package:inview_notifier_list/inview_notifier_list.dart';
+import 'package:isaac_roberts_consulting/process_single.dart';
+import 'package:isaac_roberts_consulting/process_sliver.dart';
 import 'package:isaac_roberts_consulting/scrolls_separated.dart';
 import 'package:isaac_roberts_consulting/sections.dart';
 import 'package:isaac_roberts_consulting/typing_app_bar.dart';
@@ -92,30 +95,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Key? scrollKey(Sections s) {
-    return null;
-  }
-
-  PageController pageController = PageController();
-
+  // PageController pageController = PageController();
+  late ScrollController controller;
+  int page = 0;
   @override
   void initState() {
-    globalPageController = pageController;
+    controller = ScrollController();
+    controller.addListener(_controllerChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    if (globalPageController == pageController) {
-      globalPageController = null;
-    } else {
-      if (kDebugMode) {
-        log('globalPageController is not mine');
-        assert(false);
-      }
-    }
+    controller.removeListener(_controllerChanged);
+    controller.dispose();
+
     super.dispose();
   }
+
+  void _controllerChanged() {}
+  void _pageChanged() {}
 
   void onPageChanged(int page) {
     if (page == 0) {
@@ -135,34 +134,80 @@ class _MyHomePageState extends State<MyHomePage> {
     fonts = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: TypingAppBar(pageController: pageController),
+      appBar: const TypingAppBar(),
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
-          // physics: const PageScrollPhysics(),
-          // controller: pageController,
-          scrollDirection: Axis.vertical,
-          reverse: false,
-          slivers: [
-            const PageSliverWrap(child: Header()),
-            const PageSliverWrap(child: ProcessSidebar()),
-            const PageSliverWrap(child: GPTShower(true)),
-            const PageSliverWrap(child: DataVis(true, key: Key('datavis'))),
-            const PageSliverWrap(
-                child: AnimationShower(true, key: Key('anim'))),
-            //TODO: Move this to own widget so it can reset after page changes
-            SliverToBoxAdapter(
-                child: Column(mainAxisSize: MainAxisSize.min, children: const [
-              ExperienceWidget(0, key: Key('0')),
-              ExperienceWidget(1, key: Key('1')),
-              ExperienceWidget(2, key: Key('2')),
-              SizedBox(height: 90),
-            ])),
-            // const PageSliverWrap(isLast: false, child: SignupForm()),
-            const SignupSliver(child: SignupForm()),
-            Footer.sliver()
-          ]),
+        // physics: const PageScrollPhysics(),
+        // controller: controller,
+        scrollDirection: Axis.vertical,
+        reverse: false,
+        slivers: [
+          const ScrollMarker(Sections.Home),
+          const PageSliverWrap(key: Key('home'), child: Header()),
+          const ScrollMarker(Sections.Process),
+
+          for (int n = 0; n < Stages.length; ++n)
+            ProcessSliver(
+                key: scrollTos[Sections.Proc0.index + n],
+                child: ProcessSingle(
+                  n,
+                )),
+
+          const ScrollMarker(Sections.Features),
+
+          PageSliverWrap(
+              key: scrollTos[Sections.FeatGPT.index],
+              child: const GPTShower(true, key: Key('gpt_el'))),
+
+          PageSliverWrap(
+              key: scrollTos[Sections.FeatData.index],
+              child: const DataVis(true, key: Key('datavis+el'))),
+
+          PageSliverWrap(
+              key: scrollTos[Sections.FeatAnim.index],
+              child: const AnimationShower(true, key: Key('anim_el'))),
+
+          const ScrollMarker(Sections.Experience),
+
+          //TODO: Move this to own widget so it can reset after page changes
+          const SliverToBoxAdapter(
+              key: Key('experience'),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                ExperienceWidget(0, key: Key('exp_0')),
+                ExperienceWidget(1, key: Key('exp_1')),
+                ExperienceWidget(2, key: Key('exp_2')),
+                SizedBox(height: 90),
+              ])),
+          // const PageSliverWrap(isLast: false, child: SignupForm()),
+
+          const ScrollMarker(Sections.Contact),
+
+          const SignupSliver(key: Key('signup'), child: SignupForm()),
+          Footer.sliver()
+        ],
+        // isInViewPortCondition:
+        //     (double deltaTop, double deltaBottom, double viewPortDimension) {
+        //   // return deltaTop > 0 && (viewPortDimension - deltaBottom) > 0;
+        //
+        //   //returns true when the middle is visible
+        //   return deltaTop < (0.5 * viewPortDimension) &&
+        //       deltaBottom > (0.5 * viewPortDimension);
+        // },
+      ),
       floatingActionButton: fabSwitcher(context, false),
       drawer: const CustomDrawer(),
     );
+  }
+
+  void scrollCallback(Sections sec) {
+    scroll(scrollTos[sec.index]);
+  }
+
+  void scroll(GlobalKey scrollTo) {
+    BuildContext? ct = scrollTo.currentContext;
+    if (ct != null) {
+      Scrollable.ensureVisible(ct,
+          duration: const Duration(milliseconds: 750), curve: Curves.ease);
+    }
   }
 }

@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:isaac_roberts_consulting/parallax.dart';
+import 'parallax.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'colorable_flutter_logo.dart';
@@ -16,6 +16,19 @@ import 'full_color.dart';
 import 'text_theme.dart';
 import 'contact_page.dart';
 import 'theme.dart';
+
+String pr(double num) {
+  String str = num.toStringAsFixed(2);
+  if (str.startsWith('-0')) {
+    str = '-${str.substring(2)}';
+  } else {
+    while (str.startsWith('0')) {
+      str = str.substring(1);
+    }
+    str = ' $str';
+  }
+  return str;
+}
 
 Widget glassCard({Widget? child}) {
   return ClipRRect(

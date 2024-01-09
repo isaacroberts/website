@@ -38,7 +38,7 @@ class DisplayDialog extends PopupRoute {
   Duration get transitionDuration => const Duration(milliseconds: 150);
 }
 
-abstract class FeatureShower {
+mixin FeatureShower {
   // Widget textContent(BuildContext context);
   Widget displayContent(BuildContext context);
 
@@ -218,7 +218,7 @@ abstract class FeatureShower {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: textToCA(align),
             children: [
-              Text(title(), style: watchSubt),
+              Text(title(), style: watchFonts.headlineSmall),
               paraLarge(subtitle(), align: align),
               const SizedBox(height: 15),
               paraLarge(body(), align: align)

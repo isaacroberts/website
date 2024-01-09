@@ -1,0 +1,35 @@
+{
+    "name": "Isaac Roberts Consulting",
+    "short_name": "Freelancer",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#252525",
+    "theme_color": "#F57C00",
+    "description": "Isaac Roberts Flutter & Flask Freelance.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

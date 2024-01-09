@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isaac_roberts_consulting/parallax.dart';
+import 'package:isaac_roberts_consulting/sections.dart';
 import 'package:ms_undraw/ms_undraw.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'custom_layouts.dart';
@@ -59,7 +60,9 @@ class _HeaderState extends State<Header> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return layoutMode(context);
+    return VisWrapper(section: Sections.Home, child: layoutMode(context));
+    // layoutMode(context);
+    // return fullViewRebuild(context);
     // return Stack(fit: StackFit.passthrough, children: [
     //   const Positioned.fill(
     //       child: ParallaxImage(

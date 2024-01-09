@@ -105,7 +105,8 @@ The goal of testing is to identify and fix any problems with the app before it i
 ];
 
 class ProcessSidebar extends StatefulWidget {
-  const ProcessSidebar({Key? key}) : super(key: key);
+  final int firstPage;
+  const ProcessSidebar(this.firstPage, {Key? key}) : super(key: key);
 
   @override
   State<ProcessSidebar> createState() => _ProcessSidebarState();
@@ -156,15 +157,16 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
 
   static const int numPhases = 7;
 
-  int get current => _current;
+  // int get current => _current;
+  int get current => widget.firstPage;
   set current(int n) {
     if (_current != n) {
-      setState(() {
-        _current = n;
-        if (pageController.hasClients) {
-          pageController.jumpToPage(n);
-        }
-      });
+      // setState(() {
+      //   _current = n;
+      //   if (pageController.hasClients) {
+      //     pageController.jumpToPage(n);
+      //   }
+      // });
     }
   }
 
@@ -302,7 +304,9 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
     const double height = 500;
     return Container(
-        color: const Color(0x40000000),
+        width: Device.width,
+        height: Device.height,
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Center(
             child: GestureDetector(
                 onTap: nextTab,
@@ -314,6 +318,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
     const double height = 500;
     return SizedBox(
+        width: Device.width,
         height: height,
         child: GestureDetector(
             onTap: nextTab,

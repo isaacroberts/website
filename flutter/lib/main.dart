@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 
 import 'package:device_preview/device_preview.dart';
+import 'package:isaac_roberts_consulting/multi_footer_renderer.dart';
+import 'package:isaac_roberts_consulting/simple_multi_footer.dart';
 import 'download_section.dart';
 import 'gpt_shower.dart';
 import 'signup_form.dart';
@@ -161,12 +163,25 @@ class _MyHomePageState extends State<MyHomePage> {
             const SliverToBoxAdapter(child: SizedBox(height: 30)
                 // child: Container(height: 30, decoration: expGradient(4)),
                 ),
-            signupFormSliver(key: scrollKey(Sections.Contact)),
-            Footer.sliver(),
+            // multiSliver(),
+            // const MultiSliverFooter(),
+            const SliverToBoxAdapter(child: SimpleMultiFooter()),
+
+            // signupFormSliver(key: scrollKey(Sections.Contact)),
+            // Footer.sliver(),
           ],
         ),
         drawer: drawer(context),
         floatingActionButton: fabSwitcher(context, false));
+  }
+
+  Widget multiSliver() {
+    return SliverList.list(
+      children: <Widget>[
+        signupFormSliver(),
+        Footer.sliver(),
+      ],
+    );
   }
 
   void scrollCallback(Sections sec) {
@@ -197,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             child: Text(
               'Isaac Roberts',
-              style: fonts.displaySmall?.copyWith(color: Colors.white),
+              style: fonts.displaySmall?.copyWith(color: primary),
             ),
           ),
           for (int n = 0; n < scrollTos.length; ++n) drawerListTile(n),

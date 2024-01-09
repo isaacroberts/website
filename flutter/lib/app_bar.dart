@@ -57,7 +57,7 @@ SliverAppBar buildAppBar(
       floating: true,
       // toolbarHeight: 30,
       // backgroundColor: Colors.transparent,
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: canvasColor,
       title: flexibleTitle(context, null),
       leading: Builder(builder: (context) {
         return IconButton(
@@ -115,13 +115,14 @@ Widget textOverflower(BuildContext context,
 Widget flexibleTitle(BuildContext context, var scrollCallback) {
   Widget overflower() => textOverflower(context,
       texts: [
-        // 'Isaac Roberts - Freelance Mobile & Web',
-        'Freelance Mobile & Web',
-        'Mobile & Web',
-        'App Dev',
+        // 'Isaac Roberts - App Dev',
+        'Isaac Roberts',
+        // 'Freelance Mobile & Web',
+        // 'Mobile & Web',
+        'Isaac',
         ''
       ],
-      style: Theme.of(context).textTheme.titleLarge,
+      style: Theme.of(context).textTheme.displaySmall?.copyWith(color: primary),
       textAlign: TextAlign.left);
 
   if (scrollCallback != null) {

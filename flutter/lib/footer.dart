@@ -12,8 +12,27 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'device.dart';
 import 'package:fluttericon/zocial_icons.dart';
 
+import 'signup_form.dart';
+
+const String imgAsset = 'images/swimming_deer.jpg';
+
+// const Color footerColor = Colors.black;
+const Color footerTitleColor = Colors.white;
+
+const Shadow upperShadow = Shadow(blurRadius: k / 2);
+const Shadow lowerShadow = Shadow(blurRadius: k / 4, color: Color(0x88000000));
+
 class Footer extends StatelessWidget {
   const Footer({Key? key}) : super(key: key);
+
+  /*
+      Total sliver height:
+          Signup height +
+          (screen/2 - signup/2) {so signup is centered - middle should be in middle}
+
+
+
+   */
 
   void launch(String urlS) async {
     Uri url = Uri.parse(urlS);
@@ -28,9 +47,12 @@ class Footer extends StatelessWidget {
   Widget linkButton(BuildContext context, IconData icon, String link) {
     return IconButton(
       onPressed: () => launch(link),
-      icon: Icon(icon),
+      icon: Icon(
+        icon,
+        shadows: const [lowerShadow],
+      ),
       padding: EdgeInsets.zero,
-      color: colorScheme.onSecondary,
+      color: Colors.white,
     );
   }
 
@@ -49,7 +71,8 @@ class Footer extends StatelessWidget {
   Widget sideText(TextAlign align) {
     return Wrap(children: [
       Text('Open Sorcery LLC, 2022 ©, All Rights reserved',
-          style: fonts.bodySmall?.copyWith(color: colorScheme.onSecondary),
+          style: fonts.bodySmall?.copyWith(
+              color: colorScheme.onSecondary, shadows: [lowerShadow]),
           textAlign: align),
     ]);
   }
@@ -87,17 +110,13 @@ class Footer extends StatelessWidget {
     // log('constraints $constraints');
     return Container(
         alignment: Alignment.bottomCenter,
-        color: footerColor,
-        // decoration: BoxDecoration(
-        //     gradient: LinearGradient(
-        //         begin: Alignment.bottomCenter,
-        //         end: Alignment.topCenter,
-        //         colors: [
-        //       primary.shade500,
-        //       primary.shade700,
-        //     ])),
-        // height: 200,
-        // child: Center(child: Text('Footer')));
+        // color: footerColor,
+        // decoration: const BoxDecoration(
+        //     image: DecorationImage(
+        //         image: AssetImage(imgAsset),
+        //         fit: BoxFit.cover,
+        //         alignment: Alignment.bottomCenter)),
+
         child: ClipRect(
             child: OverflowBox(
                 maxHeight: double.infinity, // intended to overflow vertically
@@ -118,25 +137,23 @@ class Footer extends StatelessWidget {
   Widget wideView(BuildContext context) {
     return Center(
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 90, vertical: k),
             child: SizedBox(
                 width: processWidth,
                 // child: SelectionArea(
                 child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text('Isaac Roberts Consulting',
                           textAlign: TextAlign.center,
-                          maxLines: 2,
-                          style: fonts.displaySmall),
-                      const SizedBox(height: 45),
+                          maxLines: 1,
+                          style: fonts.displaySmall?.copyWith(
+                              color: footerTitleColor, shadows: [upperShadow])),
+                      const SizedBox(height: k),
                       sideFlex([sideText(TextAlign.left), socials(context)]),
-
-                      // const Padding(
-                      //     padding: EdgeInsets.fromLTRB(30, 0, 80, 0),
-                      //     child: Divider(thickness: 1)),
+                      // const SizedBox(height: k),
                     ]))));
   }
 
@@ -149,7 +166,8 @@ class Footer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-          Text('Isaac Roberts Consulting',
+          const SizedBox(height: 90),
+          Text('Isaac Roberts',
               textAlign: TextAlign.center,
               maxLines: 3,
               style: fonts.displaySmall),

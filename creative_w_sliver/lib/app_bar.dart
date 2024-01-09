@@ -16,15 +16,14 @@ List<Widget> buildActions(
 
   //enum Sections { Home, Process, Features, Experience, Contact }
   Widget tb(Sections s) {
-    return LayoutBuilder(builder: (context, constraints) {
-      // log('tb layoutbuilder ${constraints.maxWidth}');
-      if (Device.width > 800) {
-        return TextButton(
-            onPressed: () => scrollCallback(s), child: Text(s.name));
-      } else {
-        return const SizedBox.shrink();
-      }
-    });
+    // if (Device.width > 800) {
+    return SizedBox(
+        width: k * 10,
+        child: TextButton(
+            onPressed: () => scrollCallback(s), child: Text(s.name)));
+    // } else {
+    //   return const SizedBox.shrink();
+    // }
   }
 
   return [

@@ -3,12 +3,12 @@ from flask import render_template
 from flask import request
 from flask import send_from_directory
 
-
 from flask_cors import CORS
-
 
 import os
 import datetime
+
+import datagather
 
 # Flask setup
 app = Flask(__name__)
@@ -62,6 +62,12 @@ def return_flutter_doc(name):
 
 
 
+@app.route('/display_data', methods=['GET', 'POST'])
+def get_display_data():
+    print('grabbing cap data')
+    d= datagather.get_all_caps()
+    print(d)
+    return d 
 
 @app.route('/contact', methods=['GET', 'POST'])
 def submit_contact():
@@ -108,7 +114,7 @@ Sent at: {str(currentDT)}
     message['To'] = RECVR # Reciver of the Mail
     message.set_content(msg) # Email body or Content
 
-    # Start mailer here just to ensure no errors from heroku/gunicorn restarts 
+    # Start mailer here just to ensure no errors from heroku/gunicorn restarts
     mailer = smtplib.SMTP('smtp.gmail.com', 587)
     mailer.starttls()
     mailer.login(SENDR, PSWRD)

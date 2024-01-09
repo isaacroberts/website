@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
 import 'common_elements.dart';
 import 'dart:developer';
 import 'device.dart';

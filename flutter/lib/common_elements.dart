@@ -274,7 +274,7 @@ Widget sectionHeaderNoSliver(String title, {Key? key}) {
       return Center(
           child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Text(key: key, title, style: watchHeaderLarge)));
+              child: Text(key: key, title, style: watchFonts.headlineLarge)));
     }
   });
 }
@@ -366,18 +366,19 @@ Widget _subt(String line,
       ));
 }
 
-var paraSmall = paraLarge;
-// Widget paraSmall(String para,
-//     {TextAlign align = TextAlign.left, bool selectable = false}) {
-//   return _paragraph(para,
-//       style: fonts.bodySmall, align: align, selectable: selectable);
-// }
-var paraMed = paraLarge;
-// Widget paraMed(String para,
-//     {TextAlign align = TextAlign.left, bool selectable = false}) {
-//   return _paragraph(para,
-//       style: fonts.bodyMedium, align: align, selectable: selectable);
-// }
+// var paraSmall = paraLarge;
+Widget paraSmall(String para,
+    {TextAlign align = TextAlign.left, bool selectable = false}) {
+  return _paragraph(para,
+      style: fonts.bodySmall, align: align, selectable: selectable);
+}
+
+// var paraMed = paraLarge;
+Widget paraMed(String para,
+    {TextAlign align = TextAlign.left, bool selectable = false}) {
+  return _paragraph(para,
+      style: fonts.bodyMedium, align: align, selectable: selectable);
+}
 
 Widget paraLarge(String para,
     {TextAlign align = TextAlign.left, bool selectable = false}) {

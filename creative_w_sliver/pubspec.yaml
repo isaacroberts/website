@@ -38,7 +38,7 @@ dependencies:
 #  cupertino_icons: ^1.0.2
 
   fluttericon: ^2.0.0
-  google_fonts: ^3.0.1
+  google_fonts:
   flex_color_scheme: ^6.1.1
   ms_undraw: ^3.1.0+3
   flutter_svg: ^1.1.6
@@ -49,15 +49,14 @@ dependencies:
   lottie: ^2.1.0
   transparent_image: ^2.0.0
   image_fade: ^0.6.2
-  visibility_detector: ^0.3.3
+  visibility_detector:
   syncfusion_flutter_charts: ^20.4.44
   rive: ^0.10.1
   http:
 
-
-  flutter_lorem: ^2.0.0
   blurrycontainer: ^1.0.2
   email_validator: ^2.1.17
+  inview_notifier_list: ^3.0.0
 
   # Chatgpt
   get: ^4.6.5
@@ -69,7 +68,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  device_preview: ^1.1.0
+  device_preview:
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

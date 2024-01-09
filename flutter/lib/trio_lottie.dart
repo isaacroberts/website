@@ -18,6 +18,8 @@ abstract class TrioLottieHaver<Type extends StatefulWidget> extends State<Type>
   bool _hovered = false;
 
   bool get hovered => _hovered;
+  AnimationController get controller => _controller;
+
   set hovered(bool s) {
     if (_hovered != s) {
       _hovered = s;

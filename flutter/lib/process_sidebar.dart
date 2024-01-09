@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_fade/image_fade.dart';
 import 'text_theme.dart';
 import 'vert_to_horiz_scroll.dart';
@@ -43,7 +44,8 @@ class ProcessSidebar extends StatefulWidget {
   State<ProcessSidebar> createState() => _ProcessSidebarState();
 }
 
-const double imgOpacity = .3;
+const double imgOpacity = 1;
+const Color imgOverlayColor = canvasColor;
 
 class _ProcessSidebarState extends State<ProcessSidebar> {
   int _current = 0;
@@ -153,7 +155,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
       return SliverToBoxAdapter(child: LayoutBuilder(builder: (c, cnt) {
         if (cnt.maxWidth > 1000) {
           return wideView();
-        } else if (cnt.maxWidth > 650) {
+        } else if (cnt.maxWidth > 700) {
           return midView();
         } else if (cnt.maxWidth > tinyWidth) {
           return topTabsView();
@@ -173,6 +175,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
   }
 
   Widget crossFadeImg() {
+    // return const SizedBox.shrink();
     return ImageFade(
       // whenever the image changes, it will be loaded, and then faded in:
       image: getBg(current),
@@ -210,79 +213,99 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
           return Image(
               image: getBg(index),
               opacity: const AlwaysStoppedAnimation<double>(imgOpacity),
+              color: imgOverlayColor,
               fit: BoxFit.cover);
         });
   }
 
   Widget wideView() {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
-    const double height = 500;
-    return Center(
-        child: ConstrainedBox(
-            constraints: const BoxConstraints(
-                maxWidth: processWidth, maxHeight: height, minHeight: height),
-            // child: ClipRRect(
-            //     borderRadius: BorderRadius.circular(15),
-            child: Container(
-                margin: EdgeInsets.zero,
-                alignment: Alignment.center,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: const Border.fromBorderSide(
-                        BorderSide(color: Color(0xa0ffffff)))),
-                // child: Card(
-                //     color: Colors.transparent,
-                //     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: GestureDetector(
-                    onTap: nextTab,
-                    child: Stack(
-                        fit: StackFit.expand,
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned.fill(
-                              child: Opacity(
-                                  opacity: imgOpacity, child: crossFadeImg())),
-                          wideViewContent(height, processWidth - 50 * 2)
-                        ])))));
+    const double height = 700;
+    return Container(
+        margin: EdgeInsets.zero,
+        alignment: Alignment.center,
+        height: height,
+        // clipBehavior: Clip.hardEdge,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/white_desk.jpg'),
+                fit: BoxFit.cover)),
+        child: GestureDetector(
+            onTap: nextTab,
+            child: Center(
+                child: SizedBox(
+                    width: processWidth,
+                    height: height,
+                    child: wideViewContent(height, processWidth - 50 * 2)))
+
+            // child: Stack(
+            //     fit: StackFit.expand,
+            //     alignment: Alignment.center,
+            //     children: [
+            //   // Positioned.fill(child: Container(color: imgOverlayColor)),
+            //   Positioned.fill(
+            //       child:
+            //           Opacity(opacity: imgOpacity, child: crossFadeImg())),
+            //   Center(
+            //       child: SizedBox(
+            //           width: processWidth,
+            //           height: height,
+            //           child:
+            //               wideViewContent(height, processWidth - 50 * 2)))
+            // ]))
+            ));
   }
 
   Widget midView() {
     //525 = 7 elements x 75 pixels, that 75 height is totally unchangeable
     const double height = 500;
     const double maxWidth = 1000;
-    return SizedBox(
+    return Container(
         height: height,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/white_desk.jpg'),
+                fit: BoxFit.cover)),
         child: GestureDetector(
             onTap: nextTab,
-            child: Stack(
-                fit: StackFit.expand,
-                alignment: Alignment.center,
-                children: [
-                  Positioned.fill(
-                      child:
-                          Opacity(opacity: imgOpacity, child: crossFadeImg())),
-                  wideViewContent(height, maxWidth - 50 * 2)
-                ])));
+            child: Center(child: wideViewContent(height, maxWidth - 50 * 2))));
+
+    // child: GestureDetector(
+    //     onTap: nextTab,
+    //     child: Stack(
+    //         fit: StackFit.expand,
+    //         alignment: Alignment.center,
+    //         children: [
+    //           Positioned.fill(child: Container(color: imgOverlayColor)),
+    //           Positioned.fill(
+    //               child:
+    //                   Opacity(opacity: imgOpacity, child: crossFadeImg())),
+    //           wideViewContent(height, maxWidth - 50 * 2)
+    //         ])));
   }
 
   Widget wideViewContent(double height, double maxWidth) {
     return Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           sectionHeaderNoSliverOrPadding('Process'),
           Expanded(
-              child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: Center(
+                  // child: Card(
+                  //     color: theme.cardColor.withOpacity(.8),
+                  child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                 sideBar(context),
                 Expanded(
                   child: contentPanel(context),
                 ),
-              ])),
+                const SizedBox(width: k * 10),
+              ]))),
           // divider()
           const SizedBox(
             height: 30,
@@ -297,31 +320,31 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
         height: Device.isLandscapeMobile ? Device.height - appBar : 500,
         width: Device.width,
         child: Stack(alignment: Alignment.topCenter, children: [
+          Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/white_desk.jpg'),
+                      fit: BoxFit.cover))),
           PageView.builder(
               controller: pageController,
+              physics: const BouncingScrollPhysics(),
               itemCount: numPhases,
               itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: nextPage,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: getBg(index),
-                                opacity: imgOpacity,
-                                fit: BoxFit.cover)),
-                        child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: hrailHeight),
-                              Expanded(
-                                  child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 45, vertical: 15),
-                                      child: contentSwitcher(context, 0,
-                                          value: index)))
-                            ])));
+                    child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: hrailHeight),
+                          Expanded(
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 45, vertical: 15),
+                                  child: contentSwitcher(context, 0,
+                                      value: index)))
+                        ]));
               }),
           SizedBox(
               height: hrailHeight,
@@ -343,25 +366,20 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: nextPage,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: getBg(index),
-                                opacity: imgOpacity,
-                                fit: BoxFit.cover)),
-                        child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: hrailHeight),
-                              Expanded(
-                                  child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30, vertical: 0),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: hrailHeight),
+                          Expanded(
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 0),
+                                  child: SingleChildScrollView(
                                       child: contentSwitcher(context, 0,
-                                          value: index)))
-                            ])));
+                                          value: index))))
+                        ]));
               }),
           SizedBox(
             height: hrailHeight,
@@ -379,19 +397,20 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
   }
 
   Widget watchView() {
-    return Column(children: [
-      for (int index = 0; index < numPhases; ++index)
-        Container(
-            constraints: const BoxConstraints(minHeight: 150),
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-            // margin: const EdgeInsets.only(bottom: 15),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: getBg(index),
-                    opacity: imgOpacity,
-                    fit: BoxFit.cover)),
-            child: contentSwitcher(context, 1, value: index))
-    ]);
+    return Container(
+        constraints: const BoxConstraints(minHeight: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+        // margin: const EdgeInsets.only(bottom: 15),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/white_desk.jpg'),
+                fit: BoxFit.cover)),
+        child: Column(children: [
+          for (int index = 0; index < numPhases; ++index)
+            Padding(
+                padding: const EdgeInsets.only(bottom: k),
+                child: contentSwitcher(context, 1, value: index))
+        ]));
   }
 
   Widget contentPanel(BuildContext context) {
@@ -474,8 +493,9 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
           // elevation: 5,
           backgroundColor: Colors.transparent,
           // indicatorColor: colorScheme.primary?.withAlpha(100),
-          extended: Device.width > 910,
+          extended: false && Device.width > 910,
           minExtendedWidth: 180,
+          groupAlignment: 0,
           // labelType: NavigationRailLabelType.all,
           selectedIndex: current,
           onDestinationSelected: (i) => current = i,
@@ -536,7 +556,7 @@ class _ProcessSidebarState extends State<ProcessSidebar> {
     if (styleNo == 0) {
       return Align(
           key: ValueKey<int>(ix),
-          alignment: Alignment.topLeft,
+          alignment: Alignment.centerLeft,
           child: Padding(
               padding: const EdgeInsets.all(15),
               child: textColumn(ix, headline, body, bounded: false)));

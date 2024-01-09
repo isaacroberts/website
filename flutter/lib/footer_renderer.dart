@@ -28,10 +28,18 @@ class RenderSliverFooter extends RenderSliverSingleBoxAdapter {
 
   @override
   void performLayout() {
+    // const double signupFormHeight = 400;
+    // const double footerMinHeight = 200;
+    //
+    // final double screenHeight = this.constraints.viewportMainAxisExtent;
+    // double footerHeight =
+    //     (screenHeight - signupFormHeight) / 2 + signupFormHeight;
+    // footerHeight = math.max(footerHeight, signupFormHeight + footerMinHeight);
     double footerHeight = 200;
+
     if (this.constraints.crossAxisExtent < 600) {
       // log('expanded footer height');
-      footerHeight = 300;
+      footerHeight += 100;
     } else {
       // log('footer width: ${this.constraints.crossAxisExtent}');
     }

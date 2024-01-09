@@ -106,7 +106,7 @@ const ColorScheme colorScheme = ColorScheme(
   onError: Colors.black,
   errorContainer: Colors.yellowAccent,
   onErrorContainer: Colors.black,
-  background: PrimDark.v9, //Grayscale.shade900,
+  background: Color(0xff0c0c0c), //PrimDark.v9, //Grayscale.shade900,
   onBackground: Colors.white,
   // surface: SecLight.v1,
   surface: SurfaceColor(),

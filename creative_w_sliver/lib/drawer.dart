@@ -46,7 +46,7 @@ class CustomDrawer extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pop();
         Future.delayed(const Duration(milliseconds: 350), () {
-          scrollToPage(Sections.values[n].pageStart);
+          scrollToPage(Sections.values[n]);
         });
       },
     );

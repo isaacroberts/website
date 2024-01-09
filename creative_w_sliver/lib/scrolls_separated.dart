@@ -17,7 +17,9 @@ class PageSliverWrap extends StatelessWidget {
     return PageSliver(
         child: LayoutBuilder(
             builder: (context, constraints) => SizedBox(
-                width: Device.width, height: Device.height, child: child)));
+                width: Device.width, height: Device.height, child:
+
+            child)));
 
     return PageSliver(
         child: Container(
@@ -44,30 +46,15 @@ class PageSliverRenderer extends RenderSliverToBoxAdapter {
   @override
   void performLayout() {
     if (this.child == null) {
-      log('no child');
       return;
     }
 
-    String pr(double num) {
-      String str = num.toStringAsFixed(2);
-      if (str.startsWith('-0')) {
-        str = '-${str.substring(2)}';
-      } else {
-        while (str.startsWith('0')) {
-          str = str.substring(1);
-        }
-        str = ' $str';
-      }
-      return str;
-    }
-
-    SliverAppBar;
     RenderBox child = this.child!;
 
     final SliverConstraints constraints = this.constraints;
     double dh = constraints.viewportMainAxisExtent;
     double w = constraints.crossAxisExtent;
-    // TODO: Safely remove maxHeight so experience column can be longer if it wants
+
     child.layout(BoxConstraints(minWidth: w, maxWidth: w, minHeight: dh),
         parentUsesSize: true);
     double h = child.size.height;
@@ -94,7 +81,6 @@ class PageSliverRenderer extends RenderSliverToBoxAdapter {
 
     // if (relPos < -1) return;
     if (relPos > 1) {
-      log('scroll pos = ${pr(scrPos / dh)} rel ${pr(relPos)}');
       geometry = SliverGeometry(
         visible: false,
         scrollExtent: maxExtent,
@@ -185,10 +171,11 @@ class SignupSliverRenderer extends RenderSliverToBoxAdapter {
 
     const double spacing = 500;
 
-    double maxExtent = dh;
+    double xtr = dh / 3;
+    double maxExtent = dh + xtr;
 
     double scrPos = constraints.scrollOffset;
-    double relPos = (scrPos).toDouble() / dh;
+    double relPos = (scrPos - xtr).toDouble() / dh;
 
     double h;
 
