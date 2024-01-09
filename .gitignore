@@ -6,3 +6,4 @@ flutter/android
 **/.DS_STORE
 flutter/axsets
 flutter/image raws
+**/axsets/
